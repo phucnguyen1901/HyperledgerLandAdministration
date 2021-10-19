@@ -1,0 +1,70 @@
+
+    <link rel="stylesheet" type="text/css" href="/css/util.css">
+	<link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+    <div class="limiter">
+		<div class="container-login100" style="background-image: url('images/bg-01.jpg');">
+        <div class="wrap-login100 p-t-30 p-b-50">
+				<span class="login100-form-title p-b-41">
+					Account Register
+				</span>
+				<form id="registerForm" class="login100-form validate-form p-b-33 p-t-5" method="get" action="/handleRegister" autocomplete="off" onsubmit="return false;">
+
+					<div class="wrap-input100 validate-input">
+						<input class="input100" type="text" id="email" name="email" placeholder="Email">
+						<span class="focus-input100" data-placeholder="&#xe818;"></span>
+					</div>
+
+                    <div class="wrap-input100 validate-input">
+						<input class="input100" type="text" id="fullname" name="fullname" placeholder="Full Name">
+						<span class="focus-input100" data-placeholder="&#xe80f;"></span>
+					</div>
+
+                    <div class="wrap-input100 validate-input">
+						<input class="input100" type="text" id="idCard" name="idCard" placeholder="ID Card">
+						<span class="focus-input100" data-placeholder="&#xe800;"></span>
+					</div>
+
+                    <div class="wrap-input100 validate-input" >
+						<input class="input100" type="text" id="numberPhone" name="numberPhone" placeholder="Number Phone">
+						<span class="focus-input100" data-placeholder="&#xe830;"></span>
+					</div>
+
+                    <div class="wrap-input100 validate-input" id="recaptcha-container"></div>
+                    
+                    <div id="enterCode"></div>
+                     <div class="container-login100-form-btn m-t-32">
+						<button class="login100-form-btn" id="registerButton">
+							Sign Up
+						</button>
+					</div>
+
+				</form>
+			</div>
+  
+	</div>
+
+
+
+    <script type="module" src="/js/requestOTP.js"></script>
+    <!-- <script>
+        
+        var validateMyForm = function(){
+            const numberPhone = document.getElementById("numberPhone").value;
+            const db = getFirestore(app);
+            try {
+                const docRef = await addDoc(collection(db, "users"), {
+                    first: "Ada",
+                    last: "Lovelace",
+                    phone:numberPhone,
+                    born: 1815
+                });
+                console.log("Document written with ID: ", docRef.id);
+                } catch (e) {
+                console.error("Error adding document: ", e);
+            }
+            console.log(numberPhone)
+            return false;
+        }
+    </script> -->

@@ -1,0 +1,90 @@
+
+<div class="container">
+ 
+  <table class="table table-bordered">
+    <tbody>
+      <tr>
+        <td width="210px">  Người sở hữu</td>
+        <td><b><b><%= detail.Owner%></b></b></td>
+      </tr>
+      <tr>
+        <td width="210px"> Giới tính</td>
+        <td><b><%= detail.Gender%></b> </td>
+      </tr>
+      <tr>
+        <td width="210px"> CMND/CCCD</td>
+        <td><b><%= detail.IdentityCard%></b> </td>
+      </tr>
+      <tr>
+        <td width="210px">Hộ khẩu thường trú </td>
+        <td><b><%= detail.HoKhauThuongTru%></b></td>
+      </tr>
+            <tr>
+        <td width="210px">
+             Thửa đất số 
+        </td>
+        <td> <b><%= detail.ThuaDatSo%></b></td>
+      </tr>
+      <tr>
+        <td width="210px"> Tờ bản đồ số </td>
+        <td> <b><%= detail.ToBanDo5o%></b></td>
+      </tr>
+      <tr>
+        <td width="210px">  Diện tích  </td>
+        <td> <b><%= detail.DienTich%> m2</b></td>
+      </tr>
+            <tr>
+        <td width="210px">Hình thức sử dụng</td>
+        <td><b><%= detail.HinhThucSuDung%></b></td>
+      </tr>
+            <tr>
+        <td width="210px"> Mục đích sử dụng </td>
+        <td>  <b><%= detail.MucDichSuDung%></b> </td>
+      </tr>
+      <tr>
+        <td width="210px"> Thời hạn sử dụng </td>
+        <td> <b><%= detail.ThoiHanSuDung%></b></td>
+      </tr>  
+      <tr>
+        <td width="210px"> Nguồn gốc sử dụng  
+        </td>
+        <td><b><%= detail.NguocGocSuDung%></b></td>
+      </tr>  
+      <tr>
+        <td width="210px">   Thời gian đăng ký </td>
+        <td><b><%= detail.ThoiGianDangKy%></b></td>
+      </tr>  
+    
+    </tbody>
+  </table>
+</div>
+
+<div class="container">
+  <h2>Toạ độ các đỉnh của mảnh đất </h2>
+  <% for (const [key, value] of Object.entries(detail.ToaDoCacDinh)){  %>
+      Đỉnh <b><%= key %> <br></b> Latitude: <b><%= value[0] %> </b><br> Longitude: <b><%= value[1] %></b> <br>
+
+  <% } %>
+
+  <h2>Chiều dài các cạnh </h2>
+  <% for (const [key, value] of Object.entries(detail.ChieuDaiCacCanh)){  %>
+    Cạnh <b><%= key %> : <%= value %> </b>m<br>
+  <% } %>
+
+
+</div>
+
+
+
+<div style="height: 100px;"></div>
+
+
+
+
+
+
+
+
+
+
+

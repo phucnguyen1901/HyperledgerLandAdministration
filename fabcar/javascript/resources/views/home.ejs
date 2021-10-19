@@ -1,0 +1,29 @@
+
+
+<div class="container">        
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Người sở hữu</th>
+        <th>CMND/CCCD</th>
+        <th>Thời gian đăng ký</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for(var element of menu){ %>
+
+          <tr>
+           <td> <a href="./detail/<%= element.Key %>"><%= element.Record.Owner %> </a></td>
+            <td><%= element.Record.IdentityCard %></td>
+            <td><%= element.Record.ThoiGianDangKy %></td>
+            
+          </tr>
+
+        <% }%>
+      </tbody>
+   
+  </table>
+</div>
+
+
+ 
