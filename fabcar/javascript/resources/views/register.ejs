@@ -9,7 +9,7 @@
 				<span class="login100-form-title p-b-41">
 					Account Register
 				</span>
-				<form id="registerForm" class="login100-form validate-form p-b-33 p-t-5" method="get" action="/handleRegister" autocomplete="off" onsubmit="return false;">
+				<form id="registerForm" class="login100-form validate-form p-b-33 p-t-5" method="post" action="/handleRegister" autocomplete="off" onsubmit="return false;">
 
 					<div class="wrap-input100 validate-input">
 						<input class="input100" type="text" id="email" name="email" placeholder="Email">
@@ -30,11 +30,21 @@
 						<input class="input100" type="text" id="numberPhone" name="numberPhone" placeholder="Number Phone">
 						<span class="focus-input100" data-placeholder="&#xe830;"></span>
 					</div>
+                    <div class="wrap-input100 validate-input" >
+						<input class="input100" type="text" id="otp" name="otp" placeholder="Enter OTP">
+						<span class="focus-input100" data-placeholder="&#xe830;"></span>
+					</div>
+                    
+                    
+
 
                     <div class="wrap-input100 validate-input" id="recaptcha-container"></div>
-                    
-                    <div id="enterCode"></div>
-                     <div class="container-login100-form-btn m-t-32">
+
+                    <div class="container-login100-form-btn m-t-32 d-flex justify-content-around" > 
+                        <button class="login100-form-btn" id="sendOTPButton">
+							send otp
+						</button>
+                        &emsp;
 						<button class="login100-form-btn" id="registerButton">
 							Sign Up
 						</button>
@@ -47,7 +57,7 @@
 
 
 
-    <script type="module" src="/js/requestOTP.js"></script>
+    <script type="module" src="/js/registerUser.js"></script>
     <!-- <script>
         
         var validateMyForm = function(){

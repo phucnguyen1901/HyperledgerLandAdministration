@@ -43,12 +43,16 @@ async function main(userId) {
         // Evaluate the specified transaction.
         // queryCar transaction - requires 1 argument, ex: ('queryCar', 'CAR4')
         // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')
-        const result = await contract.evaluateTransaction('queryAllLands');
-        console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
+        // const result = await contract.evaluateTransaction('queryAllLands');
+        // const result = await contract.evaluateTransaction('queryAllLands',{"selector":{"docType":"land","owner":"tom"}});
+
+        const result = await contract.evaluateTransaction('queryLaneByUser','a','b');
+        // console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
+        console.log(`Transaction has been evaluated, result is: ${result}`);
 
         // Disconnect from the gateway.
         await gateway.disconnect();
-        return result.toString();
+        // return result.toString();
         
     } catch (error) {
         console.error(`Failed to evaluate transaction: ${error}`);

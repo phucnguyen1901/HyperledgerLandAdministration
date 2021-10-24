@@ -15,17 +15,14 @@ function homeController() {
         const mspOrg = ['Org1MSP','Org2MSP'];
         const affiliations = ['org1.department1','org2.department2'];
         const userId = "kobao";
-        // await enrollAdmin();
+        await enrollAdmin();
+        await register(userId,mspOrg[0],organizationsCA[0],affiliations[0]),
+        await auth(userId)
         // await registerUser2(user);
-        // const menu = await queryAll(user);
+        const menu = await queryAll(userId);
+        res.render("register")
         // const obj = JSON.parse(menu);
-        // console.log(obj);
         // res.render("home",{ menu: obj });
-        // await register(userId,mspOrg[0],organizationsCA[0],affiliations[0]),
-        // await auth(userId)
-        // res.send("OK");
-        
-        res.render("home")
     },
 
     async detail(req,res){

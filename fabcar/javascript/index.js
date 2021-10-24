@@ -27,7 +27,9 @@ app.get('/demoSubmit',homeController().demoSubmit)
 
 app.get('/login',userController().login)
 app.get('/register',userController().register)
-app.get('/handleRegister',userController().handleRegister)
+// app.get('/handleRegister',userController().handleRegister)
+app.post('/handleRegister',userController().handleRegister)
+app.post('/handleLogin',userController().handleLogin)
 
 app.listen(3000,()=>console.log("Server started with port 3000"));
 

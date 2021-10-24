@@ -1,11 +1,8 @@
 
 
+import { verifyCode } from "/js/loginUser.js";
 
-export default function showName(name){
-    console.log(name);
-}
-
-
+exports.name =  verifyCode
 
 
 

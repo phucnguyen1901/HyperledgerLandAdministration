@@ -16,7 +16,7 @@ class FabCar extends Contract {
             {
                 // (ctx,owner,gender,idCard,hktt,thuasodat,tobandoso,cacsothuagiapranh,dientich,toadocacdinh,chieudaicaccanh,hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,thoigiandangky)
                 // ID:"asset1",
-                Owner:"Nguyén Vän A",
+                Owner:"Nguyen Van A",
                 Gender:'Nam',
                 IdentityCard:"358525142",
                 HoKhauThuongTru:"Quân Ninh Kièu , TP.Càn Tho",
@@ -65,7 +65,8 @@ class FabCar extends Contract {
                 ThoiHanSuDung: thoihansudung,
                 NguocGocSuDung:nguongocsudung,
                 ThoiGianDangKy: thoigiandangky,
-                Status: "Not OK"
+                Status: "Not OK",
+                Transactions: []
         };
         await ctx.stub.putState(key, Buffer.from(JSON.stringify(land)));
         console.info('============= END : Create Land ===========');
@@ -100,18 +101,51 @@ class FabCar extends Contract {
         return JSON.stringify(allResults);
     }
 
-    async changeCarOwner(ctx, carNumber, newOwner) {
+    async changeLandOwner(ctx, idCard, newOwner) {
         console.info('============= START : changeCarOwner ===========');
 
-        const carAsBytes = await ctx.stub.getState(carNumber); // get the car from chaincode state
+        const carAsBytes = await ctx.stub.getState(idCard); // get the car from chaincode state
         if (!carAsBytes || carAsBytes.length === 0) {
-            throw new Error(`${carNumber} does not exist`);
+            throw new Error(`${idCard} does not exist`);
         }
         const car = JSON.parse(carAsBytes.toString());
         car.owner = newOwner;
 
         await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
         console.info('============= END : changeCarOwner ===========');
+    }
+
+    async queryLaneByUser(ctx,idCard,Owner){
+
+        let queryString = {
+            "selector": {
+                "IdentityCard": "358525142",
+                "Owner": "Nguyen Van A"
+            }
+        }
+
+        let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
+        let result = await this.getData(iterator)
+        return JSON.stringify(result);
+    }
+
+    async getData(iterator){
+        let resultArray = []
+        while(true){
+            let res = iterator.next()
+            let resJson = {}
+
+            if(res.value && res.value.value.toString()){
+                resJson.key = res.value.key;
+                resJson.value = JSON.parse(res.value.value.toString('utf-8'));
+                resultArray.push(resJson)
+            }
+            
+            if(res.done){
+                await iterator.close()
+                return resultArray;
+            }
+        }
     }
 
 
