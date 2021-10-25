@@ -32,7 +32,8 @@ class FabCar extends Contract {
                 ThoiHanSuDung: "Lâu dài",
                 NguocGocSuDung:"Nhà nưóc giao đất có thu tiền sử dụng",
                 ThoiGianDangKy: "11/09/2021",
-                Status: "OK"
+                Status: "OK",
+                Transactions: []
             },
         ];
 
@@ -115,27 +116,46 @@ class FabCar extends Contract {
         console.info('============= END : changeCarOwner ===========');
     }
 
+    // async queryLaneByUser(ctx){
+    //     let queryString = {}
+    //     // console.log(idCard)
+    //     // console.log(Owner)
+
+    //     queryString.selector = {"IdentityCard":"358525142"};
+    //     // queryString.selector.IdentityCard = "358525142";
+    //     // queryString.selector.Owner = "Nguyen Van A";
+
+    //     // let queryString = {
+    //     //     "selector": {
+    //     //         "IdentityCard": "358525142",
+    //     //         "Owner": "Nguyen Van A"
+    //     //     }
+    //     // }
+
+    //     let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
+    //     let result = await this.getIteratorData(iterator);
+    //     return JSON.stringify(result);
+    // }
+
     async queryLaneByUser(ctx,idCard,Owner){
+        let queryString = {}
 
-        let queryString = {
-            "selector": {
-                "IdentityCard": "358525142",
-                "Owner": "Nguyen Van A"
-            }
-        }
-
+        queryString.selector = {"IdentityCard":idCard,"Owner":Owner};
         let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
-        let result = await this.getData(iterator)
+        let result = await this.getIteratorData(iterator);
         return JSON.stringify(result);
     }
 
-    async getData(iterator){
+    async getIteratorData(iterator){
+
         let resultArray = []
+
         while(true){
-            let res = iterator.next()
+            let res = await iterator.next()
             let resJson = {}
 
             if(res.value && res.value.value.toString()){
+                console.log(`res value: ${res.value.value.toString('utf8')}`);
                 resJson.key = res.value.key;
                 resJson.value = JSON.parse(res.value.value.toString('utf-8'));
                 resultArray.push(resJson)

@@ -10,16 +10,15 @@
       </tr>
     </thead>
     <tbody>
-      <% for(var element of menu){ %>
 
-          <tr>
-           <td> <a href="./detail/<%= element.Key %>"><%= element.Record.Owner %> </a></td>
-            <td><%= element.Record.IdentityCard %></td>
-            <td><%= element.Record.ThoiGianDangKy %></td>
+      <% for(var element of menu){ %>
+       <tr>
+           <td> <a href="./detail/<%= element.Key %>"><%= element.value.Owner %> </a></td>
+            <td><%= element.value.IdentityCard %></td>
+            <td><%= element.value.ThoiGianDangKy %></td>
             
           </tr>
-
-        <% }%>
+      <%}%>
       </tbody>
    
   </table>

@@ -18,11 +18,14 @@ function homeController() {
         await enrollAdmin();
         await register(userId,mspOrg[0],organizationsCA[0],affiliations[0]),
         await auth(userId)
+        
         // await registerUser2(user);
         const menu = await queryAll(userId);
-        res.render("register")
-        // const obj = JSON.parse(menu);
-        // res.render("home",{ menu: obj });
+        const obj = JSON.parse(menu);
+        console.log(obj)
+        res.render("home",{ menu: obj });
+       
+        
     },
 
     async detail(req,res){
@@ -70,9 +73,6 @@ function homeController() {
          res.send(error);
       }
     }
-
-
-
 
   };
 }
