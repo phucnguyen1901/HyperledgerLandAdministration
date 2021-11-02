@@ -1,5 +1,10 @@
 
-    <link rel="stylesheet" type="text/css" href="/css/util.css">
+    	 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+	<link rel="stylesheet" type="text/css" href="/css/util.css">
 	<link rel="stylesheet" type="text/css" href="/css/main.css">
     <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
@@ -9,16 +14,38 @@
 				<span class="login100-form-title p-b-41">
 					Account Register
 				</span>
-				<form id="registerForm" class="login100-form validate-form p-b-33 p-t-5" method="post" action="/handleRegister" autocomplete="off" onsubmit="return false;">
+				<%
+						if(error.length > 0){
+					%>
+					<div id="error" class="alert alert-success bg-danger text-white" style="text-align:center;">
+						
+										<%= error%>
+						
+					</div>
+					<%
+									}
+								%>
 
+				<form id="registerForm" class="login100-form validate-form p-b-33 p-t-5" method="post" action="/handleRegister"  onsubmit="return false;">
+					
 					<div class="wrap-input100 validate-input">
 						<input class="input100" type="text" id="email" name="email" placeholder="Email">
 						<span class="focus-input100" data-placeholder="&#xe818;"></span>
 					</div>
 
+					<div class="wrap-input100 validate-input">
+						<input class="input100" type="password" id="password" name="password" placeholder="Mật khẩu">
+						<span class="focus-input100" data-placeholder="&#xe80f;"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input">
+						<input class="input100" type="password" id="passwordR" name="passwordR" placeholder="Nhập lại mật khẩu">
+						<span class="focus-input100" data-placeholder="&#xe80f;"></span>
+					</div>
+
                     <div class="wrap-input100 validate-input">
 						<input class="input100" type="text" id="fullname" name="fullname" placeholder="Full Name">
-						<span class="focus-input100" data-placeholder="&#xe80f;"></span>
+						<span class="focus-input100" data-placeholder="&#xe82a;"></span>
 					</div>
 
                     <div class="wrap-input100 validate-input">
@@ -30,27 +57,31 @@
 						<input class="input100" type="text" id="numberPhone" name="numberPhone" placeholder="Number Phone">
 						<span class="focus-input100" data-placeholder="&#xe830;"></span>
 					</div>
-                    <div class="wrap-input100 validate-input" >
-						<input class="input100" type="text" id="otp" name="otp" placeholder="Enter OTP">
-						<span class="focus-input100" data-placeholder="&#xe830;"></span>
-					</div>
-                    
+                    <!-- <div class="wrap-input100 validate-input" > -->
+						<!-- <input class="input100" type="text" id="otp" name="otp" placeholder="Enter OTP">
+						<span class="focus-input100" data-placeholder="&#xe830;"></span> -->
+					<!-- </div> -->
                     
 
-
-                    <div class="wrap-input100 validate-input" id="recaptcha-container"></div>
+                    <div id="recaptcha-container"></div>
 
                     <div class="container-login100-form-btn m-t-32 d-flex justify-content-around" > 
-                        <button class="login100-form-btn" id="sendOTPButton">
-							send otp
-						</button>
-                        &emsp;
 						<button class="login100-form-btn" id="registerButton">
 							Sign Up
 						</button>
 					</div>
-
+					<br>
+						<div class="d-flex justify-content-center">
+						
+						<a href="/login" class="text-info">Đã có tài khoản</a>
+					</div>
+					<br>
+					<div id="error"  class="alert alert-success" style="text-align:center; display: none;">
+						
+					</div>
 				</form>
+
+				
 			</div>
   
 	</div>
@@ -58,23 +89,3 @@
 
 
     <script type="module" src="/js/registerUser.js"></script>
-    <!-- <script>
-        
-        var validateMyForm = function(){
-            const numberPhone = document.getElementById("numberPhone").value;
-            const db = getFirestore(app);
-            try {
-                const docRef = await addDoc(collection(db, "users"), {
-                    first: "Ada",
-                    last: "Lovelace",
-                    phone:numberPhone,
-                    born: 1815
-                });
-                console.log("Document written with ID: ", docRef.id);
-                } catch (e) {
-                console.error("Error adding document: ", e);
-            }
-            console.log(numberPhone)
-            return false;
-        }
-    </script> -->

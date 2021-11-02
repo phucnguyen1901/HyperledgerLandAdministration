@@ -2,46 +2,40 @@
 const queryAll = require("../queryAllLands")
 const query = require("../queryLand")
 const invoke = require('../invoke')
-const enrollAdmin = require('../enrollAdmin')
-const registerUser = require('../registerUser')
-const registerUser2 = require('../registerUser2')
+const transfer = require('../transferLand')
+
 
 const {register, auth} = require('../register')
+const { render } = require("ejs")
 
 function homeController() {
   return {
     async index(req, res) {
-        const organizationsCA = ['ca.org1.example.com','ca.org2.example.com'];
-        const mspOrg = ['Org1MSP','Org2MSP'];
-        const affiliations = ['org1.department1','org2.department2'];
-        const userId = "kobao";
-        await enrollAdmin();
-        await register(userId,mspOrg[0],organizationsCA[0],affiliations[0]),
-        await auth(userId)
+        // try {
+        //     const menu = await queryAll(req.session.user.userId,req.session.user.fullname,req.session.user.idCard,req.session.user.role);
+        //     const obj = JSON.parse(menu);
+        //     console.log(obj)
+        //     return res.render("home",{ menu: obj ,message: req.flash('message')});
+        // } catch (error) {
+        //   req.flash('error',"Sai email hoặc mật khẩu")
+        //   return res.redirect('/login')
+        // }
+
         
-        // await registerUser2(user);
-        const menu = await queryAll(userId);
-        const obj = JSON.parse(menu);
-        console.log(obj)
-        res.render("home",{ menu: obj });
+        // res.redirect('/login');
+        res.render("temp")
+
        
-        
     },
 
     async detail(req,res){
         const params = req.params.key;
         const notFound = 'Not Found';
-
-        const detail = await query(params);
+        const userId = req.session.user.userId;
+        console.log(userId)
+        const detail = await query(params,userId);
         const obj = JSON.parse(detail);
         console.dir(obj)
-
-        // const m = JSON.parse(chieudaicaccanh)
-        // console.log(typeof m)
-        // console.log(obj.ChieuDaiCacCanh)
-        // console.dir(detail)
-        // const chieudaicaccanh = JSON.parse(m);
-        // console.log(m.12])
         
         if(detail == 'Not found'){
           return res.render("detail",{ detail: notFound });
@@ -49,15 +43,6 @@ function homeController() {
 
         return res.render("detail",{ detail: obj});
 
-    },
-
-
-    async handleSubmit(req,res){
-      const {owner,idCard} = req.body;
-      console.log(req.body)
-      console.log(owner)
-      console.log(idCard)
-      res.redirect('/');
     },
 
     async demoSubmit(req,res){
@@ -72,6 +57,46 @@ function homeController() {
       } catch (error) {
          res.send(error);
       }
+    },
+
+    async addAsset(req,res){
+      res.render("addAsset")
+    },
+
+
+    async handleAddAsset(req,res){
+      const {hktt,thuasodat,tobandoso,dientich,hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,thoigiandangky} = req.body;
+      const userId = req.session.user.userId;
+      const owner = req.session.user.fullname;
+      const idCard = req.session.user.idCard;
+      const toadocacdinh = '{"D1": [406836.70,1183891.04],"D2": [406836.75,1183891.44],"D3": [406836.80,1183891.37],"D4": [406836.79,1183891.40]}';
+      const chieudaicaccanh = '{"C12": 20.5, "C23": 1.12, "C34":7.53, "C41" :15.5}';
+      await invoke(userId,owner,"Nam",idCard,hktt,thuasodat,tobandoso,[123,124,125],dientich,"{}",
+      "{}",
+      hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,thoigiandangky);
+      req.flash('message',"Đã thêm mới thành công")
+      res.redirect('/');
+    },
+
+    async transferLand(req,res){
+      res.render('transferLand')
+    },
+
+    async handleTransferLand(req,res){
+      const {key,email,idCard,owner} = req.body;
+      let userId = req.session.user.userId;
+      console.log(key)
+      console.log(email)
+      console.log(idCard)
+      console.log(owner)
+      await transfer(key,userId,email,idCard,owner)
+      req.flash("message",`Đã chuyển thành công quyền sở hữu đất có mã ${key} cho người sở hữu ${owner}`)
+      res.redirect('/')
+    },
+
+    async logoutUser(req, res) {
+      req.session.destroy();
+      return res.redirect("/login");
     }
 
   };

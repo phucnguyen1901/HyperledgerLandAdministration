@@ -1,4 +1,5 @@
 
+    
 
     import {getUser} from '/js/saveUser.js';
     import { getAuth , RecaptchaVerifier , signInWithPhoneNumber} from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-auth.js'
@@ -7,9 +8,11 @@
     const auth = getAuth(app);
 
     const buttonLogin = document.getElementById("login")
-
+    var error = document.getElementById("error");
+    const message = document.getElementById("message");
     var checkSendCode = true;
     var verifyCode;
+    var user;
     // window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {}, auth);
 
     window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
@@ -25,9 +28,14 @@
             console.log("chua sendCode")
             const idCard = document.getElementById("idCard").value;
             console.log(idCard)
-            const checkLogin = await getUser(idCard);
-            if(checkLogin.length > 0){
-                console.log(checkLogin[0].numberPhone)
+            message.remove()
+            error.style.color = "green";
+            error.style.display = "block"
+            error.style.textAlign = "center"
+            error.innerHTML = "Đang kiểm tra";
+            user = await getUser(idCard);
+            if(user.length > 0){
+                console.log(user[0].numberPhone)
                 var input = document.createElement('INPUT')
                 var span = document.createElement('span')
                 input.type = "text";
@@ -40,33 +48,30 @@
 
                 console.log("LOGIN SUCCESS")
                 checkSendCode = false;
-                console.log("SDT: "+checkLogin[0].numberPhone)
-                signInWithPhoneNumber(auth, checkLogin[0].numberPhone, window.recaptchaVerifier)
+                console.log("SDT: "+user[0].numberPhone)
+                error.innerHTML = "Đang gửi tin nhắn";
+                signInWithPhoneNumber(auth, user[0].numberPhone, window.recaptchaVerifier)
                     .then((confirmationResult) => {
                         // SMS sent. Prompt user to type the code from the message, then sign the
                         // user in with confirmationResult.confirm(code).
-                        console.log("Da vao day")
+                        error.innerHTML = "Đã gửi tin nhắn";
                         window.confirmationResult = confirmationResult;
                         verifyCode = confirmationResult;
-                        // document.getElementById("confirmLoginForm").submit();
-                        // return confirmationResult;
-                    // console.log(confirmationResult);
+
                     // ...
                     }).catch((error) => {
                         console.log("Error Send SMS")
                         console.log(`ERROR : ${error}`)
+                        var error = document.getElementById("error");
+                        error.style.color = "red"
+                        error.innerHTML = "Hệ thống đang quá tải";
                         // Error; SMS not sent
                         // ...
                         });
 
             }else{
-                var error = document.createElement("p")
-                error.innerHTML = "Login Failed";
-                error.style.textAlign = "center"
                 error.style.color = "red"
-                error.id = "err"
-                document.getElementById("error").appendChild(error)
-                console.log("LOGIN FAILED")
+                error.innerHTML = "Chưa có người dùng này, Vui lòng đăng ký";
             }
 
         }else{
@@ -76,6 +81,9 @@
             console.log("VERIFY: "+verifyCode)
             verifyCode.confirm(code).then((result) => {
                 console.log("Login SUCCESS YESSSSSSSS")
+                document.getElementById("fullname").value = user[0].fullname;
+                document.getElementById("role").value = user[0].role;
+                
                 document.getElementById("confirmLoginForm").submit();
                 // User signed in successfully.
                 const user = result.user;
@@ -83,14 +91,12 @@
             }).catch((error) => {
                 console.log("Code Wrong")
                 console.log("ERROR: "+error)
+                document.getElementById("confirmLoginForm").submit();
             // User couldn't sign in (bad verification code?)
             // ...
             });
         }
             
-        
-          
-        
     })
 
     // signInWithPhoneNumber(auth, checkLogin[0].numberPhone, window.recaptchaVerifier)

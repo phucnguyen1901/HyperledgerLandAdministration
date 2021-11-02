@@ -9,7 +9,6 @@
 import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js'
 import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-analytics.js'
 
-
 const firebaseConfig = {
   apiKey: "AIzaSyAr-9DOBFF_jr-tRybPow18Yl3a_JZp4cQ",
   authDomain: "hyperledger-7a30e.firebaseapp.com",

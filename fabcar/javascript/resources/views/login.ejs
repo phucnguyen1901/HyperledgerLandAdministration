@@ -1,28 +1,51 @@
 
 
+	 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
 
     <link rel="stylesheet" type="text/css" href="/css/util.css">
 	<link rel="stylesheet" type="text/css" href="/css/main.css">
     <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+
     <div class="limiter">
 		<div class="container-login100" style="background-image: url('images/bg-01.jpg');">
         <div class="wrap-login100 p-t-30 p-b-50">
 				<span class="login100-form-title p-b-41">
 					Account Login
 				</span>
-				<form id="confirmLoginForm" method="post" action="/handleRegister" class="login100-form validate-form p-b-33 p-t-5" autocomplete="off" onsubmit="return false;">
 
-					<div class="wrap-input100 validate-input" data-validate = "Enter idCard">
-						<input id="idCard" class="input100" type="text" name="username" placeholder="ID CARD">
+						<div id="error" style=" display: none;" class="alert alert-danger" style="text-align:center; ">
+
+						</div>
+							<%
+								if(message.length > 0){
+							%>
+								<div id="message" class="alert alert-danger" style="text-align:center;">
+
+									<%= message%>
+									
+								</div>
+							<%
+								}
+							%>
+
+
+
+				
+				<form id="confirmLoginForm" method="post" action="/handleLogin" class="login100-form validate-form p-b-33 p-t-5">
+
+					<div class="wrap-input100 validate-input" data-validate = "Enter Email">
+						<input id="email" class="input100" type="text" name="email" placeholder="Email">
 						<span class="focus-input100" data-placeholder="&#xe82a;"></span>
 					</div>
-
-					<div id="code" class="wrap-input100 validate-input" data-validate="Enter CODE">
-						<!-- <input class="input100" type="password" name="pass" placeholder="CODE"> -->
-						<!-- <span class="focus-input100" data-placeholder="&#xe80f;"></span> -->
+					<div class="wrap-input100 validate-input" data-validate = "Enter Password">
+						<input id="password" class="input100" type="password" name="password" placeholder="Password">
+						<span class="focus-input100" data-placeholder="&#xe80f;"></span>
 					</div>
-
                     <div style="text-align: center;" id="recaptcha-container"></div>
 
 					<div class="container-login100-form-btn m-t-32">
@@ -31,24 +54,15 @@
 						</button>
 					</div>
 					<br>
-
-					<div id="error"></div>
-
+					<div class="d-flex justify-content-center">
+						
+						<a href="/register" class="text-info">Đăng ký ngay</a>
+					</div>
 				</form>
+				
 			</div>
 	</div>
 
 
-  <!-- <form>
-    <input type="text" id="verificationcode" value="enter verification">
-    <button type="submit" id="getOTP">Click</button>
-  </form>
- -->
 
-
- <script type="module" src="/js/loginUser.js"></script>
-
-     <!-- <label for="">CMND/CCCD</label>
-    <input type="text" name="userId" id="">
-    <label for="">Number Phone</label>
-    <input type="text" name="phone" id=""> -->
+ <!-- <script type="module" src="/js/loginUser.js"></script> -->

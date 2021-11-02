@@ -1,0 +1,49 @@
+
+
+  <!-- <%
+              if(user.role =="user"){%>
+              <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="/">Của tôi <span class="sr-only">(current)</span></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/addAsset">Thêm mới</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/transferLand">Chuyển quyền sở hữu</a>
+                  </li>
+                  <li class="nav-item">
+                      <i class="fas fa-bell"></i>
+                  </li>
+                  <li class="nav-item">
+                    <form id="logout" action="/logout" method="post">
+                      <a onclick="document.getElementById('logout').submit()" class="nav-link" href="#">Thoát</a>
+                    </form>
+                  </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                  <input class="form-control mr-sm-2" type="search" placeholder="Search">
+                  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+              </div>
+            <% }else{ %>
+              <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="/">Tất cả <span class="sr-only">(current)</span></a>
+                  </li>
+                  <li class="nav-item">
+                    <form id="logout" action="/logout" method="post">
+                      <a onclick="document.getElementById('logout').submit()" class="nav-link" href="#">Thoát</a>
+                    </form>
+                  </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                  <input class="form-control mr-sm-2" type="search" placeholder="Search">
+                  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+              </div>
+            <%
+              }
+            %> -->

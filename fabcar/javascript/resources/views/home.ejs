@@ -1,22 +1,64 @@
 
 
+<!-- <%
+  if(message.length > 0){
+%>
+  <div id="message" class="alert alert-danger" style="text-align:center;">
+
+    <%= message%>
+    
+  </div>
+<%
+  }
+%> -->
+
+
+
 <div class="container">        
+
+  <%
+    if(message.length > 0){
+  %>
+    <div id="message" class="alert alert-success d-flex justify-content-between" style="text-align:center;">
+      <%= message %>
+    <button id="delete">X</button>
+    </div>
+  <%
+    }
+  %>
+
+
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>Người sở hữu</th>
-        <th>CMND/CCCD</th>
-        <th>Thời gian đăng ký</th>
+        <% if(user.role == 'user'){ %>
+          <th>Mã</th>
+          <th>Thời gian đăng ký</th>
+          <th>Trạng thái</th>
+        <% }else{%>
+          <th>Mã</th>
+          <th>Họ tên</th>
+          <th>CMND/CCCD</th>
+          <th>Thời gian đăng ký</th>
+          <th>Trạng thái</th>
+        <%}%>
       </tr>
     </thead>
     <tbody>
 
       <% for(var element of menu){ %>
        <tr>
-           <td> <a href="./detail/<%= element.Key %>"><%= element.value.Owner %> </a></td>
-            <td><%= element.value.IdentityCard %></td>
+         <% if(user.role == 'user'){ %>
+            <td> <a href="./detail/<%= element.key %>"><%= element.key %> </a></td>
             <td><%= element.value.ThoiGianDangKy %></td>
-            
+            <td><%= element.value.Status %></td>
+          <% }else{%>
+            <td> <a href="./detail/<%= element.Key %>"><%= element.Key %> </a></td>
+            <td><%= element.Record.Owner %></td>
+            <td><%= element.Record.IdentityCard %></td>
+            <td><%= element.Record.ThoiGianDangKy %></td>
+            <td><%= element.Record.Status %></td>
+          <%}%>
           </tr>
       <%}%>
       </tbody>
@@ -25,4 +67,11 @@
 </div>
 
 
- 
+ <script>
+   if(document.getElementById("delete")){
+    document.getElementById("delete").addEventListener("click",function(){
+      document.getElementById("message").remove()
+    })
+   }
+
+ </script>

@@ -1,18 +1,19 @@
 
 
-import { getFirestore , collection, getDocs, addDoc, query, where} from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js'
-
-import app from '/js/config.js';
+const { getFirestore , collection, getDocs, addDoc, query, where} = require("firebase/firestore")
+const app = require('./config')
 
 const db = getFirestore(app);
 
-export default async function saveUser(fullname,numberPhone,idCard){
+async function saveUser(userId,fullname,numberPhone,idCard,password){
 
      try {
         const docRef = await addDoc(collection(db, "users"), {
+            userId:userId,
             fullname: fullname,
             numberPhone:numberPhone,
             idCard: idCard,
+            password:password,
             role:"user"
         });
             console.log("Document written with ID: ", docRef.id);
@@ -25,7 +26,7 @@ export default async function saveUser(fullname,numberPhone,idCard){
 
 
 // Get a list of cities from your database
-export async function getUser(userId) {
+async function getUser(userId) {
   console.log("Get user")
   const q = query(collection(db, "users"), where("userId", "==", userId));
   const citySnapshot = await getDocs(q);
@@ -38,6 +39,31 @@ export async function getUser(userId) {
       return [];
   }
 }
+
+async function loginUser(email,password) {
+  console.log("Get user")
+  const q = query(collection(db, "users"), where("userId", "==", email), where("password", "==", password));
+  const citySnapshot = await getDocs(q);
+  if(citySnapshot.docs.length > 0){
+    const cityList = citySnapshot.docs.map(doc => doc.data());
+    console.log(cityList);
+    return cityList;
+  }else{
+      console.log("Login Failed")
+      return [];
+  }
+}
+
+
+module.exports = {saveUser,getUser,loginUser}
+
+
+
+
+
+
+
+
 
 
 

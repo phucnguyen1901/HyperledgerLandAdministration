@@ -6,19 +6,19 @@
 
 
 
-<form action="./handleSubmit" method="post">
+<form action="./handleAddAsset" method="post">
     <div class="form-group">
       <label>Người sở hữu</label>
-      <input type="text" class="form-control" name="owner" placeholder="Người sở hữu">
+      <input type="text" class="form-control" name="owner" placeholder="Người sở hữu" value="<%= user.fullname%>" disabled>
     </div>
     <div class="form-group">
       <label>CMND/CCCD </label>
-      <input type="text" class="form-control" name="idCard" placeholder="Nhập CMND/CCCD">
+      <input type="text" class="form-control" name="idCard" placeholder="Nhập CMND/CCCD"  value="<%= user.idCard%>" disabled> 
     </div>
-    <div class="form-group">
+    <!-- <div class="form-group">
         <label>Giới tính</label>
         <input type="text" class="form-control" name="gender" placeholder="Nhập ">
-      </div>
+      </div> -->
       <div class="form-group">
         <label>Hộ khẩu thường trú</label>
         <input type="text" class="form-control" name="hktt" placeholder="Nhập ">
@@ -55,11 +55,14 @@
         <label>Thời gian đăng ký	</label>
         <input type="text" class="form-control" name="thoigiandangky" placeholder="Nhập ">
       </div>
-    <!-- <div class="form-check">
-      <input type="checkbox" class="form-check-input" id="exampleCheck1">
-      <label class="form-check-label" for="exampleCheck1">Check me out</label>
-    </div> -->
-    <button type="submit" class="btn btn-primary">Submit</button>
+      
+      <div class="form-group">
+        <label>Thêm ảnh	</label>
+         <input type="file" alt="Submit" width="48" height="48">
+      </div>
+     
+
+    <button type="submit" class="btn btn-primary">Đăng ký</button>
   </form>
 
 </div>
