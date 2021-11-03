@@ -7,6 +7,8 @@
 'use strict';
 
 const FabCar = require('./lib/fabcar');
+const Transfer = require('./lib/transfer')
 
 module.exports.FabCar = FabCar;
-module.exports.contracts = [ FabCar ];
+module.exports.Transfer = Transfer;
+module.exports.contracts = [ FabCar, Transfer];

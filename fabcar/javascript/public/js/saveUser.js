@@ -1,6 +1,6 @@
 
 
-import { getFirestore , collection, getDocs, addDoc, query, where} from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js'
+import { getFirestore , collection, getDocs, setDoc, addDoc, query, where , doc, updateDoc } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js'
 
 import app from '/js/config.js';
 
@@ -39,7 +39,48 @@ export async function getUser(userId) {
   }
 }
 
+async function getKeyWith(userId) {
+  console.log("Get key")
+  const q = query(collection(db, "messages"), where("userId", "==", userId));
+  const citySnapshot = await getDocs(q);
+  if(citySnapshot.docs.length > 0){
+    const cityList = citySnapshot.docs.filter((doc) => {
+      return doc.data().Seen == false;
+    });
+    const resultList = cityList.map((element) => {
+      return element.id;
+    })
+    console.log(`list : ${typeof resultList}`);
+    return resultList;
+  }else{
+      console.log("Login Failed")
+      return [];
+  }
+}
 
 
+
+
+export async function updateMessage(userId){
+    try {
+        const listMessage = await getKeyWith(userId)
+
+        if(listMessage.length > 0){
+          
+           for(var key of listMessage){
+              await updateDoc(doc(db,"messages",key),{Seen: true})
+              console.log("update success");
+            }
+
+        }else{
+          console.log("Khong co tin nhan moi")
+
+        }
+        
+   } catch (e) {
+        console.error("Error adding document: ", e);
+    }
+
+}
 
 

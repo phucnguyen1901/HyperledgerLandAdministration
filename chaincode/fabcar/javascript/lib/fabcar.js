@@ -11,14 +11,12 @@ const { Contract } = require('fabric-contract-api');
 class FabCar extends Contract {
 
     async initLedger(ctx) {
-          console.info('============= START : Initialize Ledger ===========');
+        console.info('============= START : Initialize Ledger ===========');
         const lands = [
             {
-                // (ctx,owner,gender,idCard,hktt,thuasodat,tobandoso,cacsothuagiapranh,dientich,toadocacdinh,chieudaicaccanh,hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,thoigiandangky)
-                // ID:"asset1",
+                UserId: "kobaogiopo2@gmail.com",
                 Owner:"Nguyen Van A",
-                Gender:'Nam',
-                IdentityCard:"358525142",
+                IdentityCard:"385820222",
                 HoKhauThuongTru:"Quân Ninh Kièu , TP.Càn Tho",
                 ThuaDatSo: 931,
                 ToBanDo5o: 3,
@@ -32,7 +30,8 @@ class FabCar extends Contract {
                 ThoiHanSuDung: "Lâu dài",
                 NguocGocSuDung:"Nhà nưóc giao đất có thu tiền sử dụng",
                 ThoiGianDangKy: "11/09/2021",
-                Status: "OK",
+                Status: "Đã duyệt",
+                UrlImage: "",
                 Transactions: []
             },
         ];
@@ -42,17 +41,34 @@ class FabCar extends Contract {
             await ctx.stub.putState('LANE' + i, Buffer.from(JSON.stringify(lands[i])));
             console.info('Added <--> ', lands[i]);
         }
+        
+           const Transfers = [
+            {
+                TimeStart:"01/10/2021",
+                TimeEnd: "10/10/2021",
+                From: "a@gmail.com",
+                To: "b@gmail.com",
+                ConfirmFromReceiver: false,
+                ConfirmFromAdmin: false
+             }
+        ]
+         for (let i = 0; i < Transfers.length; i++) {
+            Transfers[i].docType = 'trans';
+            await ctx.stub.putState('Trans' + i, Buffer.from(JSON.stringify(Transfers[i])));
+            console.info('Added <--> ', Transfers[i]);
+        }
+
         console.info('============= END : Initialize Ledger ===========');
 
 
     }
 
-    async createLand(ctx,key,owner,gender,idCard,hktt,thuasodat,tobandoso,cacsothuagiapranh,dientich,toadocacdinh,chieudaicaccanh,hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,thoigiandangky){
+    async createLand(ctx,userId,owner,idCard,hktt,thuasodat,tobandoso,cacsothuagiapranh,dientich,toadocacdinh,chieudaicaccanh,hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,thoigiandangky){
         console.info('============= START : Create Land ===========');
         const land = {
                 // ID:id,
+                UserId:userId,
                 Owner:owner,
-                Gender:gender,
                 IdentityCard:idCard,
                 HoKhauThuongTru:hktt,
                 ThuaDatSo: thuasodat,
@@ -66,10 +82,11 @@ class FabCar extends Contract {
                 ThoiHanSuDung: thoihansudung,
                 NguocGocSuDung:nguongocsudung,
                 ThoiGianDangKy: thoigiandangky,
-                Status: "Not OK",
+                Status: "Chưa duyệt",
                 Transactions: []
         };
-        await ctx.stub.putState(key, Buffer.from(JSON.stringify(land)));
+        let length = await this.checkLength(ctx);
+        await ctx.stub.putState(`LANE${length+1}`, Buffer.from(JSON.stringify(land)));
         console.info('============= END : Create Land ===========');
     }
 
@@ -102,45 +119,55 @@ class FabCar extends Contract {
         return JSON.stringify(allResults);
     }
 
-    async changeLandOwner(ctx, idCard, newOwner) {
-        console.info('============= START : changeCarOwner ===========');
-
-        const carAsBytes = await ctx.stub.getState(idCard); // get the car from chaincode state
-        if (!carAsBytes || carAsBytes.length === 0) {
-            throw new Error(`${idCard} does not exist`);
+    async checkLength(ctx){
+        const startKey = '';
+        const endKey = '';
+        const allResults = [];
+        for await (const {key, value} of ctx.stub.getStateByRange(startKey, endKey)) {
+            const strValue = Buffer.from(value).toString('utf8');
+            let record;
+            try {
+                record = JSON.parse(strValue);
+            } catch (err) {
+                console.log(err);
+                record = strValue;
+            }
+            allResults.push({ Key: key, Record: record });
         }
-        const car = JSON.parse(carAsBytes.toString());
-        car.owner = newOwner;
-
-        await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
-        console.info('============= END : changeCarOwner ===========');
+        console.info(allResults);
+        return allResults.length;
     }
 
-    // async queryLaneByUser(ctx){
-    //     let queryString = {}
-    //     // console.log(idCard)
-    //     // console.log(Owner)
+    async changeLandOwner(ctx,key,userId,newUserId, newIdCard, newOwner) {
+        console.info('============= START : Update Land ===========');
 
-    //     queryString.selector = {"IdentityCard":"358525142"};
-    //     // queryString.selector.IdentityCard = "358525142";
-    //     // queryString.selector.Owner = "Nguyen Van A";
+        const landAsBytes = await ctx.stub.getState(key); // get the land from chaincode state
+        if (!landAsBytes || landAsBytes.length === 0) {
+            throw new Error(`${key} does not exist`);
+        }
 
-    //     // let queryString = {
-    //     //     "selector": {
-    //     //         "IdentityCard": "358525142",
-    //     //         "Owner": "Nguyen Van A"
-    //     //     }
-    //     // }
+        let date_ob = new Date();
+        let monthNow = date_ob.getMonth() < 10 ? `0${date_ob.getMonth()}` : `${date_ob.getMonth()}`;
+        let newDate = `${date_ob.getDay()}/${monthNow}/${date_ob.getFullYear()}`;
 
-    //     let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
-    //     let result = await this.getIteratorData(iterator);
-    //     return JSON.stringify(result);
-    // }
+        let newOb = {};
+        newOb[newDate] = `Người sở hữu cũ :  "${userId}" chuyển cho người sở hữu mới "${newUserId}"`
+        let land = JSON.parse(landAsBytes.toString());
+        land.Owner = newOwner;
+        land.IdentityCard = newIdCard;
+        land.UserId = newUserId;
+        let newTransactions = land.Transactions;
+        newTransactions.push(newOb)
+        land.Transactions = newTransactions;
 
-    async queryLaneByUser(ctx,idCard,Owner){
+        await ctx.stub.putState(key, Buffer.from(JSON.stringify(land)));
+        console.info('============= END : Update Land ===========');
+    }
+
+
+    async queryLaneByUser(ctx,userId,idCard,Owner){
         let queryString = {}
-
-        queryString.selector = {"IdentityCard":idCard,"Owner":Owner};
+        queryString.selector = {"IdentityCard":idCard,"Owner":Owner,"UserId":userId};
         let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
         let result = await this.getIteratorData(iterator);
         return JSON.stringify(result);
@@ -167,15 +194,6 @@ class FabCar extends Contract {
             }
         }
     }
-
-
-    // async TransferAsset(ctx, id, newOwner) {
-    //     const assetString = await this.ReadAsset(ctx, id);
-    //     const asset = JSON.parse(assetString);
-    //     asset.Owner = newOwner;
-    //     // we insert data in alphabetic order using 'json-stringify-deterministic' and 'sort-keys-recursive'
-    //     return ctx.stub.putState(id, Buffer.from(stringify(sortKeysRecursive(asset))));
-    // }
 
 }
 

@@ -47,7 +47,7 @@ async function main(userId) {
         // const result = await contract.evaluateTransaction('queryAllLands',{"selector":{"IdentityCard":"35852514222"}});
         // const result = await contract.evaluateTransaction('queryAllLands',{"selector":{"docType":"land","owner":"tom"}});
         console.log("Da vao toi day")
-        let result = await contract.evaluateTransaction('queryTransfers');
+        let result = await contract.evaluateTransaction('queryTransferRequest',userId);
 
         // console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
         console.log(`Transaction has been evaluated, result is: ${result}`);

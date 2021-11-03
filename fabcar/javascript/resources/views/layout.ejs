@@ -36,16 +36,18 @@
         </div>
         <div>
           <ul class="flex items-center">
-            <a href="/#" id="notification">
+            <button  id="notification">
                 <i class="fa fa-bell" aria-hidden="true" style="color:green; font-size: 25px;" ></i>
-                <span id="cartCount" class="text-white relative rounded-lg py-1 px-2 bg-red-700" style="position: relative; bottom: 10px;">1</span>
-            </a>
+                <% if(noty.countMessages > 0){ %>
+                  <span id="countMessage" class="text-white relative rounded-lg py-1 px-2 bg-red-700" style="position: relative; bottom: 10px;"><%= noty.countMessages%></span>
+                <%} %>
+            </button>
             
             <li class="ml-12">
-              <a href="/#products" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Đất của tôi</a>
+              <a href="/" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Đất của tôi</a>
             </li>
             <li class="ml-12">
-              <a href="/contact" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Thêm mới</a>
+              <a href="/addAsset" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Thêm mới</a>
             </li>
 
             <li class="ml-12 ">
@@ -58,53 +60,27 @@
       </nav>
     </div>
 
-    <div  id="message" class="overflow-auto w-72 h-64 bg-gray-800" style="position: fixed; top:bottom; left: 60%;">
+    <div id="message" class="overflow-auto w-72 h-64 bg-gray-800 rounded-b-lg	" style="display: none; position: fixed; top:bottom; left: 60%; z-index: 10;">
       <ul>
-        <button>
-          <li class="px-2 py-2 border-b-2 hover:bg-blue-500 text-white flex" > 
-            <i class="fa fa-flag" aria-hidden="true"></i>
-            <span class="px-2">lorem dasfasdfsasads asd sadsadasdsaadsafsadfsad sadasdsadsa</span>  
-            <span class="text-green-500">NEW</span>
-          </li>
-        </button>
+              <% for(var element of noty.listMessages){%>
+            <a class="flex justify-center"></a>
+            <li class="px-2 py-2 border-b-2 hover:bg-blue-500 text-white " > 
+                <span class="px-2"><%= element.Message%></span>  
+                <% if(!element.Seen){ %>
+                  <span class="text-green-500">NEW</span>
+                <%}%>
+               <div class="px-2"><%= element.Time %> - <span><%= element.Date %></span></div>
+             </li>
+            </a>
+ 
+          <%} %>
+
+          
       </ul>
     </div>
 
-      <!-- <div class="container" id="menu">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">LAND ADMINISTRATION</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-             <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                  <li class="nav-item active">
-                    <a class="nav-link" href="/">Của tôi <span class="sr-only">(current)</span></a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/addAsset">Thêm mới</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/transferLand">Chuyển quyền sở hữu</a>
-                  </li>
-                  <li class="nav-item">
-                      <i class="fa fa-bell" aria-hidden="true" style="color:green"></i>
-                  </li>
-                  <li class="nav-item">
-                    <form id="logout" action="/logout" method="post">
-                      <a onclick="document.getElementById('logout').submit()" class="nav-link" href="#">Thoát</a>
-                    </form>
-                  </li>
-                </ul>
-
-              </div>
-
-            
-          
-
-          </nav>
-    </div> -->
-
+    <input type="hidden" value="<%= noty.countMessages%>" id="MessageLength">
+    <input type="hidden" value="<%= user.userId%>" id="UserId">
 
   
     <%- body %>
@@ -112,17 +88,5 @@
 </body>
 </html>
 
-<script>
-  var checkShowMessage = false;
-   document.getElementById("message").style.display = "none";
-    document.getElementById("notification").addEventListener('click',function(){
-      if(checkShowMessage){
-        document.getElementById("message").style.display = "none";
-        checkShowMessage = false;
-        
-      }else{
-        document.getElementById("message").style.display = "block";
-        checkShowMessage = true;
-      }
-   })
-  </script>
+
+  <script type="module" src="/js/handleMessage.js"></script>

@@ -1,40 +1,27 @@
 
-
-<!-- <%
-  if(message.length > 0){
-%>
-  <div id="message" class="alert alert-danger" style="text-align:center;">
-
-    <%= message%>
-    
-  </div>
-<%
-  }
-%> -->
-
-
-
-<div class="container">        
+<div class="container d-flex flex-column justify-content-center">        
 
   <%
-    if(message.length > 0){
+    if(success.length > 0){
   %>
-    <div id="message" class="alert alert-success d-flex justify-content-between" style="text-align:center;">
-      <%= message %>
+    <div id="flash" class="alert alert-success d-flex justify-content-between" style="text-align:center;">
+      <%= success %>
     <button id="delete">X</button>
     </div>
   <%
     }
   %>
 
-
-  <table class="table table-striped">
+  <% if(menu.length > 0) {%>
+  <table class="table table-striped mt-6">
     <thead>
       <tr>
         <% if(user.role == 'user'){ %>
           <th>Mã</th>
           <th>Thời gian đăng ký</th>
           <th>Trạng thái</th>
+          <th>Sửa thông tin</th>
+          <th>Chuyển quyền sở hữu</th>
         <% }else{%>
           <th>Mã</th>
           <th>Họ tên</th>
@@ -45,13 +32,15 @@
       </tr>
     </thead>
     <tbody>
-
       <% for(var element of menu){ %>
        <tr>
          <% if(user.role == 'user'){ %>
-            <td> <a href="./detail/<%= element.key %>"><%= element.key %> </a></td>
+            <td><%= element.key %> </a></td> 
             <td><%= element.value.ThoiGianDangKy %></td>
             <td><%= element.value.Status %></td>
+            <td> <a href="./detail/<%= element.key %>" class="bg-blue-700 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Sửa đổi thông tin</a> </td>
+            <td> <a href="./detail/<%= element.key %>" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Chuyển quyền sở hữu</a></td>
+
           <% }else{%>
             <td> <a href="./detail/<%= element.Key %>"><%= element.Key %> </a></td>
             <td><%= element.Record.Owner %></td>
@@ -64,13 +53,19 @@
       </tbody>
    
   </table>
+      <%}else{%>
+        <a href="/addAsset" class="btn btn-outline-success mt-32">Bạn chưa có đất , vui lòng đăng ký ngay !</a>
+        <%}%>
+
+
+
 </div>
 
 
  <script>
    if(document.getElementById("delete")){
     document.getElementById("delete").addEventListener("click",function(){
-      document.getElementById("message").remove()
+      document.getElementById("flash").remove()
     })
    }
 

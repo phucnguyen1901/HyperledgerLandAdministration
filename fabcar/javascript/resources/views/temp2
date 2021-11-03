@@ -47,3 +47,87 @@
             <%
               }
             %> -->
+
+
+
+
+        
+            <span class="px-2">lorem dasfasdfsasads asd sadsadasdsaadsaadasdsadasdsadsadsadsa asd asd asd asd as dsad asd</span>  
+            <span class="text-green-500">NEW</span>
+          
+           
+          <% for(var element of messages){%>
+            <li class="px-2 py-2 border-b-2 hover:bg-blue-500 text-white " > 
+                <a class="flex justify-center">
+                <i class="fa fa-flag " aria-hidden="true" style="color: green;"></i>
+                <span class="px-2"><%= element.Message%></span>  
+                <% if(!element.Seen){ %>
+                  <span class="text-green-500">NEW</span>
+                <%}%>
+              </a>
+             </li>
+ 
+          <%} %>
+
+
+          <% for(var element of message.listMessages){%>
+            <li class="px-2 py-2 border-b-2 hover:bg-blue-500 text-white " > 
+                <a class="flex justify-center">
+                <!-- <i class="fa fa-flag " aria-hidden="true" style="color: green;"></i> -->
+                <span class="px-2"><%= element.Message%></span>  
+                <% if(!element.Seen){ %>
+                  <span class="text-green-500">NEW</span>
+                <%}%>
+               
+              </a>
+               <div class="px-2"><%= element.Time %></div>
+             </li>
+ 
+          <%} %>
+
+              <% 
+      for(var el of m){
+    %>
+      <h1><%= el["1"] %></h1>
+    <%}%>
+
+
+        <% for(var element of noty.listMessages){%>
+            <li class="px-2 py-2 border-b-2 hover:bg-blue-500 text-white " > 
+                <a class="flex justify-center">
+                <span class="px-2"><%= element.Message%></span>  
+                <% if(!element.Seen){ %>
+                  <span class="text-green-500">NEW</span>
+                <%}%>
+                </a>
+               <div class="px-2"><%= element.Time %></div>
+             </li>
+ 
+          <%} %>
+
+
+
+
+async function saveMessage(userId,message) {
+    let date_ob = new Date();
+    let monthNow = date_ob.getMonth() < 10 ? `0${date_ob.getMonth()}` : `${date_ob.getMonth()}`;
+    let newDate = `${date_ob.getDay()}/${monthNow}/${date_ob.getFullYear()}`;
+    let time = `${date_ob.getSeconds()}:${date_ob.getMinutes}:${date_ob.getHours()}`;
+
+    try {
+        const docRef = await addDoc(collection(db, "messages"), {
+            userId:userId,
+            Message: message,
+            Date: newDate,
+            Time: time,
+            Seen: false,
+        });
+            console.log("Message written with ID: ", docRef.id);
+        } catch (e) {
+            console.error("Error adding document: ", e);
+    }
+
+}
+
+
+

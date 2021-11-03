@@ -1,17 +1,26 @@
 
 
-
+  <%
+    if(messages.error > 0){
+  %>
+    <div id="flash" class="alert alert-success d-flex justify-content-between" style="text-align:center;">
+      <%= message.error %>
+    <button id="delete">X</button>
+    </div>
+  <%
+    }
+  %>
 
 <div class="container">
 
-<form action="./handleTransferLand" method="post">
-      <div class="form-group">
+<form action="/handleTransferLand" method="post">
+    <div class="form-group">
       <label>Nhập mã cần chuyển: </label>
-      <input type="text" class="form-control" name="key" placeholder="Nhập mã">
+      <input type="text" class="form-control" name="key" id="keyLane" placeholder="Nhập mã" value="<%= key %>" disabled>
     </div>
     <div class="form-group">
       <label>Email người sở hữu mới: </label>
-      <input type="text" class="form-control" name="email" placeholder="Nhập Người sở hữu mới">
+      <input type="text" class="form-control" name="email" placeholder="Nhập Người sở hữu mới" value="<%= messages.fullname%>">
     </div>
     <div class="form-group">
       <label>CMND/CCCD người sở hữu mới</label>
@@ -19,7 +28,7 @@
     </div>
     <div class="form-group">
     <label>Họ tên người sở hữu mới</label>
-    <input type="text" class="form-control" name="owner" placeholder="Nhập họ tên người sở hữu mới">
+    <input type="text" class="form-control" name="owner" placeholder="Nhập họ tên người sở hữu mới" value="<%= messages.fullname%>">
     </div>
 
     <button type="submit" class="btn btn-primary">Xác Nhận</button>
@@ -30,13 +39,13 @@
 <div style="height: 100px;"></div>
 
 
-
-
-
-
-
-
-
+<script>
+   if(document.getElementById("delete")){
+    document.getElementById("delete").addEventListener("click",function(){
+      document.getElementById("flash").remove()
+    })
+   }
+</script>
 
 
 

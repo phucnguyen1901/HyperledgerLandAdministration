@@ -32,6 +32,7 @@ app.use(expressLayout);
 
 app.use((req, res, next) => {
   res.locals.user = req.session.user;
+  res.locals.noty = req.session.noty;
   next();
 });
 
@@ -42,24 +43,21 @@ app.set("view engine", "ejs");
 
 app.use(express.static(__dirname + '/public'));
 
-app.get('/detail/:key',homeController().detail)
-// app.get('/',authMiddleware.requireAuth,homeController().index)
-app.get('/',homeController().index)
+app.get('/detail/:key',authMiddleware.requireAuth,homeController().detail)
+app.get('/',authMiddleware.requireAuth,homeController().index)
 app.post('/handleAddAsset',homeController().handleAddAsset)
-app.get('/addAsset',homeController().addAsset)
+app.get('/addAsset',authMiddleware.requireAuth,homeController().addAsset)
 
 app.get('/login',userController().login)
 app.get('/register',userController().register)
 app.post('/handleRegister',userController().handleRegister)
-app.post('/checkRegister',userController().checkRegister)
 app.post('/handleLogin',userController().handleLogin)
 
 
-app.get('/transferLand',homeController().transferLand)
+app.get('/transferLand/:key',authMiddleware.requireAuth,homeController().transferLand)
 app.post('/handleTransferLand',homeController().handleTransferLand)
 
 app.post('/logout',homeController().logoutUser)
-
 
 
 app.listen(3000,()=>console.log("Server started with port 3000"));
