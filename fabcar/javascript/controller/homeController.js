@@ -1,11 +1,13 @@
 
 const queryAll = require("../queryAllLands")
 const query = require("../queryLand")
+const queryTransfer = require("../queryTransfer")
 const invoke = require('../invoke')
-const transfer = require('../transferLand')
+// const transfer = require('../transferLand')
+const createTransfer = require('../inkvode_transfer')
 const {saveMessage,getMessage} = require('./saveUser')
 
-const queryMessage = require("../queryMessage")
+const updateLane = require('../updateLane')
 
 
 const {register, auth} = require('../register')
@@ -16,7 +18,6 @@ function homeController() {
     async index(req, res) {
         try {
             const menu = await queryAll(req.session.user.userId,req.session.user.fullname,req.session.user.idCard,req.session.user.role);
-           
             const obj = JSON.parse(menu);
             return res.render("home",{ menu: obj , success: req.flash('success')});
             // return res.render("home",{ menu: obj , message: req.flash('message')});
@@ -92,8 +93,10 @@ function homeController() {
       console.log(owner);
 
       try {
-        await transfer(key,userId,email,idCard,owner)
-        req.flash("success",`Đã chuyển thành công quyền sở hữu đất có mã ${key} cho người sở hữu ${owner}`)
+        // await transfer(key,userId,email,idCard,owner)
+        await createTransfer(userId,key,email)
+        await updateLane(userId,key,"Đang chuyển")
+        req.flash("success",`Đã gửi yêu cầu chuyển quyền sở hữu đất có mã ${key} cho người sở hữu ${email}`)
         res.redirect('/')
       } catch (error) {
         req.flash("owner",owner)
@@ -109,6 +112,15 @@ function homeController() {
     async logoutUser(req, res) {
       req.session.destroy();
       return res.redirect("/login");
+    },
+
+    async processTransfer(req,res){
+      const key = req.params.key;
+      let dataString = await queryTransfer(req.session.user.userId,key);
+      let data = JSON.parse(dataString)
+
+      return res.render("processTransfer",{dataProcessTransfer: data[0], length:data.length})
+
     }
 
   };

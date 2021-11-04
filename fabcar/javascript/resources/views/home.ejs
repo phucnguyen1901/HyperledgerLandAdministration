@@ -12,6 +12,7 @@
     }
   %>
 
+
   <% if(menu.length > 0) {%>
   <table class="table table-striped mt-6">
     <thead>
@@ -39,7 +40,13 @@
             <td><%= element.value.ThoiGianDangKy %></td>
             <td><%= element.value.Status %></td>
             <td> <a href="./detail/<%= element.key %>" class="bg-blue-700 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Sửa đổi thông tin</a> </td>
-            <td> <a href="./detail/<%= element.key %>" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Chuyển quyền sở hữu</a></td>
+            <td>
+              <% if(element.value.Status == "Đang chuyển"){ %>
+                <a href="./detail/processTransfer/<%= element.key %>" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Tiến độ chuyển quyền sở hữu</a>
+              <%}else{%>
+                <a href="./detail/<%= element.key %>" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Chuyển quyền sở hữu</a>
+              <%} %>
+            </td>
 
           <% }else{%>
             <td> <a href="./detail/<%= element.Key %>"><%= element.Key %> </a></td>

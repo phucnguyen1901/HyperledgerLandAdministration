@@ -1,7 +1,4 @@
 
-
-
-
 /*
  * Copyright IBM Corp. All Rights Reserved.
  *
@@ -15,7 +12,7 @@ const path = require('path');
 const fs = require('fs');
 
 
-async function main(userId) {
+async function main(userId,lane) {
     try {
         // load the network configuration
         const ccpPath = path.resolve(__dirname, '..', '..', 'test-network', 'organizations', 'peerOrganizations', 'org1.example.com', 'connection-org1.json');
@@ -42,7 +39,7 @@ async function main(userId) {
         const network = await gateway.getNetwork('mychannel');
 
         // Get the contract from the network.
-        const contract = network.getContract('fabcar','Message');
+        const contract = network.getContract('fabcar','Transfer');
 
         // Evaluate the specified transaction.
         // queryCar transaction - requires 1 argument, ex: ('queryCar', 'CAR4')
@@ -50,8 +47,10 @@ async function main(userId) {
         // const result = await contract.evaluateTransaction('queryAllLands',{"selector":{"IdentityCard":"35852514222"}});
         // const result = await contract.evaluateTransaction('queryAllLands',{"selector":{"docType":"land","owner":"tom"}});
         console.log("Da vao toi day")
-        let result = await contract.evaluateTransaction('queryMessageOwner',userId);
-
+        let result = await contract.evaluateTransaction('queryTransferRequest',userId,lane);
+        if(result == "Not found"){
+            result = [];
+        }
         // console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
         console.log(`Transaction has been evaluated, result is: ${result}`);
 
@@ -68,30 +67,6 @@ async function main(userId) {
 // main();
 
 module.exports = main;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

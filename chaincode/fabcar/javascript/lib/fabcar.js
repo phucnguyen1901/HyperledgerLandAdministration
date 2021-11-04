@@ -54,7 +54,7 @@ class FabCar extends Contract {
         ]
          for (let i = 0; i < Transfers.length; i++) {
             Transfers[i].docType = 'trans';
-            await ctx.stub.putState('Trans' + i, Buffer.from(JSON.stringify(Transfers[i])));
+            await ctx.stub.putState('TRANS' + i, Buffer.from(JSON.stringify(Transfers[i])));
             console.info('Added <--> ', Transfers[i]);
         }
 
@@ -159,6 +159,21 @@ class FabCar extends Contract {
         let newTransactions = land.Transactions;
         newTransactions.push(newOb)
         land.Transactions = newTransactions;
+
+        await ctx.stub.putState(key, Buffer.from(JSON.stringify(land)));
+        console.info('============= END : Update Land ===========');
+    }
+
+        async updateStatusLand(ctx,key,status) {
+        console.info('============= START : Update Land ===========');
+
+        const updateAsBytes = await ctx.stub.getState(key); // get the land from chaincode state
+        if (!updateAsBytes || updateAsBytes.length === 0) {
+            throw new Error(`${key} does not exist`);
+        }
+
+        let land = JSON.parse(updateAsBytes.toString());
+        land.Status = status;
 
         await ctx.stub.putState(key, Buffer.from(JSON.stringify(land)));
         console.info('============= END : Update Land ===========');

@@ -131,3 +131,69 @@ async function saveMessage(userId,message) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<% if(length > 0){%>
+&emsp;
+<div class="container flex justify-content-between">
+   <div style="text-align:center">
+        <p style="transform: translateY(90%);">ĐÃ GỬI YÊU CẦU CHUYỂN ĐẤT</p>
+    </div>
+   <div>
+        <i class="fa fa-long-arrow-right" aria-hidden="true" style="font-size: 64px;"></i>
+   </div>
+    <div style="text-align:center">
+        <p style="transform: translateY(90%);">NGƯỜI NHẬN ĐÃ ĐỒNG Ý NHẬN QUYỀN SỞ HỮU ĐẤT</p>
+    </div>
+    <div>
+        <i class="fa fa-long-arrow-right" aria-hidden="true" style="font-size: 64px;"></i>
+   </div>
+    <div style="text-align:center">
+        <p style="transform: translateY(90%);">QUẢN TRỊ VIÊN ĐÃ XÁC NHẬN CHUYỂN THÀNH CÔNG</p>
+    </div>
+
+
+
+
+</div>
+&emsp;
+<div class="container">
+    <table class="table table-striped mt-6">
+        <thead>
+            <th style="text-align:center;">Mã đất</th>
+            <th style="text-align:center;">NGƯỜI CHUYỂN</th>
+            <th style="text-align:center;">NGƯỜI NHẬN</th>
+            <th style="text-align:center;">THỜI GIAN CHUYỂN</th>
+            <th style="text-align:center;">THỜI GIAN CHUYỂN THÀNH CÔNG</th>
+        </thead>
+        <tbody>
+            <td><%= dataProcessTransfer.key%></td>
+            <td><%= dataProcessTransfer.value.From%></td>
+            <td><%= dataProcessTransfer.value.To%></td>
+            <td><%= dataProcessTransfer.value.TimeStart%></td>
+            <td><%= dataProcessTransfer.value.TimeEnd%></td>
+        </tbody>
+    </table>
+</div>
+
+<%}else{%>
+    
+    <a href="/" class="btn btn-success">Có lỗi vui lòng quay lại</a>
+    
+<%}%>
+
+
+
+
+

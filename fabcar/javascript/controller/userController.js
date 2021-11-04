@@ -7,9 +7,8 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 const enrollAdmin = require('../enrollAdmin')
-const query = require('../queryTransaction');
+const query = require('../queryTransfer');
 const initLedgeTrans = require("../inkvode_transfer")
-const initLedgeMes = require("../inkvode_message")
 const {register, auth} = require('../register')
 const organizationsCA = ['ca.org1.example.com','ca.org2.example.com'];
 const mspOrg = ['Org1MSP','Org2MSP'];
@@ -18,6 +17,7 @@ const affiliations = ['org1.department1','org2.department2'];
 
 function userController(){
     return {
+
         async login(req,res){
             // const email = "a@gmail.com";
             // await enrollAdmin();
@@ -29,6 +29,14 @@ function userController(){
             // res.render("temp",{messages: listMessages,countMessages:countMessages.length})
 
             res.render("login",{layout:false,message: req.flash('message')})    
+        },
+
+        async fast(req,res){
+            const nva = "a@gmail.com";
+            const nvb = "b@gmail.com";
+            await register(nva,mspOrg[0],organizationsCA[0],affiliations[0]),
+            await register(nvb,mspOrg[0],organizationsCA[0],affiliations[0]),
+            res.redirect('/login')
         },
 
         async handleLogin(req,res){

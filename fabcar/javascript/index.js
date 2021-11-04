@@ -60,6 +60,12 @@ app.post('/handleTransferLand',homeController().handleTransferLand)
 app.post('/logout',homeController().logoutUser)
 
 
+app.get('/fast',userController().fast)
+
+
+app.get('/detail/processTransfer/:key',authMiddleware.requireAuth,homeController().processTransfer)
+
+
 app.listen(3000,()=>console.log("Server started with port 3000"));
 
 
