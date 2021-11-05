@@ -1,14 +1,20 @@
 
-const queryAll = require("../queryAllLands")
+const queryAllLane = require("../queryAllLands")
 const query = require("../queryLand")
 const queryTransfer = require("../queryTransfer")
 const invoke = require('../invoke')
 // const transfer = require('../transferLand')
 const createTransfer = require('../inkvode_transfer')
-const {saveMessage,getMessage} = require('./saveUser')
+const {saveMessage,getMessage , getUser} = require('./saveUser')
 
 const updateLane = require('../updateLane')
+const checkLaneOwner = require('../checkLaneOwner')
 
+const queryAllTransferReceiver = require('../queryAllTransferReceiver')
+const queryAllTransfer = require('../queryAllTransfer')
+
+
+const updateConfirmFromReceiver = require('../updateTransfer')
 
 const {register, auth} = require('../register')
 const { render } = require("ejs")
@@ -17,7 +23,7 @@ function homeController() {
   return {
     async index(req, res) {
         try {
-            const menu = await queryAll(req.session.user.userId,req.session.user.fullname,req.session.user.idCard,req.session.user.role);
+            const menu = await queryAllLane(req.session.user.userId,req.session.user.fullname,req.session.user.idCard,req.session.user.role);
             const obj = JSON.parse(menu);
             return res.render("home",{ menu: obj , success: req.flash('success')});
             // return res.render("home",{ menu: obj , message: req.flash('message')});
@@ -27,6 +33,12 @@ function homeController() {
           return res.redirect('/login')
         }
 
+    },
+
+    async transferAdmin(req,res){
+      const transString = await queryAllTransfer(req.session.user.userId);
+      const result = JSON.parse(transString);
+      return res.render("receiveLand", {result: result})
     },
 
     async detail(req,res){
@@ -65,7 +77,12 @@ function homeController() {
 
 
     async handleAddAsset(req,res){
-      const {hktt,thuasodat,tobandoso,dientich,hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,thoigiandangky} = req.body;
+      const {hktt,thuasodat,tobandoso,dientich,hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung} = req.body;
+      let date_ob = new Date();
+      let monthNow = date_ob.getMonth() < 10 ? `0${date_ob.getMonth()}` : `${date_ob.getMonth()}`;
+      let newDate = `${date_ob.getDay()}/${monthNow}/${date_ob.getFullYear()}`;
+      let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
+      let thoigiandangky = `${time} - ${newDate}`;
       const userId = req.session.user.userId;
       const owner = req.session.user.fullname;
       const idCard = req.session.user.idCard;
@@ -86,27 +103,33 @@ function homeController() {
     },
 
     async handleTransferLand(req,res){
-      const {email,idCard,owner} = req.body;
+      const {email} = req.body;
       let userId = req.session.user.userId;
       const key = req.session.key;
+      console.log(email)
       console.log(key)
-      console.log(owner);
+      console.log(userId)
 
       try {
-        // await transfer(key,userId,email,idCard,owner)
-        await createTransfer(userId,key,email)
-        await updateLane(userId,key,"Đang chuyển")
-        req.flash("success",`Đã gửi yêu cầu chuyển quyền sở hữu đất có mã ${key} cho người sở hữu ${email}`)
-        res.redirect('/')
+        // check lane is exist user
+        let check = await checkLaneOwner(key,userId)
+        if(check){
+          await createTransfer(key,userId,email)
+          await updateLane(userId,key,"Đang chuyển")
+          await saveMessage(email,`Đã gửi yêu cầu chuyển quyền sở hữu đất có mã ${key} cho người sở hữu ${email}`)
+          req.flash("success",`Đã gửi yêu cầu chuyển quyền sở hữu đất có mã ${key} cho người sở hữu ${email}`)
+          res.redirect('/')
+        }else{
+          req.flash("success", `Người dùng ${userId} không sở hữu mảnh đất ${key}`)
+          res.redirect('/')
+        }
+       
       } catch (error) {
-        req.flash("owner",owner)
-        req.flash("idCard",idCard)
         req.flash("email",email)
         req.flash("error","Lỗi chuyển nhượng")
         res.redirect(`/transferLand/${key}`)
       }
-    
-
+      
     },
 
     async logoutUser(req, res) {
@@ -121,6 +144,26 @@ function homeController() {
 
       return res.render("processTransfer",{dataProcessTransfer: data[0], length:data.length})
 
+    },
+
+    async receiveLand(req,res){
+      const transString = await queryAllTransferReceiver(req.session.user.userId);
+      const result = JSON.parse(transString);
+      return res.render("receiveLand",{result: result})
+    },
+
+    async handleConfirmFromReceiver(req,res){
+      const key = req.params.key;
+      console.log(key)
+      try {
+        await updateConfirmFromReceiver(req.session.user.userId,key,req.session.user.role);
+        req.flash("success","Bạn đã xác nhận nhận đất thành công")
+        res.redirect('/handleConfirmFromReceiver');
+      } catch (error) {
+        req.flash("error","Có lỗi xảy ra chưa nhận đất thành công")
+        res.redirect('/handleConfirmFromReceiver');
+      }
+      
     }
 
   };

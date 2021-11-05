@@ -46,7 +46,7 @@ async function main(userId,lane) {
         // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')
         // const result = await contract.evaluateTransaction('queryAllLands',{"selector":{"IdentityCard":"35852514222"}});
         // const result = await contract.evaluateTransaction('queryAllLands',{"selector":{"docType":"land","owner":"tom"}});
-        console.log("Da vao toi day")
+        console.log("query transfer")
         let result = await contract.evaluateTransaction('queryTransferRequest',userId,lane);
         if(result == "Not found"){
             result = [];

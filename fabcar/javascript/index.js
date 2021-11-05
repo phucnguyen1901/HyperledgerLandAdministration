@@ -66,6 +66,10 @@ app.get('/fast',userController().fast)
 app.get('/detail/processTransfer/:key',authMiddleware.requireAuth,homeController().processTransfer)
 
 
+app.get('/receiveLand',authMiddleware.requireAuth,homeController().receiveLand);
+app.get('/requestTransferLane',homeController().transferAdmin)
+app.get('/handleConfirmFromReceiver/:key',authMiddleware.requireAuth,homeController().handleConfirmFromReceiver);
+
 app.listen(3000,()=>console.log("Server started with port 3000"));
 
 

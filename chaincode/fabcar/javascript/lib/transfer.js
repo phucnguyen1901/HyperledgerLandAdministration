@@ -12,26 +12,6 @@ const { Contract } = require('fabric-contract-api');
 
 class Transfer extends Contract {
     
-    async initLedger(ctx){
-        const Transfers = [
-            {
-                Lane:"LANE0",
-                TimeStart:"01/10/2021",
-                TimeEnd: "10/10/2021",
-                From: "a@gmail.com",
-                To: "b@gmail.com",
-                ConfirmFromReceiver: false,
-                ConfirmFromAdmin: false
-             }
-        ]
-         for (let i = 0; i < Transfers.length; i++) {
-            Transfers[i].docType = 'trans';
-            await ctx.stub.putState('Trans' + i, Buffer.from(JSON.stringify(Transfers[i])));
-            console.info('Added <--> ', Transfers[i]);
-        }
-
-    }
-
     async createTransfer(ctx,lane,userTransfer,userReceive){
         console.info('============= START : Create transfer ===========');
         let date_ob = new Date();
@@ -47,28 +27,18 @@ class Transfer extends Contract {
                 ConfirmFromAdmin: false,
                 docType: "trans"
         };
-        let length = await this.checkLength(ctx);
-        await ctx.stub.putState(`TRANS${length+1}`, Buffer.from(JSON.stringify(transfer)));
+        let resultString = await this.checkLengthTransfer(ctx);
+        let result = JSON.parse(resultString);
+        await ctx.stub.putState(`TRANS${result.length+1}`, Buffer.from(JSON.stringify(transfer)));
         console.info('============= END : Create transfer ===========');
     }
 
-     async checkLength(ctx){
-        const startKey = '';
-        const endKey = '';
-        const allResults = [];
-        for await (const {key, value} of ctx.stub.getStateByRange(startKey, endKey)) {
-            const strValue = Buffer.from(value).toString('utf8');
-            let record;
-            try {
-                record = JSON.parse(strValue);
-            } catch (err) {
-                console.log(err);
-                record = strValue;
-            }
-            allResults.push({ Key: key, Record: record });
-        }
-        console.info(allResults);
-        return allResults.length;
+    async checkLengthTransfer(ctx){
+        let queryString = {}
+        queryString.selector = {"docType":"trans"};
+        let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
+        let result = await this.getIteratorData(iterator);
+        return JSON.stringify(result);
     }
 
     async updateTransfer(ctx,key,role) {
@@ -89,6 +59,7 @@ class Transfer extends Contract {
         console.info('============= END : Update transfer ===========');
     }
 
+
     async queryTransfers(ctx){
         const startKey = '';
         const endKey = '';
@@ -108,11 +79,33 @@ class Transfer extends Contract {
         return JSON.stringify(allResults);
     }
 
-    async queryTransferRequest(ctx,userId,lane){
+    async queryTransferReceive(ctx,userId){
         let queryString = {}
-        queryString.selector = {"docType":"trans","From":userId, "Lane":lane};
+        queryString.selector = {"docType":"trans","To":userId};
         let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
         let result = await this.getIteratorData(iterator);
+        return JSON.stringify(result);
+    }
+
+    async queryTransferAll(ctx){
+        let queryString = {}
+        queryString.selector = {"docType":"trans"};
+        let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
+        let result = await this.getIteratorData(iterator);
+        return JSON.stringify(result);
+    }
+
+    async queryTransferRequest(ctx,userId,lane){
+        let queryString = {}
+        queryString.selector = {"docType":"trans","From":userId,"Lane":lane};
+        let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
+        let result = await this.getIteratorData(iterator);
+        if(result < 1){
+            queryString.selector = {"docType":"trans","To":userId,"Lane":lane};
+            let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
+            let result = await this.getIteratorData(iterator);
+            return JSON.stringify(result);
+        }
         return JSON.stringify(result);
     }
 

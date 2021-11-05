@@ -8,14 +8,15 @@
 'use strict';
 
 const { Gateway, Wallets } = require('fabric-network');
-const fs = require('fs');
 const path = require('path');
+const fs = require('fs');
 
-async function main(lane,userId,userReceive) {
+
+async function main(key,userId) {
     try {
         // load the network configuration
         const ccpPath = path.resolve(__dirname, '..', '..', 'test-network', 'organizations', 'peerOrganizations', 'org1.example.com', 'connection-org1.json');
-        let ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
+        const ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), 'wallet');
@@ -38,19 +39,22 @@ async function main(lane,userId,userReceive) {
         const network = await gateway.getNetwork('mychannel');
 
         // Get the contract from the network.
-        const contract = network.getContract('fabcar','Transfer');
-        console.log("Create Transfer")
-        // Submit the specified transaction.
-        // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
-        // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR12', 'Dave')
-        await contract.submitTransaction('createTransfer',lane,userId,userReceive);
-        console.log('Transaction has been submitted');
+        const contract = network.getContract('fabcar');
+
+        // Evaluate the specified transaction.
+        // queryCar transaction - requires 1 argument, ex: ('queryCar', 'CAR4')
+        // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')
+        const result = await contract.evaluateTransaction('checkLaneOwner',key,userId);
+        // const result = await contract.evaluateTransaction('queryLand',{"selector":{"docType":"asset","owner":"tom"}});
+
+        console.log(`Transaction has been evaluated, result is: ${result}`);
 
         // Disconnect from the gateway.
         await gateway.disconnect();
-
+        return result;
+        
     } catch (error) {
-        console.error(`Failed to submit transaction: ${error}`);
+        console.error(`Failed to evaluate transaction: ${error}`);
         process.exit(1);
     }
 }
@@ -58,7 +62,6 @@ async function main(lane,userId,userReceive) {
 // main();
 
 module.exports = main;
-
 
 
 

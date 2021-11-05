@@ -49,8 +49,9 @@ class FabCar extends Contract {
                 From: "a@gmail.com",
                 To: "b@gmail.com",
                 ConfirmFromReceiver: false,
-                ConfirmFromAdmin: false
-             }
+                ConfirmFromAdmin: false,
+                Lane:"LANE0"
+            }
         ]
          for (let i = 0; i < Transfers.length; i++) {
             Transfers[i].docType = 'trans';
@@ -83,11 +84,21 @@ class FabCar extends Contract {
                 NguocGocSuDung:nguongocsudung,
                 ThoiGianDangKy: thoigiandangky,
                 Status: "Chưa duyệt",
-                Transactions: []
+                Transactions: [],
+                docType: 'land'
         };
-        let length = await this.checkLength(ctx);
-        await ctx.stub.putState(`LANE${length+1}`, Buffer.from(JSON.stringify(land)));
+        let resultString = await this.checkLengthLand(ctx);
+        let result = JSON.parse(resultString);
+        await ctx.stub.putState(`LANE${result.length+1}`, Buffer.from(JSON.stringify(land)));
         console.info('============= END : Create Land ===========');
+    }
+
+    async checkLengthLand(ctx){
+        let queryString = {}
+        queryString.selector = {"docType":"land"};
+        let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
+        let result = await this.getIteratorData(iterator);
+        return JSON.stringify(result);
     }
 
     async queryLand(ctx,key){
@@ -179,10 +190,33 @@ class FabCar extends Contract {
         console.info('============= END : Update Land ===========');
     }
 
+    async checkLaneOwner(ctx,key,userId){
+
+        const checkAsBytes = await ctx.stub.getState(key);
+        if (!checkAsBytes || checkAsBytes.length === 0) {
+            throw new Error(`${key} does not exist`);
+        }
+
+        let check = JSON.parse(checkAsBytes.toString());
+        if(check.UserId == userId){
+            return true;
+        }
+
+        return false;
+    }
+
+    
+    async queryLaneByAdmin(ctx){
+        let queryString = {}
+        queryString.selector = {docType:'land'};
+        let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
+        let result = await this.getIteratorData(iterator);
+        return JSON.stringify(result);
+    }
 
     async queryLaneByUser(ctx,userId,idCard,Owner){
         let queryString = {}
-        queryString.selector = {"IdentityCard":idCard,"Owner":Owner,"UserId":userId};
+        queryString.selector = {"IdentityCard":idCard,"Owner":Owner,"UserId":userId, docType:'land'};
         let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
         let result = await this.getIteratorData(iterator);
         return JSON.stringify(result);

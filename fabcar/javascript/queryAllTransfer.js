@@ -1,4 +1,5 @@
 
+
 /*
  * Copyright IBM Corp. All Rights Reserved.
  *
@@ -8,14 +9,15 @@
 'use strict';
 
 const { Gateway, Wallets } = require('fabric-network');
-const fs = require('fs');
 const path = require('path');
+const fs = require('fs');
 
-async function main(lane,userId,userReceive) {
+
+async function main(userId) {
     try {
         // load the network configuration
         const ccpPath = path.resolve(__dirname, '..', '..', 'test-network', 'organizations', 'peerOrganizations', 'org1.example.com', 'connection-org1.json');
-        let ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
+        const ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), 'wallet');
@@ -25,7 +27,7 @@ async function main(lane,userId,userReceive) {
         // Check to see if we've already enrolled the user.
         const identity = await wallet.get(userId);
         if (!identity) {
-            console.log('An identity for the user "appUser" does not exist in the wallet');
+            console.log(`An identity for the user "${userId}" does not exist in the wallet`);
             console.log('Run the registerUser.js application before retrying');
             return;
         }
@@ -39,18 +41,26 @@ async function main(lane,userId,userReceive) {
 
         // Get the contract from the network.
         const contract = network.getContract('fabcar','Transfer');
-        console.log("Create Transfer")
-        // Submit the specified transaction.
-        // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
-        // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR12', 'Dave')
-        await contract.submitTransaction('createTransfer',lane,userId,userReceive);
-        console.log('Transaction has been submitted');
+
+        // Evaluate the specified transaction.
+        // queryCar transaction - requires 1 argument, ex: ('queryCar', 'CAR4')
+        // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')
+        // const result = await contract.evaluateTransaction('queryAllLands',{"selector":{"IdentityCard":"35852514222"}});
+        // const result = await contract.evaluateTransaction('queryAllLands',{"selector":{"docType":"land","owner":"tom"}});
+        console.log("Da vao toi day")
+        let result = await contract.evaluateTransaction('queryTransferAll');
+        if(result == "Not found"){
+            result = [];
+        }
+        // console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
+        console.log(`Transaction has been evaluated, result is: ${result}`);
 
         // Disconnect from the gateway.
         await gateway.disconnect();
-
+        return result.toString();
+        
     } catch (error) {
-        console.error(`Failed to submit transaction: ${error}`);
+        console.error(`Failed to evaluate transaction: ${error}`);
         process.exit(1);
     }
 }
@@ -58,15 +68,3 @@ async function main(lane,userId,userReceive) {
 // main();
 
 module.exports = main;
-
-
-
-
-
-
-
-
-
-
-
-

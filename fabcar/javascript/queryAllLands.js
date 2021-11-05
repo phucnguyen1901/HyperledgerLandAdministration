@@ -49,7 +49,7 @@ async function main(userId,fullname,idCard,role) {
         if(role == "user"){
             result = await contract.evaluateTransaction('queryLaneByUser',userId,idCard,fullname);
         }else{
-            result = await contract.evaluateTransaction('queryAllLands');
+            result = await contract.evaluateTransaction('queryLaneByAdmin');
         }
 
         // console.log(`Transaction has been evaluated, result is: ${result.toString()}`);

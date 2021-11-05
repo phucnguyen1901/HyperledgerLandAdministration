@@ -15,13 +15,7 @@
     var user;
     // window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {}, auth);
 
-    window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
-    'size': 'invisible',
-    'callback': (response) => {
-        // reCAPTCHA solved, allow signInWithPhoneNumber.
-        onSignInSubmit();
-    }
-    }, auth);
+
 
     buttonLogin.addEventListener("click",async function(){
         if(checkSendCode){

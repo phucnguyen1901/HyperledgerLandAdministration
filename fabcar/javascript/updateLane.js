@@ -40,7 +40,7 @@ async function main(userId,key,stt) {
 
         // Get the contract from the network.
         const contract = network.getContract('fabcar');
-        console.log("Da vao den day")
+        console.log("Update transfer")
         // Submit the specified transaction.
         // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
         // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR12', 'Dave')

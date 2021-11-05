@@ -1,20 +1,37 @@
+
+<% if(dataProcessTransfer.value.ConfirmFromReceiver){%>
+    <style>
+        .receiverConfirm{
+            color: green;
+        }
+    </style>
+<%}%>
+
+<% if(dataProcessTransfer.value.ConfirmFromReceiver){%>
+    <style>
+        .adminConfirm{
+            color: green;
+        }
+    </style>
+<%}%>
+
 <% if(length > 0){%>
 &emsp;
 <div class="container flex justify-content-between">
    <div style="text-align:center">
-        <p style="transform: translateY(90%);">ĐÃ GỬI YÊU CẦU CHUYỂN ĐẤT</p>
+        <p style="transform: translateY(90%); color: green;">ĐÃ GỬI YÊU CẦU CHUYỂN ĐẤT</p>
     </div>
    <div>
-        <i class="fa fa-long-arrow-right" aria-hidden="true" style="font-size: 64px;"></i>
+        <i class="fa fa-long-arrow-right" aria-hidden="true" style="font-size: 64px; color: green;" ></i>
    </div>
     <div style="text-align:center">
-        <p style="transform: translateY(90%);">NGƯỜI NHẬN ĐÃ ĐỒNG Ý NHẬN QUYỀN SỞ HỮU ĐẤT</p>
+        <p class="receiverConfirm" style="transform: translateY(90%);">NGƯỜI NHẬN ĐÃ ĐỒNG Ý NHẬN ĐẤT</p>
     </div>
     <div>
-        <i class="fa fa-long-arrow-right" aria-hidden="true" style="font-size: 64px;"></i>
+        <i class="fa fa-long-arrow-right receiverConfirm" aria-hidden="true" style="font-size: 64px;"></i>
    </div>
     <div style="text-align:center">
-        <p style="transform: translateY(90%);">QUẢN TRỊ VIÊN ĐÃ XÁC NHẬN CHUYỂN THÀNH CÔNG</p>
+        <p class="adminConfirm" style="transform: translateY(90%);">QUẢN TRỊ VIÊN ĐÃ XÁC NHẬN CHUYỂN THÀNH CÔNG</p>
     </div>
 
 
