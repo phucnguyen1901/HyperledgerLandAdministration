@@ -10,11 +10,13 @@ const {saveMessage,getMessage , getUser} = require('./saveUser')
 const updateLane = require('../updateLane')
 const checkLaneOwner = require('../checkLaneOwner')
 
+const changeLandOwner = require('../confirmTransferLand')
+
 const queryAllTransferReceiver = require('../queryAllTransferReceiver')
 const queryAllTransfer = require('../queryAllTransfer')
 
 
-const updateConfirmFromReceiver = require('../updateTransfer')
+const updateTransfer = require('../updateTransfer')
 
 const {register, auth} = require('../register')
 const { render } = require("ejs")
@@ -38,7 +40,7 @@ function homeController() {
     async transferAdmin(req,res){
       const transString = await queryAllTransfer(req.session.user.userId);
       const result = JSON.parse(transString);
-      return res.render("receiveLand", {result: result})
+      return res.render("allTransfer", {menu: result})
     },
 
     async detail(req,res){
@@ -53,7 +55,28 @@ function homeController() {
           return res.render("detail",{ detail: notFound });
         }
 
-        return res.render("detail",{ detail: obj, key: key});
+        return res.render("detail",{ detail: obj, key: key, requestPerson: 'transferUser'});
+
+    },
+
+    async detailReceive(req,res){
+      const {key, userIdTransfer} = req.params;
+      console.log(`key :`+key)
+      console.log(`userID :`+userIdTransfer)
+      try {
+        let laneString = await queryTransfer(userIdTransfer,key);
+        const lane = JSON.parse(laneString);
+        if(lane[0].value.To == req.session.user.userId){
+          const detail = await query(key,userIdTransfer);
+          const obj = JSON.parse(detail);
+          return res.render("detail",{ detail: obj, key: lane[0].key, requestPerson: 'receiveUser'});
+        }
+
+      } catch (error) {
+        console.log("Loi roi"+error)
+        req.flash("error","Xảy ra lỗi")
+        return res.redirect("/receiveLand")
+      }
 
     },
 
@@ -149,21 +172,59 @@ function homeController() {
     async receiveLand(req,res){
       const transString = await queryAllTransferReceiver(req.session.user.userId);
       const result = JSON.parse(transString);
-      return res.render("receiveLand",{result: result})
+      return res.render("receiveLand",{result: result, success:req.flash("success")})
     },
 
     async handleConfirmFromReceiver(req,res){
       const key = req.params.key;
       console.log(key)
       try {
-        await updateConfirmFromReceiver(req.session.user.userId,key,req.session.user.role);
+        console.log(`role :${req.session.user.role}`)
+        console.log(`role1 :${key}`)
+        console.log(`role2 :${req.session.user.userId}`)
+        await updateTransfer(req.session.user.userId,key,req.session.user.role);
         req.flash("success","Bạn đã xác nhận nhận đất thành công")
-        res.redirect('/handleConfirmFromReceiver');
+        res.redirect('/receiveLand');
       } catch (error) {
         req.flash("error","Có lỗi xảy ra chưa nhận đất thành công")
-        res.redirect('/handleConfirmFromReceiver');
+        res.redirect('/receiveLand');
       }
       
+    },
+
+    async updateStatusLaneAdmin(req,res){
+      const {key,status ,userId} = req.body;
+      console.log(key);
+      console.log(status);
+      try {
+          await updateLane(userId,key,status)
+          req.flash("success",`Cập nhật thành công mã đất ${key} của người sở hữu ${userId} với trạng thái mới ${status}`)
+          res.redirect("/")
+      } catch (error) {
+          req.flash("success",`Cập nhật thất bại`)
+          res.redirect("/")
+      }
+    
+    },
+
+    async confirmTransferAdmin(req,res){
+      const {key,userIdOld, userIdNew ,lane} = req.body;
+      try {
+        let newUser = await getUser(userIdNew);
+        let newFullname = newUser[0].fullname;
+        let newIdCard = newUser[0].idCard;
+
+        await changeLandOwner(lane,userIdOld,userIdNew,newIdCard,newFullname)
+        await updateLane(req.session.user.userId,lane,"Đã duyệt")
+        await updateTransfer(req.session.user.userId,key,req.session.user.role)
+        req.flash("success","Xác nhận chuyển đất "+key+" thành công")
+        res.redirect('/requestAllTransferLane')
+      } catch (error) {
+        console.log(`ERROR : ${error}`);
+        req.flash("success","Có lỗi xảy ra")
+        res.redirect('/requestAllTransferLane')
+      }
+     
     }
 
   };

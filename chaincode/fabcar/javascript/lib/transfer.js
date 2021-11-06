@@ -95,6 +95,7 @@ class Transfer extends Contract {
         return JSON.stringify(result);
     }
 
+
     async queryTransferRequest(ctx,userId,lane){
         let queryString = {}
         queryString.selector = {"docType":"trans","From":userId,"Lane":lane};

@@ -55,7 +55,7 @@ app.post('/handleLogin',userController().handleLogin)
 
 
 app.get('/transferLand/:key',authMiddleware.requireAuth,homeController().transferLand)
-app.post('/handleTransferLand',homeController().handleTransferLand)
+app.post('/handleTransferLand',authMiddleware.requireAuth,homeController().handleTransferLand)
 
 app.post('/logout',homeController().logoutUser)
 
@@ -67,8 +67,15 @@ app.get('/detail/processTransfer/:key',authMiddleware.requireAuth,homeController
 
 
 app.get('/receiveLand',authMiddleware.requireAuth,homeController().receiveLand);
-app.get('/requestTransferLane',homeController().transferAdmin)
-app.get('/handleConfirmFromReceiver/:key',authMiddleware.requireAuth,homeController().handleConfirmFromReceiver);
+app.get('/requestAllTransferLane',authMiddleware.requireAuth,homeController().transferAdmin)
+app.get('/handleConfirmFromReceiver/:key',authMiddleware.requireAuth,authMiddleware.requireAuth,homeController().handleConfirmFromReceiver);
+
+app.get('/detailReceive/:userIdTransfer/:key',authMiddleware.requireAuth,homeController().detailReceive)
+
+app.post('/updateStatusLaneAdmin',authMiddleware.requireAuth,homeController().updateStatusLaneAdmin)
+
+
+app.post('/confirmTransferAdmin',authMiddleware.requireAuth,homeController().confirmTransferAdmin)
 
 app.listen(3000,()=>console.log("Server started with port 3000"));
 

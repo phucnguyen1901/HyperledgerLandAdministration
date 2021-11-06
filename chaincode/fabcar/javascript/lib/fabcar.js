@@ -14,7 +14,7 @@ class FabCar extends Contract {
         console.info('============= START : Initialize Ledger ===========');
         const lands = [
             {
-                UserId: "kobaogiopo2@gmail.com",
+                UserId: "b@gmail.com",
                 Owner:"Nguyen Van A",
                 IdentityCard:"385820222",
                 HoKhauThuongTru:"Quân Ninh Kièu , TP.Càn Tho",
@@ -46,8 +46,8 @@ class FabCar extends Contract {
             {
                 TimeStart:"01/10/2021",
                 TimeEnd: "10/10/2021",
-                From: "a@gmail.com",
-                To: "b@gmail.com",
+                From: "a123@gmail.com",
+                To: "b123@gmail.com",
                 ConfirmFromReceiver: false,
                 ConfirmFromAdmin: false,
                 Lane:"LANE0"

@@ -11,10 +11,10 @@
   %>
 
     <%
-    if(messages.success > 0){
+    if(success.length > 0){
   %>
     <div id="flash" class="alert alert-success d-flex justify-content-between" style="text-align:center;">
-      <%= message.success %>
+      <%= success %>
     <button id="delete">X</button>
     </div>
   <%
@@ -22,54 +22,41 @@
   %>
 
 
+
+
 <div class="container">
     <table class="table table-striped mt-6">
         <thead>
             <th style="text-align:center;">Mã đất</th>
             <th style="text-align:center;">NGƯỜI CHUYỂN</th>
-            <th style="text-align:center;">NGƯỜI NHẬN</th>
             <th style="text-align:center;">THỜI GIAN CHUYỂN</th>
-            <th style="text-align:center;">XEM CHI TIẾT ĐẤT</th> 
-            <th style="text-align:center;">XEM TIẾN ĐỘ CHUYỂN NHƯỢNG</th>
-            <%
-              if(user.role == 'user'){ %>
-                <th style="text-align:center;">Nhận đất</th>
-            <%  }else{ %>
-                <th style="text-align:center;">Xác nhận chuyển đất</th>
-            <%  }
-            %>
-
+            <th style="text-align:center;">TRẠNG THÁI</th> 
+            <th style="text-align:center;">NHẬN ĐẤT</th>
 
         </thead>
         <tbody>
             <% for(var element of result){ %>
-                <tr>
+              <a href="/#">
+                 <tr>
                     <td style="text-align:center"><%= element.value.Lane%></td>
                     <td style="text-align:center"><%= element.value.From%></td>
-                    <td style="text-align:center"><%= element.value.To%></td>
                     <td style="text-align:center"><%= element.value.TimeStart%></td>
-                    <td style="text-align:center"> <a href="" class="bg-blue-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Xem chi tiết đất</a></td>
-                    <td style="text-align:center"> <a href="/detail/processTransfer/<%= element.value.Lane %>" class="bg-blue-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Tiến độ chuyển nhượng</a></td>
-
-                    <td style="text-align:center">
-                            <a href="/handleConfirmFromReceiver/<%= element.key %>" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Nhận đất</a>
-                    </td>
-
-                    <!-- <%
-                      if(user.role == 'user'){ %>
-                         <td style="text-align:center">
-                            <a href="/" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Nhận đất</a>
-                         </td>
-                    <%  }else{ %>
+                    <% if(element.value.ConfirmFromReceiver){%>
+                        <td style="text-align:center; color:green;">Đã nhận đất</td>
                           <td style="text-align:center">
-                            <a href="/" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Nhận đất</a>
-                          </td>     
-                    <%  }
-                    %> -->
-
+                            <a href="/detail/processTransfer/<%= element.value.Lane %> " class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Tiến độ chuyển đất</a>
+                        </td>
+                    <%}else{%>
+                        <td style="text-align:center; color:red;">Chưa nhận đất</td>
+                        <td style="text-align:center">
+                            <a href="/detailReceive/<%= element.value.From %>/<%= element.value.Lane %>" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Nhận đất</a>
+                        </td>
+                    <%}%>
 
 
                 </tr>
+              </a>
+               
                 <%}  %>
             
         </tbody>

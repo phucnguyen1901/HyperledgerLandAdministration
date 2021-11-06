@@ -1,0 +1,66 @@
+
+<div class="container">
+
+
+
+<div class="flex mt-8">
+    <a href="/" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mr-8">Tất cả đất</a>
+    <a href="/requestAllTransferLane" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Tất cả yêu cầu chuyển đất</a>
+</div>
+
+
+
+  <table class="table table-striped mt-6">
+    <thead>
+        <tr>
+            <th style="text-align:center;">Mã đất</th>
+            <th style="text-align:center;">Ngày yêu cầu</th>
+            <th style="text-align:center;">Người chuyển</th>
+            <th style="text-align:center;">Người nhận</th>
+            <th style="text-align:center;">Người nhận xác nhận</th>
+            <th style="text-align:center;">Admin xác nhận</th>
+        </tr>
+
+    </thead>
+    <tbody>
+           <% for(var element of menu){ %>
+            <tr>
+                <td style="text-align:center;"><%= element.value.Lane %></td>
+                <td style="text-align:center;"><%= element.value.TimeStart %></td>
+                <td style="text-align:center;"><%= element.value.From %></td>
+                <td style="text-align:center;"><%= element.value.To %></td>
+
+                    <%if(element.value.ConfirmFromReceiver){%>
+                        <td style="text-align:center; color:green;">Đã xác nhận</td>
+                          <%  if(!element.value.ConfirmFromAdmin){ %>
+                                 <td style="text-align:center;">
+                                    <form action="/confirmTransferAdmin" method="POST">
+                                        <input type="hidden" name="key" value=<%= element.key %> >
+                                        <input type="hidden" name="userIdOld" value=<%= element.value.From %> >
+                                        <input type="hidden" name="userIdNew" value=<%= element.value.To %> >
+                                        <input type="hidden" name="lane" value=<%= element.value.Lane %> >
+                                        <button type="submit" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-1 px-4 rounded">Xác nhận chuyển quyền sở hữu đất</button>
+
+                                    </form>
+                                  </td>
+                            <% }else{ %>
+                                <td style="text-align:center; color:green;">Admin đã xác nhận</td>
+                            <%}%>
+
+                      
+                    <%}else{%>
+                        <td style="text-align:center; color:red;">Chưa xác nhận</td>
+                        <td style="text-align:center;">
+                            <p class="text-red-700">Người nhận chưa xác nhận </p>
+                        </td>
+                    <%}%>
+
+                </tr>
+           <%}%>
+    </tbody>
+  </table>
+
+
+
+
+</div>

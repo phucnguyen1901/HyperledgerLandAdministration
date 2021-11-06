@@ -34,8 +34,10 @@ function userController(){
         async fast(req,res){
             const nva = "a@gmail.com";
             const nvb = "b@gmail.com";
+            const nvc = "c@gmail.com";
             await register(nva,mspOrg[0],organizationsCA[0],affiliations[0]),
             await register(nvb,mspOrg[0],organizationsCA[0],affiliations[0]),
+            await register(nvc,mspOrg[0],organizationsCA[0],affiliations[0]),
             res.redirect('/login')
         },
 
