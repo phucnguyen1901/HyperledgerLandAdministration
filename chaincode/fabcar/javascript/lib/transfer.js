@@ -12,13 +12,13 @@ const { Contract } = require('fabric-contract-api');
 
 class Transfer extends Contract {
     
-    async createTransfer(ctx,lane,userTransfer,userReceive){
+    async createTransfer(ctx,land,userTransfer,userReceive){
         console.info('============= START : Create transfer ===========');
         let date_ob = new Date();
-        let monthNow = date_ob.getMonth() < 10 ? `0${date_ob.getMonth()}` : `${date_ob.getMonth()}`;
-        let newDate = `${date_ob.getDay()}/${monthNow}/${date_ob.getFullYear()}`;
+        let monthNow = date_ob.getMonth() < 10 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
+        let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
         const transfer = {
-                Lane:lane,
+                Land:land,
                 TimeStart: newDate,
                 TimeEnd: "-/-/-",
                 From: userTransfer,
@@ -87,6 +87,15 @@ class Transfer extends Contract {
         return JSON.stringify(result);
     }
 
+    async queryTransferOwner(ctx,userId){
+        let queryString = {}
+        queryString.selector = {"docType":"trans","From":userId};
+        let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
+        let result = await this.getIteratorData(iterator);
+        return JSON.stringify(result);
+    }
+
+
     async queryTransferAll(ctx){
         let queryString = {}
         queryString.selector = {"docType":"trans"};
@@ -96,18 +105,28 @@ class Transfer extends Contract {
     }
 
 
-    async queryTransferRequest(ctx,userId,lane){
+    async queryTransferRequest(ctx,userId,land){
         let queryString = {}
-        queryString.selector = {"docType":"trans","From":userId,"Lane":lane};
+        queryString.selector = {"docType":"trans","From":userId,"Land":land};
         let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
         let result = await this.getIteratorData(iterator);
         if(result < 1){
-            queryString.selector = {"docType":"trans","To":userId,"Lane":lane};
+            queryString.selector = {"docType":"trans","To":userId,"Land":land};
             let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
             let result = await this.getIteratorData(iterator);
             return JSON.stringify(result);
         }
         return JSON.stringify(result);
+    }
+
+    async queryTransferOne(ctx,key){
+        const transAsBytes = await ctx.stub.getState(key); // get the car from chaincode state
+        if (!transAsBytes || transAsBytes.length === 0) {
+            // throw new Error(`${carNumber} does not exist`);
+            return 'Not found';
+        }
+        console.log(transAsBytes.toString());
+        return transAsBytes.toString();
     }
 
     async getIteratorData(iterator){

@@ -1,6 +1,6 @@
 
 
-const { getFirestore , collection, getDocs, setDoc, addDoc, query, where} = require("firebase/firestore")
+const { getFirestore , collection, getDocs, setDoc, addDoc, query, where, serverTimestamp, orderBy} = require("firebase/firestore")
 const app = require('./config')
 
 const db = getFirestore(app);
@@ -42,8 +42,8 @@ async function getUser(userId) {
 
 async function saveMessage(userId,message) {
     let date_ob = new Date();
-    let monthNow = date_ob.getMonth() < 10 ? `0${date_ob.getMonth()}` : `${date_ob.getMonth()}`;
-    let newDate = `${date_ob.getDay()}/${monthNow}/${date_ob.getFullYear()}`;
+    let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
+    let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
     let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
 
     try {
@@ -53,6 +53,7 @@ async function saveMessage(userId,message) {
             Date: newDate,
             Time: time,
             Seen: false,
+            timestamp:serverTimestamp()
         });
             console.log("Message written with ID: ", docRef.id);
         } catch (e) {
@@ -64,7 +65,7 @@ async function saveMessage(userId,message) {
 
 async function getMessage(userId) {
   console.log("Get messages")
-  const q = query(collection(db, "messages"), where("userId", "==", userId));
+  const q = query(collection(db, "messages"), where("userId", "==", userId),orderBy("timestamp","desc"));
   const citySnapshot = await getDocs(q);
   if(citySnapshot.docs.length > 0){
     const cityList = citySnapshot.docs.map(doc => doc.data());

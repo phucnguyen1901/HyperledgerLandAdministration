@@ -5,7 +5,7 @@
 
 <div class="flex mt-8">
     <a href="/" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mr-8">Tất cả đất</a>
-    <a href="/requestAllTransferLane" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Tất cả yêu cầu chuyển đất</a>
+    <a href="/requestAllTransferLand" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Tất cả yêu cầu chuyển đất</a>
 </div>
 
 
@@ -25,7 +25,7 @@
     <tbody>
            <% for(var element of menu){ %>
             <tr>
-                <td style="text-align:center;"><%= element.value.Lane %></td>
+                <td style="text-align:center;"><%= element.value.Land %></td>
                 <td style="text-align:center;"><%= element.value.TimeStart %></td>
                 <td style="text-align:center;"><%= element.value.From %></td>
                 <td style="text-align:center;"><%= element.value.To %></td>
@@ -38,7 +38,7 @@
                                         <input type="hidden" name="key" value=<%= element.key %> >
                                         <input type="hidden" name="userIdOld" value=<%= element.value.From %> >
                                         <input type="hidden" name="userIdNew" value=<%= element.value.To %> >
-                                        <input type="hidden" name="lane" value=<%= element.value.Lane %> >
+                                        <input type="hidden" name="land" value=<%= element.value.Land %> >
                                         <button type="submit" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-1 px-4 rounded">Xác nhận chuyển quyền sở hữu đất</button>
 
                                     </form>

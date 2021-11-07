@@ -15,7 +15,7 @@
   <%if(user.role == 'admin'){%>
     <div class="flex mt-8">
     <a href="" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mr-8">Tất cả đất</a>
-    <a href="/requestAllTransferLane" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Tất cả yêu cầu chuyển đất</a>
+    <a href="/requestAllTransferLand" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Tất cả yêu cầu chuyển đất</a>
     </div>
  <%}%>
 
@@ -47,16 +47,17 @@
             <td><%= element.value.ThoiGianDangKy %></td>
             <td><%= element.value.Status %></td>
             <%if(element.value.Status == "Chưa duyệt"){%>
-
               <td> <a href="./detail/<%= element.key %>" class="bg-blue-700 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Sửa đổi thông tin</a> </td>
             <%}else{%>
               <td class="text-red-700">Không thể sửa đổi thông tin</td>
             <%}%>
             <td>
               <% if(element.value.Status == "Đang chuyển"){ %>
-                <a href="./detail/processTransfer/<%= element.key %>" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Tiến độ chuyển quyền sở hữu</a>
+                 <p class="text-green-700">Đất đang chuyển nhượng</p>
+              <%}else if(element.value.Status == "Chưa duyệt"){%>
+                <p class="text-red-700">Đất chưa được duyệt không thể chuyển</p>
               <%}else{%>
-                <a href="./detail/<%= element.key %>" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Chuyển quyền sở hữu</a>
+                  <a href="./detail/<%= element.key %>" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Chuyển quyền sở hữu</a>
               <%} %>
             </td>
 
@@ -66,55 +67,61 @@
             <td><%= element.value.Owner %></td>
             <td><%= element.value.IdentityCard %></td>
             <td><%= element.value.ThoiGianDangKy %></td>
-            <td>
-              <div class="relative">
-                <form id="formUpdateLane" action="/updateStatusLaneAdmin" method="POST">
-                  <input type="hidden" name="key" value=<%= element.key %> />
-                  <input type="hidden" name="userId" value=<%= element.value.UserId %> />
-                  <select name="status" data-toggle="modal" data-target="#<%= element.key %>" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-1 px-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
-                    <option 
-                    <%= 
-                              element.value.Status === "Chưa duyệt" ? "selected" : ""
-                     %> 
-                     >Chưa duyệt</option>
-                    <option
-                    <%= 
-                              element.value.Status === "Đang chuyển" ? "selected" : ""
-                     %> 
-                    > Đang chuyển</option>
-                    <option 
-                      <%= 
-                              element.value.Status === "Đã duyệt" ? "selected" : ""
-                     %> 
-                    >Đã duyệt</option>
-                  </select>
-                  <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center text-gray-700">
-                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                  </div>
-                              <!-- Modal -->
-            <div class="modal fade" id=<%= element.key %> tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Cập nhật trạng thái</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body" id="<%= element.key%>">
-                    Bạn muốn cập nhật trạng thái mã đất <%= element.key%>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button id="updateLane" onclick="this.form.submit()" type="button" class="btn btn-primary">Save changes</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-                </form>
+            <%if(element.value.Status == "Đang chuyển"){%>
+                <td class="text-green-700">Đất đang được chuyển</td>
+            <%}else{%>
 
-              </div>
-           </td>
+                 <td>
+                              <div class="relative">
+                                <form id="formUpdateLand" action="/updateStatusLandAdmin" method="POST">
+                                  <input type="hidden" name="key" value=<%= element.key %> />
+                                  <input type="hidden" name="userId" value=<%= element.value.UserId %> />
+                                  <select name="status" data-toggle="modal" data-target="#<%= element.key %>" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-1 px-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+                                    <option 
+                                    <%= 
+                                              element.value.Status === "Chưa duyệt" ? "selected" : ""
+                                    %> 
+                                    >Chưa duyệt</option>
+                                    <option
+                                    <%= 
+                                              element.value.Status === "Đang chuyển" ? "selected" : ""
+                                    %> 
+                                    > Đang chuyển</option>
+                                    <option 
+                                      <%= 
+                                              element.value.Status === "Đã duyệt" ? "selected" : ""
+                                    %> 
+                                    >Đã duyệt</option>
+                                  </select>
+                                  <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center text-gray-700">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                  </div>
+                                              <!-- Modal -->
+                            <div class="modal fade" id=<%= element.key %> tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Cập nhật trạng thái</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <div class="modal-body" id="<%= element.key%>">
+                                    Bạn muốn cập nhật trạng thái mã đất <%= element.key%>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button id="updateLand" onclick="this.form.submit()" type="button" class="btn btn-primary">Save changes</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                                </form>
+
+                              </div>
+                          </td>
+            <%}%>
+            
           <%}%>
             </tr>
 
@@ -124,7 +131,7 @@
    
   </table>
       <%}else{%>
-        <a href="/addAsset" class="btn btn-outline-success mt-32">Bạn chưa có đất , vui lòng đăng ký ngay !</a>
+        <a href="/addAsset" class="btn btn-outline-success mt-32">Bạn chưa có đất , Đăng ký ngay !</a>
         <%}%>
 
 </div>
@@ -148,8 +155,8 @@
     })
    }
 
-   document.getElementById("updateLane").addEventListener('click',function(){
-     document.getElementById("formUpdateLane").submit();
+   document.getElementById("updateLand").addEventListener('click',function(){
+     document.getElementById("formUpdateLand").submit();
    })
 
 

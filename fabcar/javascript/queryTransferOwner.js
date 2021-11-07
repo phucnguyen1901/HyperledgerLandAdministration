@@ -12,7 +12,7 @@ const path = require('path');
 const fs = require('fs');
 
 
-async function main(key,userId) {
+async function main(userId) {
     try {
         // load the network configuration
         const ccpPath = path.resolve(__dirname, '..', '..', 'test-network', 'organizations', 'peerOrganizations', 'org1.example.com', 'connection-org1.json');
@@ -26,7 +26,7 @@ async function main(key,userId) {
         // Check to see if we've already enrolled the user.
         const identity = await wallet.get(userId);
         if (!identity) {
-            console.log('An identity for the user "appUser" does not exist in the wallet');
+            console.log(`An identity for the user "${userId}" does not exist in the wallet`);
             console.log('Run the registerUser.js application before retrying');
             return;
         }
@@ -39,19 +39,24 @@ async function main(key,userId) {
         const network = await gateway.getNetwork('mychannel');
 
         // Get the contract from the network.
-        const contract = network.getContract('fabcar');
+        const contract = network.getContract('fabcar','Transfer');
 
         // Evaluate the specified transaction.
         // queryCar transaction - requires 1 argument, ex: ('queryCar', 'CAR4')
         // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')
-        const result = await contract.evaluateTransaction('checkLaneOwner',key,userId);
-        // const result = await contract.evaluateTransaction('queryLand',{"selector":{"docType":"asset","owner":"tom"}});
-
+        // const result = await contract.evaluateTransaction('queryAllLands',{"selector":{"IdentityCard":"35852514222"}});
+        // const result = await contract.evaluateTransaction('queryAllLands',{"selector":{"docType":"land","owner":"tom"}});
+        console.log("query transfer")
+        let result = await contract.evaluateTransaction('queryTransferOwner',userId);
+        if(result == "Not found"){
+            result = [];
+        }
+        // console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
         console.log(`Transaction has been evaluated, result is: ${result}`);
 
         // Disconnect from the gateway.
         await gateway.disconnect();
-        return result;
+        return result.toString();
         
     } catch (error) {
         console.error(`Failed to evaluate transaction: ${error}`);
@@ -62,8 +67,6 @@ async function main(key,userId) {
 // main();
 
 module.exports = main;
-
-
 
 
 

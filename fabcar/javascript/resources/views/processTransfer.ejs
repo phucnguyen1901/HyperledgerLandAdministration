@@ -1,5 +1,5 @@
 
-<% if(dataProcessTransfer.value.ConfirmFromReceiver){%>
+<% if(dataProcessTransfer.ConfirmFromReceiver){%>
     <style>
         .receiverConfirm{
             color: green;
@@ -7,7 +7,7 @@
     </style>
 <%}%>
 
-<% if(dataProcessTransfer.value.ConfirmFromAdmin){%>
+<% if(dataProcessTransfer.ConfirmFromAdmin){%>
     <style>
         .adminConfirm{
             color: green;
@@ -15,7 +15,6 @@
     </style>
 <%}%>
 
-<% if(length > 0){%>
 &emsp;
 <div class="container flex justify-content-between">
    <div style="text-align:center">
@@ -48,20 +47,14 @@
             <th style="text-align:center;">THỜI GIAN CHUYỂN THÀNH CÔNG</th>
         </thead>
         <tbody>
-            <td style="text-align:center"><%= dataProcessTransfer.value.Lane%></td>
-            <td style="text-align:center"><%= dataProcessTransfer.value.From%></td>
-            <td style="text-align:center"><%= dataProcessTransfer.value.To%></td>
-            <td style="text-align:center"><%= dataProcessTransfer.value.TimeStart%></td>
-            <td style="text-align:center"><%= dataProcessTransfer.value.TimeEnd%></td>
+            <td style="text-align:center"><%= dataProcessTransfer.Land%></td>
+            <td style="text-align:center"><%= dataProcessTransfer.From%></td>
+            <td style="text-align:center"><%= dataProcessTransfer.To%></td>
+            <td style="text-align:center"><%= dataProcessTransfer.TimeStart%></td>
+            <td style="text-align:center"><%= dataProcessTransfer.TimeEnd%></td>
         </tbody>
     </table>
 </div>
-
-<%}else{%>
-    
-    <a href="/" class="btn btn-success">Có lỗi vui lòng quay lại</a>
-    
-<%}%>
 
 
 

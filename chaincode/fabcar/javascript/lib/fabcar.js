@@ -38,7 +38,7 @@ class FabCar extends Contract {
 
         for (let i = 0; i < lands.length; i++) {
             lands[i].docType = 'land';
-            await ctx.stub.putState('LANE' + i, Buffer.from(JSON.stringify(lands[i])));
+            await ctx.stub.putState('LAND' + i, Buffer.from(JSON.stringify(lands[i])));
             console.info('Added <--> ', lands[i]);
         }
         
@@ -50,7 +50,7 @@ class FabCar extends Contract {
                 To: "b123@gmail.com",
                 ConfirmFromReceiver: false,
                 ConfirmFromAdmin: false,
-                Lane:"LANE0"
+                Land:"LAND0"
             }
         ]
          for (let i = 0; i < Transfers.length; i++) {
@@ -89,7 +89,7 @@ class FabCar extends Contract {
         };
         let resultString = await this.checkLengthLand(ctx);
         let result = JSON.parse(resultString);
-        await ctx.stub.putState(`LANE${result.length+1}`, Buffer.from(JSON.stringify(land)));
+        await ctx.stub.putState(`LAND${result.length+1}`, Buffer.from(JSON.stringify(land)));
         console.info('============= END : Create Land ===========');
     }
 
@@ -158,8 +158,8 @@ class FabCar extends Contract {
         }
 
         let date_ob = new Date();
-        let monthNow = date_ob.getMonth() < 10 ? `0${date_ob.getMonth()}` : `${date_ob.getMonth()}`;
-        let newDate = `${date_ob.getDay()}/${monthNow}/${date_ob.getFullYear()}`;
+        let monthNow = date_ob.getMonth() < 10 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
+        let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
 
         let newOb = {};
         newOb[newDate] = `Người sở hữu cũ :  "${userId}" chuyển cho người sở hữu mới "${newUserId}"`
@@ -190,7 +190,7 @@ class FabCar extends Contract {
         console.info('============= END : Update Land ===========');
     }
 
-    async checkLaneOwner(ctx,key,userId){
+    async checkLandOwner(ctx,key,userId){
 
         const checkAsBytes = await ctx.stub.getState(key);
         if (!checkAsBytes || checkAsBytes.length === 0) {
@@ -206,7 +206,7 @@ class FabCar extends Contract {
     }
 
     
-    async queryLaneByAdmin(ctx){
+    async queryLandByAdmin(ctx){
         let queryString = {}
         queryString.selector = {docType:'land'};
         let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
@@ -214,7 +214,7 @@ class FabCar extends Contract {
         return JSON.stringify(result);
     }
 
-    async queryLaneByUser(ctx,userId,idCard,Owner){
+    async queryLandByUser(ctx,userId,idCard,Owner){
         let queryString = {}
         queryString.selector = {"IdentityCard":idCard,"Owner":Owner,"UserId":userId, docType:'land'};
         let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));

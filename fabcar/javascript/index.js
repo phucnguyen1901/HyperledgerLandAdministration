@@ -63,16 +63,18 @@ app.post('/logout',homeController().logoutUser)
 app.get('/fast',userController().fast)
 
 
-app.get('/detail/processTransfer/:key',authMiddleware.requireAuth,homeController().processTransfer)
+app.post('/processTransfer',authMiddleware.requireAuth,homeController().processTransfer)
 
 
 app.get('/receiveLand',authMiddleware.requireAuth,homeController().receiveLand);
-app.get('/requestAllTransferLane',authMiddleware.requireAuth,homeController().transferAdmin)
-app.get('/handleConfirmFromReceiver/:key',authMiddleware.requireAuth,authMiddleware.requireAuth,homeController().handleConfirmFromReceiver);
+app.get('/transferLandOwner',authMiddleware.requireAuth,homeController().transferLandOwner);
+
+app.get('/requestAllTransferLand',authMiddleware.requireAuth,homeController().transferAdmin)
+app.get('/handleConfirmFromReceiver/:key',authMiddleware.requireAuth,homeController().handleConfirmFromReceiver);
 
 app.get('/detailReceive/:userIdTransfer/:key',authMiddleware.requireAuth,homeController().detailReceive)
 
-app.post('/updateStatusLaneAdmin',authMiddleware.requireAuth,homeController().updateStatusLaneAdmin)
+app.post('/updateStatusLandAdmin',authMiddleware.requireAuth,homeController().updateStatusLandAdmin)
 
 
 app.post('/confirmTransferAdmin',authMiddleware.requireAuth,homeController().confirmTransferAdmin)
