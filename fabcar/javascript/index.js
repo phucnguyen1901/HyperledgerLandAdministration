@@ -45,7 +45,7 @@ app.use(express.static(__dirname + '/public'));
 
 app.get('/detail/:key',authMiddleware.requireAuth,homeController().detail)
 app.get('/',authMiddleware.requireAuth,homeController().index)
-app.post('/handleAddAsset',homeController().handleAddAsset)
+app.post('/handleAddAsset',authMiddleware.requireAuth,homeController().handleAddAsset)
 app.get('/addAsset',authMiddleware.requireAuth,homeController().addAsset)
 
 app.get('/login',userController().login)
@@ -78,6 +78,9 @@ app.post('/updateStatusLandAdmin',authMiddleware.requireAuth,homeController().up
 
 
 app.post('/confirmTransferAdmin',authMiddleware.requireAuth,homeController().confirmTransferAdmin)
+
+app.post('/cancelTransferLane',authMiddleware.requireAuth,homeController().cancelTransferLane)
+
 
 app.listen(3000,()=>console.log("Server started with port 3000"));
 

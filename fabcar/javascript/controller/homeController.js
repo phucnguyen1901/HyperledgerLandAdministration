@@ -19,9 +19,9 @@ const queryTransferOne = require('../queryTransferOne')
 
 
 const updateTransfer = require('../updateTransfer')
+const cancleTransferFromUser = require('../cancleTransferFromUser')
 
-const {register, auth} = require('../register')
-const { render } = require("ejs")
+
 
 function homeController() {
   return {
@@ -187,13 +187,12 @@ function homeController() {
 
     async handleConfirmFromReceiver(req,res){
       const key = req.params.key;
+      const userIdFromTransfer = req.prams.userIdTransfer;
       console.log(key)
       try {
-        console.log(`role :${req.session.user.role}`)
-        console.log(`role1 :${key}`)
-        console.log(`role2 :${req.session.user.userId}`)
         await updateTransfer(req.session.user.userId,key,req.session.user.role);
         await saveMessage(req.session.user.userId,"Bạn đã nhận đất thành công")
+        await saveMessage(userIdFromTransfer,`Người dùng ${req.session.user.userId} đã nhận mã đất ${key}`)
         req.flash("success","Bạn đã xác nhận nhận đất thành công")
         res.redirect('/receiveLand');
       } catch (error) {
@@ -242,6 +241,23 @@ function homeController() {
         res.redirect('/requestAllTransferLand')
       }
      
+    },
+
+    async cancelTransferLane(req,res){
+      try {
+        const {keyLand, keyTransfer, receiver} = req.body;
+        await cancleTransferFromUser(keyTransfer,req.session.user.userId,keyLand);
+        await updateLand(req.session.user.userId,keyLand,"Đã duyệt")
+        await saveMessage(req.session.user.userId,`Bạn đã hủy chuyển nhượng mã đất ${keyLand} thành công`)
+        await saveMessage(receiver,`Người chuyển mã đất ${keyLand} đã hủy giao dịch`)
+        req.flash('success',`Bạn đã hủy chuyển mã đất ${keyLand} cho người nhận ${receiver} thành công`)
+        res.redirect('/')
+      } catch (error) {
+        console.log(`ERROR : ${error}`)
+        req.flash('success',`Hủy chuyển không thành công`)
+        res.redirect('/')
+      }
+
     }
 
   };

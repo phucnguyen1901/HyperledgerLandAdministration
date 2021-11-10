@@ -180,7 +180,7 @@ class FabCar extends Contract {
 
         const updateAsBytes = await ctx.stub.getState(key); // get the land from chaincode state
         if (!updateAsBytes || updateAsBytes.length === 0) {
-            throw new Error(`${key} does not exist`);
+            throw new Error(`${key} la keylane`);
         }
 
         let land = JSON.parse(updateAsBytes.toString());

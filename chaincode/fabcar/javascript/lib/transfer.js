@@ -52,12 +52,18 @@ class Transfer extends Contract {
         if(role == 'user'){
             transfer.ConfirmFromReceiver = true;
         }else{
+            let date_ob = new Date();
+            let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
+            let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
             transfer.ConfirmFromAdmin = true;
+            transfer.TimeEnd = newDate;
+
         }
 
         await ctx.stub.putState(key, Buffer.from(JSON.stringify(transfer)));
         console.info('============= END : Update transfer ===========');
     }
+
 
 
     async queryTransfers(ctx){
@@ -149,6 +155,22 @@ class Transfer extends Contract {
                 return resultArray;
             }
         }
+    }
+
+
+    // DeleteAsset deletes an given asset from the world state.
+    async DeleteAsset(ctx,key,userId,lane) {
+        const transferAsBytes = await ctx.stub.getState(key);
+        let result = JSON.parse(transferAsBytes);
+
+        if(result.From != userId || result.Land != lane ) throw new Error(`${key} co loi khi xoa`);;
+        await ctx.stub.deleteState(key);
+    }
+
+    // AssetExists returns true when asset with given ID exists in world state.
+    async AssetExists(ctx, id) {
+        const assetJSON = await ctx.stub.getState(id);
+        return assetJSON && assetJSON.length > 0;
     }
 
 }

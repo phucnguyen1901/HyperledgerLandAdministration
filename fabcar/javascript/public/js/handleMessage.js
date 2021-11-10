@@ -4,6 +4,7 @@
 
     var checkShowMessage = true;
 
+
     document.getElementById("notification").addEventListener('click',async function(){
            
             const count = document.getElementById("MessageLength").value;

@@ -32,6 +32,7 @@
             <th style="text-align:center;">NGƯỜI NHẬN</th>
             <th style="text-align:center;">THỜI GIAN CHUYỂN</th>
             <th style="text-align:center;">TRẠNG THÁI</th> 
+            <th style="text-align:center;">HỦY</th> 
 
         </thead>
         <tbody>
@@ -49,6 +50,23 @@
                     </form>
                     </td>
 
+                    <%if(element.value.ConfirmFromAdmin){%>
+                      <td class="text-green-700" style="text-align:center">Đất đã chuyển thành công không thể HỦY</td>
+
+                    <%}else{%>
+                      <td style="text-align:center">
+                        <form action="/cancelTransferLane" method="POST">
+                            <input type="hidden" name="keyTransfer" value=<%= element.key%> >
+                            <input type="hidden" name="keyLand" value=<%= element.value.Land%> >
+                            <input type="hidden" name="receiver" value=<%= element.value.To%> >
+                            <button type="submit" class="bg-red-700 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Hủy chuyển</button>
+                        </form>
+                      </td>
+
+                   <% }%>
+                    
+
+                      
 
                 </tr>
               </a>
