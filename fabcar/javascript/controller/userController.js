@@ -8,7 +8,6 @@ const saltRounds = 10;
 
 const enrollAdmin = require('../enrollAdmin')
 const query = require('../queryTransfer');
-const initLedgeTrans = require("../inkvode_transfer")
 const {register, auth} = require('../register')
 const organizationsCA = ['ca.org1.example.com','ca.org2.example.com'];
 const mspOrg = ['Org1MSP','Org2MSP'];

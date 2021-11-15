@@ -2,9 +2,10 @@
 const queryAllLand = require("../queryAllLands")
 const query = require("../queryLand")
 const queryTransfer = require("../queryTransfer")
-const invoke = require('../invoke')
+const invokeLandOne = require('../invoke_land_One')
+const invokeLandCo = require('../invoke_land_Co')
 // const transfer = require('../transferLand')
-const createTransfer = require('../inkvode_transfer')
+const createTransfer = require('../inkvode_transfer_OneToOne')
 const {saveMessage,getMessage , getUser} = require('./saveUser')
 
 const updateLand = require('../updateLand')
@@ -21,7 +22,7 @@ const queryTransferOne = require('../queryTransferOne')
 const updateTransfer = require('../updateTransfer')
 const cancleTransferFromUser = require('../cancleTransferFromUser')
 
-
+const formidable = require('formidable');
 
 function homeController() {
   return {
@@ -86,7 +87,7 @@ function homeController() {
       try {
         const toadocacdinh = '{"D1": [406836.70,1183891.04],"D2": [406836.75,1183891.44],"D3": [406836.80,1183891.37],"D4": [406836.79,1183891.40]}';
         const chieudaicaccanh = '{"C12": 20.5, "C23": 1.12, "C34":7.53, "C41" :15.5}';
-        await invoke('Land5','Phuc Nguyen',"Nam",'12312312','Ca Mau',192,1,[123,124,125],1200,toadocacdinh,
+        await invokeLandOne('Land5','Phuc Nguyen',"Nam",'12312312','Ca Mau',192,1,[123,124,125],1200,toadocacdinh,
         chieudaicaccanh,
         "Chung","Mua ban","vinh vien","Mua cua nha nuoc","18/9/2025");
         // res.send('OK');
@@ -97,12 +98,32 @@ function homeController() {
     },
 
     async addAsset(req,res){
-      res.render("addAsset")
+      res.render("addAssetHome")
+    },
+
+    async addAssetOne(req,res){
+      res.render("addAsset",{layout:false})
     },
 
 
+    async addAssetCo(req,res){
+      res.render("addAssetCo",{layout:false})
+    },
+
+    async blank(req,res){
+      res.render("blank",{layout:false})
+    },
+
+    async addAssetFormOwner(req,res){
+      const count = req.params.count;
+      res.render("addAssetFormOwner",{layout:false,count:count})
+    },
+
+
+
     async handleAddAsset(req,res){
-      const {hktt,thuasodat,tobandoso,dientich,hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung} = req.body;
+      const {thuasodat,tobandoso,dientich,hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,url,laneOfCity} = req.body;
+
       let date_ob = new Date();
       let monthNow = date_ob.getMonth() < 10 ? `0${date_ob.getMonth()}` : `${date_ob.getMonth()}`;
       let newDate = `${date_ob.getDay()}/${monthNow}/${date_ob.getFullYear()}`;
@@ -113,12 +134,56 @@ function homeController() {
       const idCard = req.session.user.idCard;
       const toadocacdinh = '{"D1": [406836.70,1183891.04],"D2": [406836.75,1183891.44],"D3": [406836.80,1183891.37],"D4": [406836.79,1183891.40]}';
       const chieudaicaccanh = '{"C12": 20.5, "C23": 1.12, "C34":7.53, "C41" :15.5}';
-      await invoke(userId,owner,idCard,hktt,thuasodat,tobandoso,[123,124,125],dientich,"{}",
+      await invokeLandOne(userId,owner,idCard,thuasodat,tobandoso,[123,124,125],dientich,"{}",
       "{}",
-      hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,thoigiandangky);
+      hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,thoigiandangky,url,laneOfCity);
       await saveMessage(userId,"Bạn đã thêm một mảnh đất mới")
       req.flash('success',"Đã thêm mới thành công")
       res.redirect('/');
+    },
+
+
+    async handleAddAssetCo(req,res){
+      const {thuasodat,tobandoso,dientich,hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,url,landOfCity,countOwner} = req.body;
+      console.log(countOwner)
+      let listOwner = [req.session.user.userId];
+      for(let i = 0; i < countOwner; i++){
+        listOwner.push(req.body[`owner${i}`]);
+      }
+
+      // res.send("OK")
+      let date_ob = new Date();
+      let monthNow = date_ob.getMonth() < 10 ? `0${date_ob.getMonth()}` : `${date_ob.getMonth()}`;
+      let newDate = `${date_ob.getDay()}/${monthNow}/${date_ob.getFullYear()}`;
+      let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
+      let thoigiandangky = `${time} - ${newDate}`;
+      const userId = req.session.user.userId;
+      const idCard = req.session.user.idCard;
+      const toadocacdinh = '{"D1": [406836.70,1183891.04],"D2": [406836.75,1183891.44],"D3": [406836.80,1183891.37],"D4": [406836.79,1183891.40]}';
+      const chieudaicaccanh = '{"C12": 20.5, "C23": 1.12, "C34":7.53, "C41" :15.5}';
+      console.log(thuasodat)
+      console.log(tobandoso)
+      console.log(hinhthucsudung)
+      console.log(mucdichsudung)
+      console.log(nguongocsudung)
+      console.log(thoigiandangky)
+      console.log(url)
+      console.log(landOfCity)
+      console.log(listOwner)
+      console.log(typeof listOwner)
+      try {
+        await invokeLandCo(userId,listOwner,thuasodat,tobandoso,[123,124,125],dientich,"{}",
+        "{}",
+        hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,thoigiandangky,url,landOfCity);
+        await saveMessage(userId,"Bạn đã thêm một mảnh đất mới gồm nhiều người sở hữu "+listOwner.join('-'))
+        req.flash('success',"Đã thêm mới thành công")
+        res.redirect('/');
+      } catch (error) {
+        console.log("Add Failed")
+        req.flash('error',"Thêm đất thất bại ")
+        res.redirect('/');
+      }
+
     },
 
     async transferLand(req,res){
@@ -187,7 +252,7 @@ function homeController() {
 
     async handleConfirmFromReceiver(req,res){
       const key = req.params.key;
-      const userIdFromTransfer = req.prams.userIdTransfer;
+      const userIdFromTransfer = req.params.userIdTransfer;
       console.log(key)
       try {
         await updateTransfer(req.session.user.userId,key,req.session.user.role);

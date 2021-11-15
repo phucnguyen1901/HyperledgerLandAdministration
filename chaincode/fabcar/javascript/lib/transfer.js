@@ -33,6 +33,54 @@ class Transfer extends Contract {
         console.info('============= END : Create transfer ===========');
     }
 
+    async createTransferCoOwnerForOne(ctx,land,arrayUserTransfer,userReceive){
+        console.info('============= START : Create transfer ===========');
+        let date_ob = new Date();
+        let monthNow = date_ob.getMonth() < 10 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
+        let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
+
+        let arrayFrom = arrayUserTransfer.map((e) => ({e:false}));
+
+        const transfer = {
+                Land:land,
+                TimeStart: newDate,
+                TimeEnd: "-/-/-",
+                From: arrayFrom,
+                To: userReceive,
+                ConfirmFromReceiver: false,
+                ConfirmFromAdmin: false,
+                docType: "trans"
+        };
+        let resultString = await this.checkLengthTransfer(ctx);
+        let result = JSON.parse(resultString);
+        await ctx.stub.putState(`TRANS${result.length+1}`, Buffer.from(JSON.stringify(transfer)));
+        console.info('============= END : Create transfer ===========');
+    }
+
+    async createTransferCoOwnerForCo(ctx,land,arrayUserTransfer,arrayUserReceiver){
+        console.info('============= START : Create transfer ===========');
+        let date_ob = new Date();
+        let monthNow = date_ob.getMonth() < 10 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
+        let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
+
+        let arrayFrom = arrayUserTransfer.map((e) => ({e:false}));
+        let arrayReceive = arrayUserReceiver.map((e) => ({e:false}));
+
+        const transfer = {
+                Land:land,
+                TimeStart: newDate,
+                TimeEnd: "-/-/-",
+                From: arrayFrom,
+                To: arrayReceive,
+                ConfirmFromAdmin: false,
+                docType: "trans"
+        };
+        let resultString = await this.checkLengthTransfer(ctx);
+        let result = JSON.parse(resultString);
+        await ctx.stub.putState(`TRANS${result.length+1}`, Buffer.from(JSON.stringify(transfer)));
+        console.info('============= END : Create transfer ===========');
+    }
+
     async checkLengthTransfer(ctx){
         let queryString = {}
         queryString.selector = {"docType":"trans"};

@@ -6,12 +6,17 @@ const path = require('path');
 
 const expressLayout = require('express-ejs-layouts');
 const userController = require('./controller/userController');
+const transferController = require('./controller/transferController');
 const session = require('express-session')
 const flash = require('express-flash')
+
+var fileupload = require("express-fileupload");
+
 
 const authMiddleware = require('./middlewares/auth.middleware')
 
 const app = express();
+app.use(fileupload());
 
 app.use(
   session({
@@ -46,7 +51,10 @@ app.use(express.static(__dirname + '/public'));
 app.get('/detail/:key',authMiddleware.requireAuth,homeController().detail)
 app.get('/',authMiddleware.requireAuth,homeController().index)
 app.post('/handleAddAsset',authMiddleware.requireAuth,homeController().handleAddAsset)
+app.post('/handleAddAssetCo',authMiddleware.requireAuth,homeController().handleAddAssetCo)
+
 app.get('/addAsset',authMiddleware.requireAuth,homeController().addAsset)
+
 
 app.get('/login',userController().login)
 app.get('/register',userController().register)
@@ -56,11 +64,6 @@ app.post('/handleLogin',userController().handleLogin)
 
 app.get('/transferLand/:key',authMiddleware.requireAuth,homeController().transferLand)
 app.post('/handleTransferLand',authMiddleware.requireAuth,homeController().handleTransferLand)
-
-app.post('/logout',homeController().logoutUser)
-
-
-app.get('/fast',userController().fast)
 
 
 app.post('/processTransfer',authMiddleware.requireAuth,homeController().processTransfer)
@@ -81,6 +84,21 @@ app.post('/confirmTransferAdmin',authMiddleware.requireAuth,homeController().con
 
 app.post('/cancelTransferLane',authMiddleware.requireAuth,homeController().cancelTransferLane)
 
+app.get('/addAssetOne',authMiddleware.requireAuth, homeController().addAssetOne)
+
+app.get('/addAssetCo',authMiddleware.requireAuth, homeController().addAssetCo)
+
+
+app.get('/blank',authMiddleware.requireAuth, homeController().blank)
+
+
+app.get('/addAssetFormOwner/:count',authMiddleware.requireAuth, homeController().addAssetFormOwner)
+app.post('/checkUserExistAndReturnInfo',authMiddleware.requireAuth, transferController().checkUserExistAndReturnInfo)
+
+
+
+app.post('/logout',homeController().logoutUser)
+app.get('/fast',userController().fast)
 
 app.listen(3000,()=>console.log("Server started with port 3000"));
 

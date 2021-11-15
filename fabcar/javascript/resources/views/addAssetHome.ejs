@@ -1,0 +1,38 @@
+<div class="container" style="width: 65%;">
+
+    <label for="">
+        Tạo đất:
+    </label>
+    
+    <select id="StatusOwner" name="mucdichsudung" class="text-green-700 form-control block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-1 px-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" >
+        <option 
+         value="Chọn hình thức sở hữu">Chọn hình thức sở hữu</option>
+        <option value="Bản thân sở hữu">Bản thân sở hữu</option>
+        <option value="Nhiều người sở hữu">Nhiều người sở hữu</option>
+    </select>
+    
+    <div id="demo">
+    
+    </div>
+
+</div>
+
+
+<script>
+    $(document).ready(function(){
+  $("#StatusOwner").change(function(){
+      let value = this.value;
+      let url;
+      if(value == "Chọn hình thức sở hữu"){
+        url = "/blank"
+      }else if(value == "Bản thân sở hữu"){
+        url = "/addAssetOne"  
+      }else{
+        url = "/addAssetCo"  
+      }
+    $.ajax({url: url, success: function(result){
+      $("#demo").html(result);
+    }});
+  });
+});
+</script>

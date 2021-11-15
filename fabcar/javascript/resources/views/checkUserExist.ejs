@@ -1,0 +1,15 @@
+
+
+
+<%if(checkEmail){%>
+    <p class="text-red-500">Người dùng này chính là bản thân bạn</p>
+<%}else{%>
+    <% if(listUser.length > 0){ %>
+        <p class="text-green-500">Họ tên: <%= listUser[0].fullname %></p>
+        <p class="text-green-500">CMND/CCCD:  <%= listUser[0].idCard %></p>
+    <% }else{ %>
+        <p class="text-red-500">Không có người dùng này</p>
+    <% } %>
+
+<%}%>
+

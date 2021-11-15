@@ -8,6 +8,17 @@
 
 const { Contract } = require('fabric-contract-api');
 
+const StatusOwner = {
+    Alone: "Một người",
+    CoOwner: "Nhiều người"
+}
+
+const StatusLane = {
+    NotApprovedYet: "Chưa duyệt",
+    Transfering: "Đang chuyển",
+    Done: "Đã duyệt"
+}
+
 class FabCar extends Contract {
 
     async initLedger(ctx) {
@@ -15,9 +26,9 @@ class FabCar extends Contract {
         const lands = [
             {
                 UserId: "b@gmail.com",
+                StatusOwner: StatusOwner.Alone,
                 Owner:"Nguyen Van A",
                 IdentityCard:"385820222",
-                HoKhauThuongTru:"Quân Ninh Kièu , TP.Càn Tho",
                 ThuaDatSo: 931,
                 ToBanDo5o: 3,
                 CacSoThuaGiapRanh: [919, 905,803],
@@ -30,9 +41,11 @@ class FabCar extends Contract {
                 ThoiHanSuDung: "Lâu dài",
                 NguocGocSuDung:"Nhà nưóc giao đất có thu tiền sử dụng",
                 ThoiGianDangKy: "11/09/2021",
-                Status: "Đã duyệt",
+                Status: StatusLane.Done,
                 UrlImage: "",
-                Transactions: []
+                Transactions: [],
+                LaneOfCity: "TP.HCM"
+
             },
         ];
 
@@ -64,14 +77,14 @@ class FabCar extends Contract {
 
     }
 
-    async createLand(ctx,userId,owner,idCard,hktt,thuasodat,tobandoso,cacsothuagiapranh,dientich,toadocacdinh,chieudaicaccanh,hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,thoigiandangky){
+    async createLand(ctx,userId,owner,idCard,thuasodat,tobandoso,cacsothuagiapranh,dientich,toadocacdinh,chieudaicaccanh,hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,thoigiandangky,url,city){
         console.info('============= START : Create Land ===========');
         const land = {
                 // ID:id,
                 UserId:userId,
                 Owner:owner,
+                StatusOwner: StatusOwner.Alone,
                 IdentityCard:idCard,
-                HoKhauThuongTru:hktt,
                 ThuaDatSo: thuasodat,
                 ToBanDo5o: tobandoso,
                 CacSoThuaGiapRanh: cacsothuagiapranh,
@@ -83,9 +96,40 @@ class FabCar extends Contract {
                 ThoiHanSuDung: thoihansudung,
                 NguocGocSuDung:nguongocsudung,
                 ThoiGianDangKy: thoigiandangky,
-                Status: "Chưa duyệt",
+                Status: StatusLane.NotApprovedYet,
                 Transactions: [],
-                docType: 'land'
+                docType: 'land',
+                UrlImage: url,
+                LaneOfCity: city,
+        };
+        let resultString = await this.checkLengthLand(ctx);
+        let result = JSON.parse(resultString);
+        await ctx.stub.putState(`LAND${result.length+1}`, Buffer.from(JSON.stringify(land)));
+        console.info('============= END : Create Land ===========');
+    }
+
+    async createLandCo(ctx,arrayOwner,thuasodat,tobandoso,cacsothuagiapranh,dientich,toadocacdinh,chieudaicaccanh,hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,thoigiandangky,url,city){
+        console.info('============= START : Create Land ===========');
+        const land = {
+                // ID:id,
+                StatusOwner: StatusOwner.CoOwner,
+                coOwner:arrayOwner,
+                ThuaDatSo: thuasodat,
+                ToBanDo5o: tobandoso,
+                CacSoThuaGiapRanh: cacsothuagiapranh,
+                DienTich: dientich,
+                ToaDoCacDinh: JSON.parse(toadocacdinh),
+                ChieuDaiCacCanh: JSON.parse(chieudaicaccanh),
+                HinhThucSuDung:hinhthucsudung,
+                MucDichSuDung: mucdichsudung,
+                ThoiHanSuDung: thoihansudung,
+                NguocGocSuDung:nguongocsudung,
+                ThoiGianDangKy: thoigiandangky,
+                Status: StatusLane.NotApprovedYet,
+                Transactions: [],
+                docType: 'land',
+                UrlImage: url,
+                LaneOfCity: city,
         };
         let resultString = await this.checkLengthLand(ctx);
         let result = JSON.parse(resultString);

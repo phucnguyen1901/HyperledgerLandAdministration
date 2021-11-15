@@ -1,18 +1,5 @@
 
-
-<form  id="formAdd" action="./handleAddAsset" method="post" enctype="multipart/form-data" onsubmit="return false;">
-    <div class="form-group">
-      <label>Người sở hữu</label>
-      <input type="text" class="form-control" name="owner" placeholder="Người sở hữu" value="<%= user.fullname%>" disabled>
-    </div>
-    <div class="form-group">
-      <label>CMND/CCCD </label>
-      <input type="text" class="form-control" name="idCard" placeholder="Nhập CMND/CCCD"  value="<%= user.idCard%>" disabled> 
-    </div>
-      <div class="form-group">
-        <label>Hộ khẩu thường trú</label>
-        <input type="text" class="form-control" name="hktt" placeholder="Nhập ">
-      </div>
+<form  id="formAdd" action="./handleAddAssetCo" method="post" enctype="multipart/form-data" >
       <div class="form-group">
         <label>Thửa đất số</label>
         <input type="text" class="form-control" name="thuasodat" placeholder="Nhập ">
@@ -140,22 +127,39 @@
 
       <div class="form-group">
         <label>Đất thuộc tỉnh/TP</label>
-        <select name="laneOfCity" class="text-green-700 form-control block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-1 px-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
-          <option 
+        <select name="landOfCity" class="text-green-700 form-control block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-1 px-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+          <option selected="selected"
           > &emsp;- TP.HCM</option>
           <option 
           > &emsp;- TP.Cần Thơ</option>
         </select>
+      </div>
+
+      <div class="form-group">
+        <label>Người sở hữu</label>
+        <input type="text" class="form-control" name="owner" placeholder="Người sở hữu" value="<%= user.fullname%>" disabled>
+      </div>
+
+      <div class="form-group">
+        <label>Thêm bao nhiêu người cùng sở hữu</label>
+        <input id="countOwner" type="text" class="form-control" name="countOwner" placeholder="Nhập ">
+      </div>
+      <div id="count">
+
       </div>
       
       <div class="form-group">
         <label>Thêm ảnh	</label>
          <input id="image" name="image" type="file" alt="Submit" width="48" height="48" multiple="multiple">
       </div>
+      
 
       <div class="form-group">
          <input id="url" name="url" type="hidden" alt="Submit" width="48" height="48" multiple="multiple">
       </div>
+
+
+
      
 
     <button id="addButton" class="btn btn-primary">Đăng ký</button>
@@ -163,7 +167,7 @@
 
 <div style="height: 100px;"></div>
 
-<script type="module">
+<!-- <script type="module">
   import app from '/js/config.js';
   import { getStorage, ref, uploadBytes,uploadBytesResumable,getDownloadURL } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-storage.js";
 
@@ -213,6 +217,19 @@
     console.log(document.getElementById('url').value)
 
   })
+
+</script> -->
+
+<script>
+
+    $(document).ready(function(){
+      $('#countOwner').on('input',function(e){
+          $.ajax({url: "/addAssetFormOwner/"+this.value, success: function(result){
+            $("#count").html(result);
+          }});
+        });
+
+    });
 
 </script>
 

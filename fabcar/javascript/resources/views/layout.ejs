@@ -8,6 +8,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
     <!-- <link rel="stylesheet" href="/css/register.css"> -->
         <link
       href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
@@ -17,6 +18,8 @@
 	  <link rel="stylesheet" type="text/css" href="/css/main.css">  
     <link rel="stylesheet" type="text/css" href="/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 	  <link rel="stylesheet" type="text/css" href="/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500" rel="stylesheet" />
+    <link href="/css/search/main.css" rel="stylesheet" />
     
     <title>Land Administration</title>
 
@@ -36,17 +39,18 @@
         </div>
         <div>
           <ul class="flex items-center">
-            Xin chào <%= user.fullname%>
+            <p class="text-blue-500"> Xin chào <%= user.fullname%></p>
+           
             &emsp;
             <button  id="notification">
-                <i class="fa fa-bell" aria-hidden="true" style="color:green; font-size: 25px;" ></i>
+                <i class="fa fa-bell" aria-hidden="true" style="color:lightgreen; font-size: 25px;" ></i>
                 <% if(noty.countMessages > 0){ %>
                   <span id="countMessage" class="text-white relative rounded-lg py-1 px-2 bg-red-700" style="position: relative; bottom: 10px;"><%= noty.countMessages%></span>
                 <%} %>
             </button>
             <% if(user.role == "user"){%>
             <li class="ml-12">
-              <a href="/" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Đất của tôi</a>
+              <a href="/" class="text-blue-500 hover:text-red-500 focus:outline-none" style="font-size: 20px;">Đất của tôi</a>
             </li>
 
             <li class="ml-12">
@@ -100,3 +104,5 @@
 
 
   <script type="module" src="/js/handleMessage.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
