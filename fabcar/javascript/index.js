@@ -64,7 +64,7 @@ app.post('/handleLogin',userController().handleLogin)
 
 app.get('/transferLand/:key',authMiddleware.requireAuth,homeController().transferLand)
 app.post('/handleTransferLand',authMiddleware.requireAuth,homeController().handleTransferLand)
-
+app.post('/handleTransferLandCo',authMiddleware.requireAuth,homeController().handleTransferLandCo)
 
 app.post('/processTransfer',authMiddleware.requireAuth,homeController().processTransfer)
 
@@ -95,7 +95,8 @@ app.get('/blank',authMiddleware.requireAuth, homeController().blank)
 app.get('/addAssetFormOwner/:count',authMiddleware.requireAuth, homeController().addAssetFormOwner)
 app.post('/checkUserExistAndReturnInfo',authMiddleware.requireAuth, transferController().checkUserExistAndReturnInfo)
 
-
+app.get('/transferLandOne/:key',authMiddleware.requireAuth, transferController().transferLandOne)
+app.get('/transferLandCo/:key',authMiddleware.requireAuth, transferController().transferLandCo)
 
 app.post('/logout',homeController().logoutUser)
 app.get('/fast',userController().fast)

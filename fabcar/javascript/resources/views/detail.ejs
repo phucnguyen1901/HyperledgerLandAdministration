@@ -32,17 +32,14 @@
     <tbody>
       <tr>
         <td width="210px">  Người sở hữu</td>
-        <td><b><%= detail.Owner%></b></td>
+        <%if(detail.StatusOwner == "Một người"){%>
+          <td><%= detail.UserId %></td>
+        <%}else{%>
+          <td><%= detail.coOwner %></td>
+        <%}%>
+
       </tr>
-      <tr>
-        <td width="210px"> CMND/CCCD</td>
-        <td><b><%= detail.IdentityCard%></b> </td>
-      </tr>
-      <tr>
-        <td width="210px">Hộ khẩu thường trú </td>
-        <td><b><%= detail.HoKhauThuongTru%></b></td>
-      </tr>
-            <tr>
+        <tr>
         <td width="210px">
              Thửa đất số 
         </td>

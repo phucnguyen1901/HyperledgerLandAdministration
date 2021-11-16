@@ -1,0 +1,50 @@
+
+
+<% for (var i =0; i < count;  i++ ) { %>
+  <div class="form-group flex">
+    <input id=<%=i %> style="width: 50%;" onchange="" type="text" class="form-control" name="owner<%=i%>" placeholder="Nhập email">
+    &emsp;
+    <div id="checkInfo<%=i%>">
+    </div>
+    
+    &emsp;
+    <div style="display: none;" id="spinnerLoad<%=i%>" class="flex justify-center items-center">
+      <div
+        class="
+          animate-spin
+          rounded-full
+          h-8
+          w-8
+          border-t-2 border-b-2 border-purple-500
+        "
+      ></div>
+    </div>
+</div>
+
+<script>
+  var count = parseInt("<%= count %>");
+  console.log(count)
+  console.log(typeof count)
+  
+  for (let index = 0; index < count; index++) {
+    let button = `#${index}`;
+    let showResult = `#checkInfo${index}`;
+    let spinnerLoad = `#spinnerLoad${index}`;
+    $(document).ready(function(){
+      $(button).on('input',function(e){
+          $(spinnerLoad).show();
+          let value = this.value;
+          $.ajax({type: "POST",url: "/checkUserExistAndReturnInfo", data: {email:value}, success: function(result){
+            $(showResult).html(result);
+            $(spinnerLoad).hide();
+          }});
+
+        });
+        
+
+    });
+    
+  }
+  
+</script>
+<% } %>

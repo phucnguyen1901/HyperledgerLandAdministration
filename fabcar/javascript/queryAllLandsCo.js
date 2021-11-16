@@ -47,7 +47,7 @@ async function main(userId,role) {
         // const result = await contract.evaluateTransaction('queryAllLands',{"selector":{"docType":"land","owner":"tom"}});
         let result;
         if(role == "user"){
-            result = await contract.evaluateTransaction('queryLandByUser',userId);
+            result = await contract.evaluateTransaction('queryLandByUserCo',userId);
         }else{
             result = await contract.evaluateTransaction('queryLandByAdmin');
         }

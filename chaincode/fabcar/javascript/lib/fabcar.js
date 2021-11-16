@@ -110,10 +110,15 @@ class FabCar extends Contract {
 
     async createLandCo(ctx,arrayOwner,thuasodat,tobandoso,cacsothuagiapranh,dientich,toadocacdinh,chieudaicaccanh,hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,thoigiandangky,url,city){
         console.info('============= START : Create Land ===========');
+        console.log(`array handle :${arrayOwner}`)
+        console.log(`array handle2 :${typeof arrayOwner}`)
+        let arrayOwnerResult = arrayOwner.split(',')
+        console.log(`array arrayOwnerResult :${arrayOwnerResult}`)
+        console.log(`array arrayOwnerResult2 :${typeof arrayOwnerResult}`)
         const land = {
                 // ID:id,
                 StatusOwner: StatusOwner.CoOwner,
-                coOwner:arrayOwner,
+                coOwner:arrayOwnerResult,
                 ThuaDatSo: thuasodat,
                 ToBanDo5o: tobandoso,
                 CacSoThuaGiapRanh: cacsothuagiapranh,
@@ -249,6 +254,21 @@ class FabCar extends Contract {
         return false;
     }
 
+    async checkLandOwnerCo(ctx,key,userId){
+
+        const checkAsBytes = await ctx.stub.getState(key);
+        if (!checkAsBytes || checkAsBytes.length === 0) {
+            throw new Error(`${key} does not exist`);
+        }
+
+        let check = JSON.parse(checkAsBytes.toString());
+        if(check.coOwner.includes(userId)){
+            return true;
+        }
+
+        return false;
+    }
+
     
     async queryLandByAdmin(ctx){
         let queryString = {}
@@ -258,9 +278,21 @@ class FabCar extends Contract {
         return JSON.stringify(result);
     }
 
-    async queryLandByUser(ctx,userId,idCard,Owner){
+    async queryLandByUser(ctx,userId){
         let queryString = {}
-        queryString.selector = {"IdentityCard":idCard,"Owner":Owner,"UserId":userId, docType:'land'};
+        queryString.selector = {"UserId":userId, docType:'land'};
+        let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
+        let result = await this.getIteratorData(iterator);
+        return JSON.stringify(result);
+    }
+
+    async queryLandByUserCo(ctx,userId){
+        let queryString = {}
+        queryString.selector = { "coOwner": {
+            "$elemMatch": {
+               "$eq": userId
+            }
+         }, "docType":"land"};
         let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
         let result = await this.getIteratorData(iterator);
         return JSON.stringify(result);

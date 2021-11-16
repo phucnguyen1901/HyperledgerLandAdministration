@@ -1,15 +1,18 @@
 
 const queryAllLand = require("../queryAllLands")
+const queryAllLandCo = require("../queryAllLandsCo")
 const query = require("../queryLand")
 const queryTransfer = require("../queryTransfer")
 const invokeLandOne = require('../invoke_land_One')
 const invokeLandCo = require('../invoke_land_Co')
 // const transfer = require('../transferLand')
 const createTransfer = require('../inkvode_transfer_OneToOne')
+const createTransferCoToCo = require('../inkvode_transfer_CoToCo')
 const {saveMessage,getMessage , getUser} = require('./saveUser')
 
 const updateLand = require('../updateLand')
 const checkLandOwner = require('../checkLandOwner')
+const checkLandOwnerCo = require('../checkLandOwnerCo')
 
 const changeLandOwner = require('../confirmTransferLand')
 
@@ -24,14 +27,32 @@ const cancleTransferFromUser = require('../cancleTransferFromUser')
 
 const formidable = require('formidable');
 
+const StatusLane = {
+  NotApprovedYet: "Chưa duyệt",
+  Transfering: "Đang chuyển",
+  Done: "Đã duyệt"
+}
+
+
+
 function homeController() {
   return {
     async index(req, res) {
         try {
-            const menu = await queryAllLand(req.session.user.userId,req.session.user.fullname,req.session.user.idCard,req.session.user.role);
-            const obj = JSON.parse(menu);
-            return res.render("home",{ menu: obj , success: req.flash('success')});
-            // return res.render("home",{ menu: obj , message: req.flash('message')});
+            let allMenu;
+            if(req.session.user.role == "user"){
+              const menuString = await queryAllLand(req.session.user.userId,req.session.user.role); 
+              const menuCoString = await queryAllLandCo(req.session.user.userId,req.session.user.role);
+              const menu = JSON.parse(menuString);
+              const menuCo = JSON.parse(menuCoString);
+              allMenu = [...menu,...menuCo];
+            }else{
+              const menuString = await queryAllLand(req.session.user.userId,req.session.user.role); 
+              const menu = JSON.parse(menuString);
+              allMenu = menu;
+            }
+            return res.render("home",{ menu: allMenu, success: req.flash('success')});
+
         } catch (error) {
           console.log("Login khong thanh cong : "+error)
           req.flash('message',"Sai email hoặc mật khẩu")
@@ -158,7 +179,6 @@ function homeController() {
       let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
       let thoigiandangky = `${time} - ${newDate}`;
       const userId = req.session.user.userId;
-      const idCard = req.session.user.idCard;
       const toadocacdinh = '{"D1": [406836.70,1183891.04],"D2": [406836.75,1183891.44],"D3": [406836.80,1183891.37],"D4": [406836.79,1183891.40]}';
       const chieudaicaccanh = '{"C12": 20.5, "C23": 1.12, "C34":7.53, "C41" :15.5}';
       console.log(thuasodat)
@@ -175,7 +195,10 @@ function homeController() {
         await invokeLandCo(userId,listOwner,thuasodat,tobandoso,[123,124,125],dientich,"{}",
         "{}",
         hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,thoigiandangky,url,landOfCity);
-        await saveMessage(userId,"Bạn đã thêm một mảnh đất mới gồm nhiều người sở hữu "+listOwner.join('-'))
+        for(let i = 0; i < listOwner.length; i++){
+          await saveMessage(listOwner[i],"Bạn đã sở một mảnh đất mới gồm nhiều người sở hữu "+listOwner.join('-'))
+        }
+
         req.flash('success',"Đã thêm mới thành công")
         res.redirect('/');
       } catch (error) {
@@ -217,6 +240,47 @@ function homeController() {
        
       } catch (error) {
         req.flash("email",email)
+        req.flash("error","Lỗi chuyển nhượng")
+        res.redirect(`/transferLand/${key}`)
+      }
+      
+    },
+
+    async handleTransferLandCo(req,res){
+      const {countOwner} = req.body;
+      let listOwner = []
+      for(let i = 0 ; i < countOwner; i++){
+        listOwner.push(req.body[`owner${i}`])
+      }
+      let userId = req.session.user.userId;
+      const key = req.session.key;
+      console.log(key)
+      console.log(userId)
+
+      try {
+        // check Land is exist user
+        let check = await checkLandOwner(key,userId)
+        if(check){
+          let landString = await query(key,userId)
+          let land = JSON.parse(landString);
+          console.log(`landne : ${land.coOwner}`)
+          console.log(`landne2 : ${typeof land.coOwner}`)
+
+          await createTransferCoToCo(key,userId,land.coOwner,listOwner)
+          res.send("OK")
+          // await updateLand(userId,key,"Đang chuyển")
+          // await saveMessage(email,`Bạn nhận được đất do người sở hữu ${userId} chuyển cho bạn`)
+          // await saveMessage(userId,`Bạn đã gửi yêu cầu chuyển quyền sở hữu đất có mã ${key} cho người sở hữu ${email}`)
+          // req.flash("success",`Đã gửi yêu cầu chuyển quyền sở hữu đất có mã ${key} cho người sở hữu ${email}`)
+          // res.redirect('/')
+        }else{
+          console.log("not ok")
+          res.send("NOT OK")
+          // req.flash("success", `Người dùng ${userId} không sở hữu mảnh đất ${key}`)
+          // res.redirect('/')
+        }
+       
+      } catch (error) {
         req.flash("error","Lỗi chuyển nhượng")
         res.redirect(`/transferLand/${key}`)
       }
@@ -268,11 +332,11 @@ function homeController() {
     },
 
     async updateStatusLandAdmin(req,res){
-      const {key,status ,userId} = req.body;
+      const {key,status} = req.body;
       console.log(key);
       console.log(status);
       try {
-          await updateLand(userId,key,status)
+          await updateLand(req.session.user.userId,key,status)
           req.flash("success",`Cập nhật thành công mã đất ${key} của người sở hữu ${userId} với trạng thái mới ${status}`)
           await saveMessage(req.session.user.userId, `Đã duyệt đất có mã số ${key} đã được duyệt thành công`)
           await saveMessage(userId, `Đất có mã số ${key} đã được duyệt thành công`)

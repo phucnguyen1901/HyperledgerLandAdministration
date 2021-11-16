@@ -13,61 +13,18 @@
 
 <div class="container">
 
-<form id="formTransfer" action="/handleTransferLand" method="post" onsubmit="return false;">
-    <div class="form-group">
-      <label>Nhập mã cần chuyển: </label>
-      <input type="text" class="form-control w-64" name="key" id="keyLane" placeholder="Nhập mã" value="<%= key %>" disabled>
-    </div>
-    <div class="form-group">
-      <label>Email người sở hữu mới: </label>
-      <div class="flex">
-        <input id="userId" type="text" class="form-control w-64" name="email" placeholder="Nhập Người sở hữu mới" value="<%= messages.fullname%>">
-        &emsp;
-        <span><button id="check" type="submit" class="btn btn-success">Kiểm tra thông người nhận</button></span>
-      </div>
+  <select id="StatusOwner" name="mucdichsudung" class="text-green-700 form-control block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-1 px-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" >
+    <option 
+     value="Chọn hình thức chuyển nhượng">Chọn hình thức chuyển nhượng</option>
+    <option value="Bản thân sở hữu">Chuyển cho 1 người</option>
+    <option value="Nhiều người sở hữu">Chuyển cho nhiều người</option>
+</select>
 
-    </div>
-    <input type="hidden" value="<%= user.userId%>" id="userId">
-    <br>
-    <div>
-      <p id="hoten"></p>
-    </div>
-    <br>
-    <button id="confirm" style="display: none;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Chuyển ngay</button>
-    
-  </form>
+<div id="demo">
 
 </div>
 
-<div id="recaptcha-container"></div>
-
-<div style="height: 100px;"></div>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Xác nhận chuyển nhượng</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-           <div class="form-group">
-            <label for="" id="showNumberPhone">Nhập OTP đã gửi về số điện thoại : </label>
-            &emsp; 
-            <input id="code" type="text" class="form-control w-64" placeholder="Nhập OTP"><br>
-            <button id="submitOTP" type="submit" class="btn btn-primary">Xác nhận</button>
-            &emsp; 
-          </div>
-
-      </div>
-    </div>
-  </div>
-</div>
-
-
+<input type="hidden" id="key" value=<%= key%> >
 
 <script>
    if(document.getElementById("delete")){
@@ -77,6 +34,24 @@
    }
 </script>
 
-<script type="module" src="/js/transferLandClient.js"></script>
+<!-- <script type="module" src="/js/transferLandClient.js"></script> -->
 
-
+<script>
+  $(document).ready(function(){
+  $("#StatusOwner").change(function(){
+      let key = $("#key").val();
+      let value = this.value;
+      let url;
+      if(value == "Chọn hình thức chuyển nhượng"){
+        url = "/blank"
+      }else if(value == "Chuyển cho 1 người"){
+        url = `/transferLandOne/${key}` 
+      }else{
+        url = `/transferLandCo/${key}`
+      }
+    $.ajax({url: url, success: function(result){
+      $("#demo").html(result);
+    }});
+  });
+  });
+</script>

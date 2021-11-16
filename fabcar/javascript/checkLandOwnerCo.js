@@ -1,3 +1,4 @@
+
 /*
  * Copyright IBM Corp. All Rights Reserved.
  *
@@ -11,7 +12,7 @@ const path = require('path');
 const fs = require('fs');
 
 
-async function main(userId,role) {
+async function main(key,userId) {
     try {
         // load the network configuration
         const ccpPath = path.resolve(__dirname, '..', '..', 'test-network', 'organizations', 'peerOrganizations', 'org1.example.com', 'connection-org1.json');
@@ -25,7 +26,7 @@ async function main(userId,role) {
         // Check to see if we've already enrolled the user.
         const identity = await wallet.get(userId);
         if (!identity) {
-            console.log(`An identity for the user "${userId}" does not exist in the wallet`);
+            console.log('An identity for the user "appUser" does not exist in the wallet');
             console.log('Run the registerUser.js application before retrying');
             return;
         }
@@ -43,21 +44,14 @@ async function main(userId,role) {
         // Evaluate the specified transaction.
         // queryCar transaction - requires 1 argument, ex: ('queryCar', 'CAR4')
         // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')
-        // const result = await contract.evaluateTransaction('queryAllLands',{"selector":{"IdentityCard":"35852514222"}});
-        // const result = await contract.evaluateTransaction('queryAllLands',{"selector":{"docType":"land","owner":"tom"}});
-        let result;
-        if(role == "user"){
-            result = await contract.evaluateTransaction('queryLandByUser',userId);
-        }else{
-            result = await contract.evaluateTransaction('queryLandByAdmin');
-        }
+        const result = await contract.evaluateTransaction('checkLandOwner',key,userId);
+        // const result = await contract.evaluateTransaction('queryLand',{"selector":{"docType":"asset","owner":"tom"}});
 
-        // console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
         console.log(`Transaction has been evaluated, result is: ${result}`);
 
         // Disconnect from the gateway.
         await gateway.disconnect();
-        return result.toString();
+        return result;
         
     } catch (error) {
         console.error(`Failed to evaluate transaction: ${error}`);
@@ -68,3 +62,14 @@ async function main(userId,role) {
 // main();
 
 module.exports = main;
+
+
+
+
+
+
+
+
+
+
+

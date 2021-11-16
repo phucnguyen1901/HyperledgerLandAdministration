@@ -63,14 +63,29 @@ class Transfer extends Contract {
         let monthNow = date_ob.getMonth() < 10 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
         let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
 
-        let arrayFrom = arrayUserTransfer.map((e) => ({e:false}));
-        let arrayReceive = arrayUserReceiver.map((e) => ({e:false}));
+        let arrayFrom = arrayUserTransfer.split(',')
+        let arrayTo = arrayUserReceiver.split(',')
+
+        const arrayTransfer = {};
+        const arrayReceive = {};
+
+
+        // copy array elements to th object
+        for (let i = 0; i < arrayFrom.length; i++) {
+            arrayTransfer[arrayFrom[i]] = false;
+        }
+        for (let i = 0; i < arrayTo.length; i++) {
+            arrayReceive[arrayTo[i]] = false;
+        }
+
+        console.log(arrayTransfer)
+        console.log(arrayReceive)
 
         const transfer = {
                 Land:land,
                 TimeStart: newDate,
                 TimeEnd: "-/-/-",
-                From: arrayFrom,
+                From: arrayTransfer,
                 To: arrayReceive,
                 ConfirmFromAdmin: false,
                 docType: "trans"

@@ -1,0 +1,83 @@
+
+
+
+
+
+
+
+<form id="formTransfer" action="/handleTransferLandCo" method="post" >
+  <div class="form-group">
+    <label>Mã đang được chuyển: </label>
+    <input type="text" class="form-control w-64" name="key" id="keyLane" placeholder="Nhập mã" value="<%= key %>" disabled>
+  </div>
+
+  <div class="form-group">
+    <label>Nhập số người cùng sở hữu: </label>
+    <input type="text" class="form-control w-64" name="countOwner" id="countOwner" placeholder="Nhập số người cùng sở hữu">
+  </div>
+  <div id="count">
+
+  </div>
+
+  <input type="hidden" value="<%= user.userId%>" id="userId">
+
+  <!-- <button id="confirm" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Chuyển ngay</button> -->
+  <button id="confirm" type="submit" class="btn btn-primary">Chuyển ngay</button>
+
+</form>
+
+</div>
+
+<div id="recaptcha-container"></div>
+
+<div style="height: 100px;"></div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">Xác nhận chuyển nhượng</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+         <div class="form-group">
+          <label for="" id="showNumberPhone">Nhập OTP đã gửi về số điện thoại : </label>
+          &emsp; 
+          <input id="code" type="text" class="form-control w-64" placeholder="Nhập OTP"><br>
+          <button id="submitOTP" type="submit" class="btn btn-primary">Xác nhận</button>
+          &emsp; 
+        </div>
+
+    </div>
+  </div>
+</div>
+</div>
+
+<script type="module" src="/js/transferLandClient.js"></script>
+
+<script>
+
+  $(document).ready(function(){
+    $('#countOwner').on('input',function(e){
+        $.ajax({url: "/addAssetFormOwner/"+this.value, success: function(result){
+          $("#count").html(result);
+        }});
+      });
+
+  });
+
+  $(document).ready(function(){
+    $('#confirm').click(function(e){
+        confirm
+        $.ajax({url: "/addAssetFormOwner/"+this.value, success: function(result){
+          $("#count").html(result);
+        }});
+      });
+
+  });
+
+</script>
+

@@ -39,6 +39,8 @@ async function main(userId,arrayOwner,thuasodat,tobandoso,cacsothuagiapranh,dien
         // Get the contract from the network.
         const contract = network.getContract('fabcar');
         console.log("Create land Co")
+        // console.log(` Array Owner : ${arrayOwner.split(',')}`) 
+        console.log(` Array Owner : ${typeof arrayOwner}`)
         // Submit the specified transaction.
         // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
         // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR12', 'Dave')
