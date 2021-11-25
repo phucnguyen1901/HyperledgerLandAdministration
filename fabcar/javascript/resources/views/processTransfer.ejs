@@ -19,12 +19,34 @@
 <div class="container flex justify-content-between">
    <div style="text-align:center">
         <p style="transform: translateY(90%); color: green;">ĐÃ GỬI YÊU CẦU CHUYỂN ĐẤT</p>
+        <br>
+        <%if(typeof dataProcessTransfer.From == 'object'){
+            for(let el of dataProcessTransfer.From){
+                if(el[Object.keys(el)]){%>
+                    <p style="text-align:center; color:green;"><%= Object.keys(el) %></p>
+            <%  }else{%>
+                    <p style="text-align:center;"><%= Object.keys(el) %></p>
+            <%}}
+        }else{%>
+            <td style="text-align:center"><%= dataProcessTransfer.From%></td>
+          <%}%>
     </div>
    <div>
         <i class="fa fa-long-arrow-right" aria-hidden="true" style="font-size: 64px; color: green;" ></i>
    </div>
     <div style="text-align:center">
         <p class="receiverConfirm" style="transform: translateY(90%);">NGƯỜI NHẬN ĐÃ ĐỒNG Ý NHẬN ĐẤT</p>
+        <br>
+        <%if(typeof dataProcessTransfer.To == 'object'){
+            for(let el of dataProcessTransfer.To){
+                if(el[Object.keys(el)]){%>
+                    <p style="text-align:center; color:green;"><%= Object.keys(el) %></p>
+            <%  }else{%>
+                    <p style="text-align:center;"><%= Object.keys(el) %></p>
+            <%}}
+        }else{%>
+            <td style="text-align:center"><%= dataProcessTransfer.To%></td>
+          <%}%>
     </div>
     <div>
         <i class="fa fa-long-arrow-right receiverConfirm" aria-hidden="true" style="font-size: 64px;"></i>
@@ -33,11 +55,13 @@
         <p class="adminConfirm" style="transform: translateY(90%);">QUẢN TRỊ VIÊN ĐÃ XÁC NHẬN CHUYỂN THÀNH CÔNG</p>
     </div>
 
-
-
 </div>
 &emsp;
+
+
+
 <div class="container">
+
     <table class="table table-striped mt-6">
         <thead>
             <th style="text-align:center;">Mã đất</th>
@@ -48,12 +72,41 @@
         </thead>
         <tbody>
             <td style="text-align:center"><%= dataProcessTransfer.Land%></td>
-            <td style="text-align:center"><%= dataProcessTransfer.From%></td>
-            <td style="text-align:center"><%= dataProcessTransfer.To%></td>
+            <%if(typeof dataProcessTransfer.From == 'object'){
+                let m="";
+                for(let el of dataProcessTransfer.From){
+                  m += Object.keys(el)+"/"
+                }
+              %>
+                <td style="text-align:center"><%= m.substring(m,m.length-1)%></td>
+              <%}else{%>
+                <td style="text-align:center"><%= dataProcessTransfer.From%></td>
+              <%}%>
+              <%if(typeof dataProcessTransfer.To == 'object'){
+                let m="";
+                for(let el of dataProcessTransfer.To){
+                  m += Object.keys(el)+"/"
+                }
+              %>
+                <td style="text-align:center"><%= m.substring(m,m.length-1)%></td>
+              <%}else{%>
+                <td style="text-align:center"><%= dataProcessTransfer.To%></td>
+              <%}%>
             <td style="text-align:center"><%= dataProcessTransfer.TimeStart%></td>
             <td style="text-align:center"><%= dataProcessTransfer.TimeEnd%></td>
         </tbody>
     </table>
+<br>
+    <%if(confirmed == "true"){%>
+        <p class="text-green-500">Bạn đã xác nhận chuyển đất</p>
+    <%}else{%>
+        <form action="/coConfirmTransfer" method="POST">
+            <input type="hidden" name="keyTransfer" value=<%=dataProcessTransfer.Land%> >
+            <button class="btn btn-success">Xác nhận chuyển đất</button>
+        </form>
+       
+    <%}%>
+
 </div>
 
 

@@ -12,18 +12,40 @@ const { Contract } = require('fabric-contract-api');
 
 class Transfer extends Contract {
     
-    async createTransfer(ctx,land,userTransfer,userReceive){
+    async createTransfer(ctx,land,userTransfer1,userReceive1,time){
         console.info('============= START : Create transfer ===========');
-        let date_ob = new Date();
-        let monthNow = date_ob.getMonth() < 10 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
-        let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
         const transfer = {
                 Land:land,
-                TimeStart: newDate,
+                TimeStart: time,
+                TimeEnd: "-/-/-",
+                From: userTransfer1,
+                To: userReceive1,
+                ConfirmFromReceiver: false,
+                ConfirmFromAdmin: false,
+                docType: "trans"
+        };
+        let resultString = await this.checkLengthTransfer(ctx);
+        let result = JSON.parse(resultString);
+        await ctx.stub.putState(`TRANS${result.length+1}`, Buffer.from(JSON.stringify(transfer)));
+        console.info('============= END : Create transfer ===========');
+    }
+
+    async createTransferOneOwnerForCo(ctx,land,userTransfer,arrayUserReceive,time){
+        console.info('============= START : Create transfer ===========');
+        let arrayTo = arrayUserReceive.split(',')
+        let arrayReceive = []
+        for(let i =0 ; i < arrayTo.length; i++){
+            let obj = {}
+            obj[arrayTo[i]] = false;
+            arrayReceive.push(obj)
+        }
+
+        const transfer = {
+                Land:land,
+                TimeStart: time,
                 TimeEnd: "-/-/-",
                 From: userTransfer,
-                To: userReceive,
-                ConfirmFromReceiver: false,
+                To: arrayReceive,
                 ConfirmFromAdmin: false,
                 docType: "trans"
         };
@@ -33,20 +55,29 @@ class Transfer extends Contract {
         console.info('============= END : Create transfer ===========');
     }
 
-    async createTransferCoOwnerForOne(ctx,land,arrayUserTransfer,userReceive){
+    async createTransferCoOwnerForOne(ctx,land,arrayUserTransferList,userReceive1,time){
         console.info('============= START : Create transfer ===========');
-        let date_ob = new Date();
-        let monthNow = date_ob.getMonth() < 10 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
-        let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
 
-        let arrayFrom = arrayUserTransfer.map((e) => ({e:false}));
+        let arrayF = arrayUserTransferList.split(',')
+        
+        let arrayTransfer2 = []
+        for(let i =0 ; i < arrayF.length; i++){
+            let obj = {}
+            if(i == 0){
+                obj[arrayF[i]] = true;
+                arrayTransfer2.push(obj)
+            }else{
+                obj[arrayF[i]] = false;
+                arrayTransfer2.push(obj)
+            }
 
+        }
         const transfer = {
                 Land:land,
-                TimeStart: newDate,
+                TimeStart: time,
                 TimeEnd: "-/-/-",
-                From: arrayFrom,
-                To: userReceive,
+                From: arrayTransfer2,
+                To: userReceive1,
                 ConfirmFromReceiver: false,
                 ConfirmFromAdmin: false,
                 docType: "trans"
@@ -57,25 +88,31 @@ class Transfer extends Contract {
         console.info('============= END : Create transfer ===========');
     }
 
-    async createTransferCoOwnerForCo(ctx,land,arrayUserTransfer,arrayUserReceiver){
-        console.info('============= START : Create transfer ===========');
-        let date_ob = new Date();
-        let monthNow = date_ob.getMonth() < 10 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
-        let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
 
+    async createTransferCoOwnerForCo(ctx,land,arrayUserTransfer,arrayUserReceiver,time){
+        console.info('============= START : Create transfer ===========');
         let arrayFrom = arrayUserTransfer.split(',')
         let arrayTo = arrayUserReceiver.split(',')
+        
+        let arrayTransfer = []
+        let arrayReceive = []
 
-        const arrayTransfer = {};
-        const arrayReceive = {};
-
-
-        // copy array elements to th object
-        for (let i = 0; i < arrayFrom.length; i++) {
-            arrayTransfer[arrayFrom[i]] = false;
+        for(let i =0 ; i < arrayFrom.length; i++){
+            let obj = {}
+            if(i == 0){
+                obj[arrayFrom[i]] = true;
+                arrayTransfer.push(obj)
+            }else{
+                obj[arrayFrom[i]] = false;
+                arrayTransfer.push(obj)
+            }
         }
-        for (let i = 0; i < arrayTo.length; i++) {
-            arrayReceive[arrayTo[i]] = false;
+
+        for(let i =0 ; i < arrayTo.length; i++){
+            let obj = {}
+            obj[arrayTo[i]] = false;
+            arrayReceive.push(obj)
+
         }
 
         console.log(arrayTransfer)
@@ -83,7 +120,7 @@ class Transfer extends Contract {
 
         const transfer = {
                 Land:land,
-                TimeStart: newDate,
+                TimeStart: time,
                 TimeEnd: "-/-/-",
                 From: arrayTransfer,
                 To: arrayReceive,
@@ -104,7 +141,7 @@ class Transfer extends Contract {
         return JSON.stringify(result);
     }
 
-    async updateTransfer(ctx,key,role) {
+    async updateTransfer(ctx,key,role,time) {
         console.info('============= START : Update transfer ===========');
 
         const transferAsBytes = await ctx.stub.getState(key); // get the transfer from chaincode state
@@ -115,12 +152,8 @@ class Transfer extends Contract {
         if(role == 'user'){
             transfer.ConfirmFromReceiver = true;
         }else{
-            let date_ob = new Date();
-            let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
-            let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
             transfer.ConfirmFromAdmin = true;
-            transfer.TimeEnd = newDate;
-
+            transfer.TimeEnd = time;
         }
 
         await ctx.stub.putState(key, Buffer.from(JSON.stringify(transfer)));
@@ -153,7 +186,35 @@ class Transfer extends Contract {
         queryString.selector = {"docType":"trans","To":userId};
         let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
         let result = await this.getIteratorData(iterator);
-        return JSON.stringify(result);
+
+        let query1 = {};
+        let query2 = {};
+        query1[userId] = false;
+        query2[userId] = true;
+        let queryString2 = {}
+        queryString2.selector = {
+            "To": {
+               "$or": [
+                  {
+                     "$elemMatch": {
+                        "$eq": query1
+                     }
+                  },
+                  {
+                     "$elemMatch": {
+                        "$eq": query2
+                     }
+                  }
+               ]
+            },
+            "docType": "trans"
+         };
+     
+        let iterator2 = await ctx.stub.getQueryResult(JSON.stringify(queryString2));
+        let result2 = await this.getIteratorData(iterator2);
+        let allResult = [...result,...result2];
+        return JSON.stringify(allResult);
+
     }
 
     async queryTransferOwner(ctx,userId){
@@ -161,8 +222,74 @@ class Transfer extends Contract {
         queryString.selector = {"docType":"trans","From":userId};
         let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
         let result = await this.getIteratorData(iterator);
+
+        let query1 = {};
+        let query2 = {};
+        query1[userId] = false;
+        query2[userId] = true;
+        let queryString2 = {}
+        queryString2.selector = {
+            "From": {
+               "$or": [
+                  {
+                     "$elemMatch": {
+                        "$eq": query1
+                     }
+                  },
+                  {
+                     "$elemMatch": {
+                        "$eq": query2
+                     }
+                  }
+               ]
+            },
+            "docType": "trans"
+         };
+     
+        let iterator2 = await ctx.stub.getQueryResult(JSON.stringify(queryString2));
+        let result2 = await this.getIteratorData(iterator2);
+        let allResult = [...result,...result2];
+        return JSON.stringify(allResult);
+    }
+    async queryTransferOwnerTest(ctx,userId){
+        let query = {};
+        query[userId] = false;
+        let queryString = {}
+        queryString.selector = {
+            "From": {
+               "$or": [
+                  {
+                     "$elemMatch": {
+                        "$eq": query
+                     }
+                  },
+                  {
+                     "$elemMatch": {
+                        "$eq": query
+                     }
+                  }
+               ]
+            },
+            "docType": "trans"
+         };
+     
+        let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
+        let result = await this.getIteratorData(iterator);
+
         return JSON.stringify(result);
     }
+
+    // async queryTransferOwnerCo(ctx,userId){
+    //     let queryString = {}
+    //     queryString.selector = { "From": {
+    //         "$elemMatch": {
+    //            "$eq": userId
+    //         }
+    //      }, "docType":"trans"};
+    //     let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
+    //     let result = await this.getIteratorData(iterator);
+    //     return JSON.stringify(result);
+    // }
 
 
     async queryTransferAll(ctx){

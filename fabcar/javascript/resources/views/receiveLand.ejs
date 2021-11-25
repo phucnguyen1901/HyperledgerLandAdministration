@@ -30,6 +30,7 @@
             <th style="text-align:center;">Mã chuyển</th>
             <th style="text-align:center;">Mã đất</th>
             <th style="text-align:center;">NGƯỜI CHUYỂN</th>
+            <th style="text-align:center;">NGƯỜI NHẬN</th>
             <th style="text-align:center;">THỜI GIAN CHUYỂN</th>
             <th style="text-align:center;">TRẠNG THÁI</th> 
             <th style="text-align:center;">NHẬN ĐẤT</th>
@@ -41,22 +42,84 @@
                  <tr>
                     <td style="text-align:center"><%= element.key%></td>
                     <td style="text-align:center"><%= element.value.Land%></td>
-                    <td style="text-align:center"><%= element.value.From%></td>
-                    <td style="text-align:center"><%= element.value.TimeStart%></td>
-                    <% if(element.value.ConfirmFromReceiver){%>
-                        <td style="text-align:center; color:green;">Đã nhận đất</td>
-                          <td style="text-align:center">
-                            <form action="/processTransfer" method="POST">
-                            <input type="hidden" name="keyTransfer" value=<%= element.key%> >
-                            <button type="submit" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Tiến độ chuyển đất</button>
-                        </form>
-                          </td>
+
+                    <%if(typeof element.value.From == 'object'){
+                      let m="";
+                      let array = [];
+                      for(let el of element.value.From){
+                        m += Object.keys(el)+"/"
+                    }%>
+                      <td style="text-align:center"><%= m.substring(m,m.length-1)%></td>
                     <%}else{%>
+                      <td style="text-align:center"><%= element.value.From%></td>
+                    <%}%>
+
+                    <%if(typeof element.value.To == 'object'){
+                      let m="";
+                      let array = [];
+                      for(let el of element.value.To){
+                        m += Object.keys(el)+"/"
+                    }%>
+                      <td style="text-align:center"><%= m.substring(m,m.length-1)%></td>
+                    <%}else{%>
+                      <td style="text-align:center"><%= element.value.To%></td>
+                    <%}%>
+
+                    <td style="text-align:center"><%= element.value.TimeStart%></td>
+                 
+                    <%if(typeof element.value.To == 'object'){
+                      let check;
+                      for(let el of element.value.To){
+                        if(Object.keys(el) == user.userId){
+                          check = Object.values(el);
+                        }
+                      }
+                      
+                      if(check == "true"){%>
+                        <td style="text-align:center; color:green;">Đã nhận đất</td>
+                        <td style="text-align:center">
+                          <form action="/processTransfer" method="POST">
+                              <input type="hidden" name="keyTransfer" value=<%= element.key%> >
+                              <input type="hidden" name="confirmed" value=<%= check %> >
+                              <button type="submit" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Tiến độ chuyển đất</button>
+                          </form>
+                          </td>
+                      <%}else{%>
                         <td style="text-align:center; color:red;">Chưa nhận đất</td>
                         <td style="text-align:center">
-                            <a href="/detailReceive/<%= element.value.From %>/<%= element.value.Land %>" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Nhận đất</a>
+                          <form action="/detailReceive" method="POST">
+                              <input type="hidden" name="key" value=<%= element.value.Land%> >
+                              <input type="hidden" name="keyTransfer" value=<%= element.key%>>
+                              <input type="hidden" name="confirmed" value=<%= check %> >
+                              <button type="submit" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Nhận đất</button>
+                          </form>
+                          </td>
+                      <%}%>
+                        
+                    <%}else{
+                      if(element.value.ConfirmFromReceiver){%>
+                      <td style="text-align:center; color:green;"> Đã nhận đất </td>
+                      <td style="text-align:center">
+                        <form action="/processTransfer" method="POST">
+                            <input type="hidden" name="keyTransfer" value=<%= element.key%> >
+                            <input type="hidden" name="confirmed" value=<%= check %> >
+                            <button type="submit" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Tiến độ chuyển đất</button>
+                        </form>
                         </td>
-                    <%}%>
+                      <%}else{%>
+                        <td style="text-align:center; color:green;"> Chưa nhận đất </td>
+                        <td style="text-align:center">
+                          <form action="/detailReceive" method="POST">
+                              <input type="hidden" name="key" value=<%= element.value.Land%> >
+                              <input type="hidden" name="keyTransfer" value=<%= element.key%>>
+                              <input type="hidden" name="confirmed" value=<%= check %> >
+                              <button type="submit" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Nhận đất</button>
+                          </form>
+                          </td>
+                        
+                      <%}
+                    }%>
+
 
 
                 </tr>

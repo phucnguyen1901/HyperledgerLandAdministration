@@ -41,7 +41,7 @@ class FabCar extends Contract {
                 ThoiHanSuDung: "Lâu dài",
                 NguocGocSuDung:"Nhà nưóc giao đất có thu tiền sử dụng",
                 ThoiGianDangKy: "11/09/2021",
-                Status: StatusLane.Done,
+                Status: "Đã duyệt",
                 UrlImage: "",
                 Transactions: [],
                 LaneOfCity: "TP.HCM"
@@ -96,7 +96,7 @@ class FabCar extends Contract {
                 ThoiHanSuDung: thoihansudung,
                 NguocGocSuDung:nguongocsudung,
                 ThoiGianDangKy: thoigiandangky,
-                Status: StatusLane.NotApprovedYet,
+                Status: "Chưa duyệt",
                 Transactions: [],
                 docType: 'land',
                 UrlImage: url,
@@ -130,7 +130,7 @@ class FabCar extends Contract {
                 ThoiHanSuDung: thoihansudung,
                 NguocGocSuDung:nguongocsudung,
                 ThoiGianDangKy: thoigiandangky,
-                Status: StatusLane.NotApprovedYet,
+                Status: "Chưa duyệt",
                 Transactions: [],
                 docType: 'land',
                 UrlImage: url,
@@ -293,6 +293,7 @@ class FabCar extends Contract {
                "$eq": userId
             }
          }, "docType":"land"};
+
         let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
         let result = await this.getIteratorData(iterator);
         return JSON.stringify(result);

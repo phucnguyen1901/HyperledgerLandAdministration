@@ -16,7 +16,7 @@ function transferController() {
 
           async transferLandOne(req,res){
             let key = req.params.key;
-            res.render("transferLand",{layout:false, key:key})
+            res.render("transferLandOne",{layout:false, key:key})
           },
       
       
@@ -33,6 +33,15 @@ function transferController() {
             const count = req.params.count;
             res.render("transferLandCountCo",{layout:false,count:count})
           },
+
+          async returnError(req,res){
+            const {error} = req.body;
+            res.render("returnError",{layout:false,count:error})
+          },
+
+          async coConfirmTransfer(req,res){
+            
+          }
     }
 }
 

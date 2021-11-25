@@ -45,10 +45,11 @@ async function main(userId,key,stt) {
         // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
         // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR12', 'Dave')
         await contract.submitTransaction('updateStatusLand',key,stt);
-        console.log('Transaction has been submitted');
-
         // Disconnect from the gateway.
         await gateway.disconnect();
+        console.log('Transaction has been submitted');
+
+
 
     } catch (error) {
         console.error(`Failed to submit transaction: ${error}`);

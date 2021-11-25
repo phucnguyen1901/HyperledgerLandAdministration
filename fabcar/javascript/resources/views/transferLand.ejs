@@ -4,7 +4,7 @@
     if(messages.error > 0){
   %>
     <div id="flash" class="alert alert-success d-flex justify-content-between" style="text-align:center;">
-      <%= message.error %>
+    <%= message.error %>
     <button id="delete">X</button>
     </div>
   <%
@@ -16,7 +16,7 @@
   <select id="StatusOwner" name="mucdichsudung" class="text-green-700 form-control block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-1 px-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" >
     <option 
      value="Chọn hình thức chuyển nhượng">Chọn hình thức chuyển nhượng</option>
-    <option value="Bản thân sở hữu">Chuyển cho 1 người</option>
+    <option value="Chuyển cho 1 người">Chuyển cho 1 người</option>
     <option value="Nhiều người sở hữu">Chuyển cho nhiều người</option>
 </select>
 
@@ -25,6 +25,7 @@
 </div>
 
 <input type="hidden" id="key" value=<%= key%> >
+<input type="hidden" id="userTransfer" value=<%= userId%> >
 
 <script>
    if(document.getElementById("delete")){
@@ -44,7 +45,8 @@
       let url;
       if(value == "Chọn hình thức chuyển nhượng"){
         url = "/blank"
-      }else if(value == "Chuyển cho 1 người"){
+      }
+      if(value == "Chuyển cho 1 người"){
         url = `/transferLandOne/${key}` 
       }else{
         url = `/transferLandCo/${key}`

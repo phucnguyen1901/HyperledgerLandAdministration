@@ -22,7 +22,11 @@
   <% if(requestPerson == "transferUser"){%>
     <a href="/transferLand/<%= key %>" class="bg-red-700 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">Chuyển quyền sở hữu mảnh đất này</a>
   <%}else{%>
-    <a href="/handleConfirmFromReceiver/<%= key %>" class="bg-green-700 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">Nhận mảnh đất này</a>
+    <form action="/processTransfer" method="POST">
+      <input type="hidden" name="keyTransfer" value=<%= keyTransfer %>>
+      <input type="hidden" name="confirmed" value=<%= confirmed %>>
+      <button type="submit" class="bg-green-700 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">Nhận mảnh đất này</button>
+    </form>
   <%}%>
   <br>
   <br>

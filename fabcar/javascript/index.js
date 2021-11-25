@@ -64,7 +64,7 @@ app.post('/handleLogin',userController().handleLogin)
 
 app.get('/transferLand/:key',authMiddleware.requireAuth,homeController().transferLand)
 app.post('/handleTransferLand',authMiddleware.requireAuth,homeController().handleTransferLand)
-app.post('/handleTransferLandCo',authMiddleware.requireAuth,homeController().handleTransferLandCo)
+app.post('/handleTransferLandCo',authMiddleware.requireAuth,homeController().handleTransferLandCoToCo)
 
 app.post('/processTransfer',authMiddleware.requireAuth,homeController().processTransfer)
 
@@ -75,7 +75,7 @@ app.get('/transferLandOwner',authMiddleware.requireAuth,homeController().transfe
 app.get('/requestAllTransferLand',authMiddleware.requireAuth,homeController().transferAdmin)
 app.get('/handleConfirmFromReceiver/:key',authMiddleware.requireAuth,homeController().handleConfirmFromReceiver);
 
-app.get('/detailReceive/:userIdTransfer/:key',authMiddleware.requireAuth,homeController().detailReceive)
+app.post('/detailReceive',authMiddleware.requireAuth,homeController().detailReceive)
 
 app.post('/updateStatusLandAdmin',authMiddleware.requireAuth,homeController().updateStatusLandAdmin)
 
@@ -100,6 +100,10 @@ app.get('/transferLandCo/:key',authMiddleware.requireAuth, transferController().
 
 app.post('/logout',homeController().logoutUser)
 app.get('/fast',userController().fast)
+
+//error
+app.post('/returnError',authMiddleware.requireAuth, transferController().returnError)
+
 
 app.listen(3000,()=>console.log("Server started with port 3000"));
 
