@@ -7,6 +7,22 @@
     </style>
 <%}%>
 
+<%if(typeof dataProcessTransfer.To == 'object'){
+    let countConfirmFromReceiver = 0;
+    for(let el of dataProcessTransfer.To){
+        if(!el[Object.keys(el)]){
+            countConfirmFromReceiver++;
+         }
+    }
+    if(countConfirmFromReceiver == 0){%>
+        <style>
+            .receiverConfirm{
+                color: green;
+            }
+        </style>
+    <%}}%>
+
+
 <% if(dataProcessTransfer.ConfirmFromAdmin){%>
     <style>
         .adminConfirm{
@@ -28,7 +44,7 @@
                     <p style="text-align:center;"><%= Object.keys(el) %></p>
             <%}}
         }else{%>
-            <td style="text-align:center"><%= dataProcessTransfer.From%></td>
+            <td style="text-align:center"><p style="color: green;"><%= dataProcessTransfer.From%></p></td>
           <%}%>
     </div>
    <div>
@@ -45,12 +61,14 @@
                     <p style="text-align:center;"><%= Object.keys(el) %></p>
             <%}}
         }else{%>
-            <td style="text-align:center"><%= dataProcessTransfer.To%></td>
-          <%}%>
+            
+            <td style="text-align:center"> <p class="receiverConfirm"><%= dataProcessTransfer.To%></p></td>
+        <%}%>
     </div>
     <div>
-        <i class="fa fa-long-arrow-right receiverConfirm" aria-hidden="true" style="font-size: 64px;"></i>
+        <i class="fa fa-long-arrow-right receiverConfirm" aria-hidden="true" style="font-size: 64px;" ></i>
    </div>
+
     <div style="text-align:center">
         <p class="adminConfirm" style="transform: translateY(90%);">QUẢN TRỊ VIÊN ĐÃ XÁC NHẬN CHUYỂN THÀNH CÔNG</p>
     </div>
@@ -97,13 +115,37 @@
         </tbody>
     </table>
 <br>
-    <%if(confirmed == "true"){%>
-        <p class="text-green-500">Bạn đã xác nhận chuyển đất</p>
-    <%}else{%>
-        <form action="/coConfirmTransfer" method="POST">
-            <input type="hidden" name="keyTransfer" value=<%=dataProcessTransfer.Land%> >
-            <button class="btn btn-success">Xác nhận chuyển đất</button>
-        </form>
+    <%if(confirmed == "true"){
+        if(position == "from"){%>
+            <p class="text-green-500">Bạn đã xác nhận chuyển đất</p>
+        <%}else{%>
+            <p class="text-green-500">Bạn đã nhận đất</p>
+        <%}%>
+       
+    <%}else{
+        if(position == "from"){%>
+                <form action="/handleConfirmFromTransferCo" method="POST">
+                    <input type="hidden" name="key" value=<%=keyTransfer%> >
+                    <input type="hidden" name="userIdFromTransfer" value=<%=dataProcessTransfer.From%> >
+                    <button class="btn btn-success">Xác nhận chuyển đất</button>
+                </form>
+        <%}else{
+            if(typeof dataProcessTransfer.To == 'object'){%>
+                <form action="/handleConfirmFromReceiverCo" method="POST">
+                    <input type="hidden" name="keyTransfer" value=<%=keyTransfer%> >
+                    <button class="btn btn-success">Nhận đất</button>
+                </form>
+            <%}else{%>
+                <form action="/handleConfirmFromReceiver" method="POST">
+                    <input type="hidden" name="key" value=<%=keyTransfer%> >
+                    <input type="hidden" name="userIdFromTransfer" value=<%=dataProcessTransfer.From%> >
+                    <button class="btn btn-success">Nhận đất</button>
+                </form>
+            
+            <%}
+        }%>
+
+
        
     <%}%>
 

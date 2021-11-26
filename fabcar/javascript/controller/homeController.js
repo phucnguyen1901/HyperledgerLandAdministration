@@ -29,6 +29,7 @@ const queryTransferOne = require('../queryTransferOne')
 
 
 const updateTransfer = require('../updateTransfer')
+const updateTransferCo = require('../updateTransferCo')
 const cancleTransferFromUser = require('../cancleTransferFromUser')
 
 const formidable = require('formidable');
@@ -90,13 +91,13 @@ function homeController() {
     },
 
     async detailReceive(req,res){
-      const {key,keyTransfer,confirmed} = req.body;
+      const {key,keyTransfer,confirmed,position} = req.body;
       console.log(`key :`+key)
       const userId = req.session.user.userId;
       try {
           const detail = await query(key,userId);
           const obj = JSON.parse(detail);
-          return res.render("detail",{ detail: obj,confirmed:confirmed,keyTransfer:keyTransfer,requestPerson: 'receiveUser'});
+          return res.render("detail",{ detail: obj,confirmed:confirmed,keyTransfer:keyTransfer,position:position,requestPerson: 'receiveUser'});
       } catch (error) {
         console.log("Loi roi"+error)
         req.flash("error","Xảy ra lỗi")
@@ -157,7 +158,7 @@ function homeController() {
       const idCard = req.session.user.idCard;
       const toadocacdinh = '{"D1": [406836.70,1183891.04],"D2": [406836.75,1183891.44],"D3": [406836.80,1183891.37],"D4": [406836.79,1183891.40]}';
       const chieudaicaccanh = '{"C12": 20.5, "C23": 1.12, "C34":7.53, "C41" :15.5}';
-      await invokeLandOne(userId,owner,idCard,thuasodat,tobandoso,[123,124,125],dientich,"{}",
+      await invokeLandOne(userId,owner,thuasodat,tobandoso,[123,124,125],dientich,"{}",
       "{}",
       hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,thoigiandangky,url,laneOfCity);
       await saveMessage(userId,"Bạn đã thêm một mảnh đất mới")
@@ -170,11 +171,16 @@ function homeController() {
       const {thuasodat,tobandoso,dientich,hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,url,landOfCity,countOwner} = req.body;
       console.log(countOwner)
       let listOwner = [req.session.user.userId];
+      let listNameOwner = [];
       for(let i = 0; i < countOwner; i++){
         listOwner.push(req.body[`owner${i}`]);
       }
 
-      // res.send("OK")
+      for(let i = 0; i < listOwner.length;i++){
+        let listUser = await getUser(listOwner[i]);
+        listNameOwner.push(listUser[0].fullname)
+      }
+
       let date_ob = new Date();
       let monthNow = date_ob.getMonth() < 10 ? `0${date_ob.getMonth()}` : `${date_ob.getMonth()}`;
       let newDate = `${date_ob.getDay()}/${monthNow}/${date_ob.getFullYear()}`;
@@ -184,7 +190,7 @@ function homeController() {
       const toadocacdinh = '{"D1": [406836.70,1183891.04],"D2": [406836.75,1183891.44],"D3": [406836.80,1183891.37],"D4": [406836.79,1183891.40]}';
       const chieudaicaccanh = '{"C12": 20.5, "C23": 1.12, "C34":7.53, "C41" :15.5}';
       try {
-        await invokeLandCo(userId,listOwner,thuasodat,tobandoso,[123,124,125],dientich,"{}",
+        await invokeLandCo(userId,listOwner,listNameOwner,thuasodat,tobandoso,[123,124,125],dientich,"{}",
         "{}",
         hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,thoigiandangky,url,landOfCity);
         for(let i = 0; i < listOwner.length; i++){
@@ -214,20 +220,19 @@ function homeController() {
       console.log(owner0)
       console.log(key)
       console.log(userId)
-      // await createTransfer(key,userId,owner0)
-      // res.send("OK")
 
       try {
         // check Land is exist user
           let landString = await query(key,userId)
           let land = JSON.parse(landString);
-          if(land.StatusOwner == "Một người"){
+          if(typeof land.UserId != "object"){
+            console.log("TU NHIEN VAO DAY Z TROI")
             if(land.UserId == userId){
+              console.log("TU NHIEN VAO DAY Z TROI2")
               let date_ob = new Date();
               let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
               let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
-  
-              console.log("TU NHIEN VAO DAY Z TROI")
+
               await createTransfer(key,userId,owner0,newDate)
               await updateLand(userId,key,"Đang chuyển1")
               await saveMessage(owner0,`Bạn nhận được đất do người sở hữu ${userId} chuyển cho bạn`)
@@ -241,16 +246,16 @@ function homeController() {
             }
 
           }else{
-            if(land.coOwner.includes(userId)){
-              console.log("DA VAO DAY ROIIIIIIIIIIIIIIIIIIIIIIIIIIIIi : "+land.coOwner)
+            if(land.UserId.includes(userId)){
+              console.log("DA VAO DAY ROIIIIIIIIIIIIIIIIIIIIIIIIIIIIi : "+land.UserId)
               let date_ob = new Date();
               let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
               let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
-              await createTransferCoToOne(key,userId,land.coOwner,owner0,newDate)
+              await createTransferCoToOne(key,userId,land.UserId,owner0,newDate)
               await updateLand(userId,key,"Đang chuyển1")
               console.log("DA QUAAAAAAAA DAY ROIIIIIIIIIIIIIIIIIIIIIIIIIIIIi")
-              for(let i = 0; i < land.coOwner.length;i++){
-                await saveMessage(land.coOwner[i],`${land.coOwner.join('-')} đã gửi yêu cầu chuyển quyền sở hữu đất có mã ${key} cho người sở hữu ${owner0}`)
+              for(let i = 0; i < land.UserId.length;i++){
+                await saveMessage(land.UserId[i],`${land.UserId.join('-')} đã gửi yêu cầu chuyển quyền sở hữu đất có mã ${key} cho người sở hữu ${owner0}`)
               }
               console.log("Da toi redirectttttttttttttttttttttttttttttttttt")
               req.flash("success",`Đã gửi yêu cầu chuyển quyền sở hữu đất có mã ${key} cho người sở hữu ${owner0}`)
@@ -286,7 +291,7 @@ function homeController() {
         // check Land is exist user
           let landString = await query(key,userId)
           let land = JSON.parse(landString);
-          if(land.StatusOwner == "Một người"){
+          if(typeof land.userId != "object"){
             if(land.UserId == userId){
               let date_ob = new Date();
               let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
@@ -305,17 +310,17 @@ function homeController() {
             }
 
           }else{
-            if(land.coOwner.includes(userId)){
+            if(land.UserId.includes(userId)){
               let date_ob = new Date();
               let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
               let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
-              await createTransferCoToCo(key,userId,land.coOwner,listOwner,newDate)
+              await createTransferCoToCo(key,userId,land.UserId,listOwner,newDate)
               await updateLand(userId,key,"Đang chuyển1")
-              for(let i = 0; i < land.coOwner.length;i++){
-                await saveMessage(land.coOwner[i],`${land.coOwner.join('-')} đã gửi yêu cầu chuyển quyền sở hữu đất có mã ${key} cho người sở hữu ${listOwner.join('-')}`)
+              for(let i = 0; i < land.UserId.length;i++){
+                await saveMessage(land.UserId[i],`${land.UserId.join('-')} đã gửi yêu cầu chuyển quyền sở hữu đất có mã ${key} cho người sở hữu ${listOwner.join('-')}`)
               }
               for(let i = 0; i < listOwner.length;i++){
-                await saveMessage(listOwner[i],`Bạn nhận được đất do người sở hữu ${land.coOwner.join('-')} chuyển cho bạn`)
+                await saveMessage(listOwner[i],`Bạn nhận được đất do người sở hữu ${land.UserId.join('-')} chuyển cho bạn`)
               }
 
               req.flash("success",`Đã gửi yêu cầu chuyển quyền sở hữu đất có mã ${key} cho người sở hữu ${listOwner.join('-')}`)
@@ -340,12 +345,15 @@ function homeController() {
     },
 
     async processTransfer(req,res){
-      const {keyTransfer, confirmed} = req.body;
+      const {keyTransfer, confirmed, position} = req.body;
       console.log(`keytransfer ${keyTransfer}`)
       let dataString = await queryTransferOne(req.session.user.userId,keyTransfer);
       let data = JSON.parse(dataString)
       console.log(`confirmed : ${typeof confirmed}`)
-      return res.render("processTransfer",{dataProcessTransfer: data, confirmed:confirmed})
+      // console.log(`confirmed2 : ${position}`)
+
+      // res.send("OK")
+      return res.render("processTransfer",{dataProcessTransfer: data,keyTransfer:keyTransfer,position:position, confirmed:confirmed})
 
     },
 
@@ -363,9 +371,9 @@ function homeController() {
     },
 
     async handleConfirmFromReceiver(req,res){
-      const key = req.params.key;
-      const userIdFromTransfer = req.params.userIdTransfer;
+      const {key,userIdFromTransfer} = req.body;
       console.log(key)
+      console.log(userIdFromTransfer)
       try {
         let date_ob = new Date();
         let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
@@ -373,6 +381,50 @@ function homeController() {
         await updateTransfer(req.session.user.userId,key,req.session.user.role,newDate);
         await saveMessage(req.session.user.userId,"Bạn đã nhận đất thành công")
         await saveMessage(userIdFromTransfer,`Người dùng ${req.session.user.userId} đã nhận mã đất ${key}`)
+        req.flash("success","Bạn đã xác nhận nhận đất thành công")
+        res.redirect('/receiveLand');
+      } catch (error) {
+        req.flash("error","Có lỗi xảy ra chưa nhận đất thành công")
+        res.redirect('/receiveLand');
+      }
+      
+    },
+
+    async handleConfirmFromTransferCo(req,res){
+      const {key} = req.body;
+      console.log(`handle  transfer co : ${key}`)
+      const userId = req.session.user.userId;
+      try {
+
+        await updateTransferCo(userId,key,"from");
+        let transferString = await queryTransfer(key);
+        let transfer = JSON.parse(transferString);
+        await saveMessage(userId,`Bạn đã xác nhận chuyển đất { ${transfer.Land} } thành công`)
+        for(let i = 0; i < Object.keys(transfer.From).length; i++){
+          await saveMessage(Object.keys(a)[i],`Người dùng ${userId} đã xác nhận chuyển mã đất ${transfer.Land}`)
+        }
+        req.flash("success","Bạn đã xác nhận nhận đất thành công")
+        res.redirect('/transferLandOwner');
+      } catch (error) {
+        req.flash("error","Có lỗi xảy ra chưa nhận đất thành công")
+        res.redirect('/transferLandOwner');
+      }
+      
+    },
+
+    async handleConfirmFromReceiverCo(req,res){
+      const {keyTransfer} = req.body;
+      const userId = req.session.user.userId;
+      console.log(keyTransfer)
+      try {
+        await updateTransferCo(userId,keyTransfer,"to");
+        let transferString = await queryTransfer(keyTransfer);
+        let transfer = JSON.parse(transferString);
+        await saveMessage(userId,"Bạn đã nhận đất thành công")
+        for(let i = 0; i < Object.keys(transfer.From).length; i++){
+          await saveMessage(Object.keys(a)[i],`Người dùng ${userId} đã xác nhận chuyển mã đất ${transfer.Land}`)
+        }
+     
         req.flash("success","Bạn đã xác nhận nhận đất thành công")
         res.redirect('/receiveLand');
       } catch (error) {
@@ -406,7 +458,7 @@ function homeController() {
         let newUser = await getUser(userIdNew);
         let newFullname = newUser[0].fullname;
         let newIdCard = newUser[0].idCard;
-
+        // await queryTransfer()
         await changeLandOwner(land,userIdOld,userIdNew,newIdCard,newFullname)
         await updateLand(req.session.user.userId,land,"Đã duyệt")
         await updateTransfer(req.session.user.userId,key,req.session.user.role)

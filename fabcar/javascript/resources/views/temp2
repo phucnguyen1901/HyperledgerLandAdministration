@@ -29,3 +29,34 @@
     </form>
   </td>
 <%}%>
+
+
+
+
+
+
+<%
+let m="";
+let array = [];
+let countConfirmFromTransfer = 0;
+for(let el of element.value.From){
+  if(Object.values(el) == false){
+    countConfirmFromTransfer++;
+    array.push(Object.keys(el))
+  }
+} 
+if(count == 0){
+%>
+  <td style="text-align:center">
+    <form action="/detailReceive" method="POST">
+        <input type="hidden" name="key" value=<%= element.value.Land%> >
+        <input type="hidden" name="keyTransfer" value=<%= element.key%>>
+        <input type="hidden" name="confirmed" value=<%= check %> >
+        <button type="submit" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Nhận đất</button>
+    </form>
+    </td>
+<%}else{%>
+  <td style="text-align:center; color:red">
+    Người chuyển chưa xác nhận : <%= array.join('/')%>
+  </td>
+<%}%>

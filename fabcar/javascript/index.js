@@ -73,7 +73,9 @@ app.get('/receiveLand',authMiddleware.requireAuth,homeController().receiveLand);
 app.get('/transferLandOwner',authMiddleware.requireAuth,homeController().transferLandOwner);
 
 app.get('/requestAllTransferLand',authMiddleware.requireAuth,homeController().transferAdmin)
-app.get('/handleConfirmFromReceiver/:key',authMiddleware.requireAuth,homeController().handleConfirmFromReceiver);
+app.post('/handleConfirmFromReceiver',authMiddleware.requireAuth,homeController().handleConfirmFromReceiver);
+app.post('/handleConfirmFromTransferCo',authMiddleware.requireAuth,homeController().handleConfirmFromTransferCo);
+app.post('/handleConfirmFromReceiverCo',authMiddleware.requireAuth,homeController().handleConfirmFromReceiverCo);
 
 app.post('/detailReceive',authMiddleware.requireAuth,homeController().detailReceive)
 

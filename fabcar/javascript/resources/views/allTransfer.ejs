@@ -13,6 +13,7 @@
   <table class="table table-striped mt-6">
     <thead>
         <tr>
+            <th style="text-align:center;">Mã chuyển</th>
             <th style="text-align:center;">Mã đất</th>
             <th style="text-align:center;">Ngày yêu cầu</th>
             <th style="text-align:center;">Người chuyển</th>
@@ -25,11 +26,58 @@
     <tbody>
            <% for(var element of menu){ %>
             <tr>
+                <td style="text-align:center;"><%= element.key %></td>
                 <td style="text-align:center;"><%= element.value.Land %></td>
                 <td style="text-align:center;"><%= element.value.TimeStart %></td>
-                <td style="text-align:center;"><%= element.value.From %></td>
-                <td style="text-align:center;"><%= element.value.To %></td>
+                <%if(typeof element.value.From == 'object'){
+                    let m="";
+                    let array = [];
+                    for(let el of element.value.From){
+                      m += Object.keys(el)+"/"
+                  }%>
+                    <td style="text-align:center"><%= m.substring(m,m.length-1)%></td>
+                  <%}else{%>
+                    <td style="text-align:center"><%= element.value.From%></td>
+                  <%}%>
 
+                  <%if(typeof element.value.To == 'object'){
+                    let m="";
+                    let array = [];
+                    for(let el of element.value.To){
+                      m += Object.keys(el)+"/"
+                  }%>
+                    <td style="text-align:center"><%= m.substring(m,m.length-1)%></td>
+                  <%}else{%>
+                    <td style="text-align:center"><%= element.value.To%></td>
+                  <%}%>
+                    
+                  <%if(typeof element.value.To == 'object'){%>
+                    <% 
+                    let array = [];
+                    let countConfirmFromTransfer = 0;
+                    for(let el of element.value.To){
+                      if(Object.values(el) == "false"){
+                        countConfirmFromTransfer++;
+                        array.push(Object.keys(el))
+                      }
+                    }
+                    if(countConfirmFromTransfer == 0){%>
+                        <td style="text-align:center; color:green;">Đã xác nhận</td>
+                        <td style="text-align:center;">
+                            <form action="/confirmTransferAdmin" method="POST">
+                                <input type="hidden" name="key" value=<%= element.key %> >
+                                <input type="hidden" name="userIdOld" value=<%= element.value.From %> >
+                                <input type="hidden" name="userIdNew" value=<%= element.value.To %> >
+                                <input type="hidden" name="land" value=<%= element.value.Land %> >
+                                <button type="submit" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-1 px-4 rounded">Xác nhận chuyển quyền sở hữu đất</button>
+
+                            </form>
+                          </td>
+                    <%}else{%>
+                        <td style="text-align:center; color:red;">Người nhận chưa xác nhận <br> {<%= array.join("/")%>} </td>
+                    <%}%>
+
+                  <%}else{%>
                     <%if(element.value.ConfirmFromReceiver){%>
                         <td style="text-align:center; color:green;">Đã xác nhận</td>
                           <%  if(!element.value.ConfirmFromAdmin){ %>
@@ -54,6 +102,10 @@
                             <p class="text-red-700">Người nhận chưa xác nhận </p>
                         </td>
                     <%}%>
+
+                  <%}%>
+
+
 
                 </tr>
            <%}%>

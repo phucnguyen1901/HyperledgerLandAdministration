@@ -34,9 +34,13 @@ function userController(){
             const nva = "a@gmail.com";
             const nvb = "b@gmail.com";
             const nvc = "c@gmail.com";
+            const nvd = "d@gmail.com";
+            const nve = "e@gmail.com";
             await register(nva,mspOrg[0],organizationsCA[0],affiliations[0]),
             await register(nvb,mspOrg[0],organizationsCA[0],affiliations[0]),
             await register(nvc,mspOrg[0],organizationsCA[0],affiliations[0]),
+            await register(nvd,mspOrg[0],organizationsCA[0],affiliations[0]),
+            await register(nve,mspOrg[0],organizationsCA[0],affiliations[0]),
             res.redirect('/login')
         },
 

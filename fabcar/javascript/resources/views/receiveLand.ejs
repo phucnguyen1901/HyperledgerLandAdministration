@@ -86,14 +86,32 @@
                           </td>
                       <%}else{%>
                         <td style="text-align:center; color:red;">Chưa nhận đất</td>
-                        <td style="text-align:center">
-                          <form action="/detailReceive" method="POST">
-                              <input type="hidden" name="key" value=<%= element.value.Land%> >
-                              <input type="hidden" name="keyTransfer" value=<%= element.key%>>
-                              <input type="hidden" name="confirmed" value=<%= check %> >
-                              <button type="submit" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Nhận đất</button>
-                          </form>
-                          </td>
+
+                        <% 
+                        let array = [];
+                        let countConfirmFromTransfer = 0;
+                        for(let el of element.value.From){
+                          if(Object.values(el) == "false"){
+                            countConfirmFromTransfer++;
+                            array.push(Object.keys(el))
+                          }
+                        }
+                        if(countConfirmFromTransfer == 0){%>
+                          <td style="text-align:center">
+                            <form action="/detailReceive" method="POST">
+                                <input type="hidden" name="key" value=<%= element.value.Land%> >
+                                <input type="hidden" name="keyTransfer" value=<%= element.key%>>
+                                <input type="hidden" name="confirmed" value=<%= false %> >
+                                <button type="submit" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Nhận đất</button>
+                            </form>
+                            </td>
+                          
+                        <%}else{%>
+                            <td style="color: red;">Người chuyển chưa xác nhận <br> {<%= array.join("/")%>} </td>
+                          <%}
+                        %>
+                       
+
                       <%}%>
                         
                     <%}else{
@@ -102,21 +120,39 @@
                       <td style="text-align:center">
                         <form action="/processTransfer" method="POST">
                             <input type="hidden" name="keyTransfer" value=<%= element.key%> >
-                            <input type="hidden" name="confirmed" value=<%= check %> >
+                            <input type="hidden" name="confirmed" value=<%= true %> >
+                            <input type="hidden" name="position" value=<%= true %> >
+                            
                             <button type="submit" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Tiến độ chuyển đất</button>
                         </form>
                         </td>
                       <%}else{%>
-                        <td style="text-align:center; color:green;"> Chưa nhận đất </td>
-                        <td style="text-align:center">
-                          <form action="/detailReceive" method="POST">
-                              <input type="hidden" name="key" value=<%= element.value.Land%> >
-                              <input type="hidden" name="keyTransfer" value=<%= element.key%>>
-                              <input type="hidden" name="confirmed" value=<%= check %> >
-                              <button type="submit" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Nhận đất</button>
-                          </form>
-                          </td>
-                        
+                        <td style="text-align:center; color:red;"> Chưa nhận đất </td>
+                        <% 
+                        let array = [];
+                        let countConfirmFromTransfer = 0;
+                        for(let el of element.value.From){
+                          if(Object.values(el) == "false"){
+                            countConfirmFromTransfer++;
+                            array.push(Object.keys(el))
+                          }
+                        }
+                        if(countConfirmFromTransfer == 0){%>
+                          <td style="text-align:center">
+                            <form action="/detailReceive" method="POST">
+                                <input type="hidden" name="key" value=<%= element.value.Land%> >
+                                <input type="hidden" name="keyTransfer" value=<%= element.key%>>
+                                <input type="hidden" name="confirmed" value=<%= false %> >
+                                <button type="submit" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Nhận đất</button>
+                            </form>
+                            </td>
+                          
+                        <%}else{%>
+                            <td style="color: red;">Người chuyển {<%= array.join("/")%>} chưa xác nhận</td>
+                          <%}
+                        %>
+
+
                       <%}
                     }%>
 

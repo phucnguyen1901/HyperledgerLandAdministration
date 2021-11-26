@@ -160,6 +160,43 @@ class Transfer extends Contract {
         console.info('============= END : Update transfer ===========');
     }
 
+    async updateTransferCo(ctx,key,userId,position) {
+        console.info('============= START : Update transfer ===========');
+
+        const transferAsBytes = await ctx.stub.getState(key); // get the transfer from chaincode state
+        if (!transferAsBytes || transferAsBytes.length === 0) {
+            throw new Error(`${key} does not exist`);
+        }
+        let transfer = JSON.parse(transferAsBytes.toString());
+        
+        console.log(`USERID: ${userId}`)
+        console.log(`USERID2: ${position}`)
+        console.log(`USERID3: ${transfer.From[userId]}`)
+        console.log(`USERID3: ${transfer.To[userId]}`)
+
+
+        if(position == "from"){
+            for(let i =0 ; i < transfer.From.length; i++){
+                if(Object.keys(transfer.From[i]) == userId){
+                    console.log(`++++++++++++++++ KEY FROM+++++++++++++++++++++`)
+                    console.log(`un ${transfer.From[i][userId]}`)
+                    transfer.From[i][userId] = true
+                }
+            }
+        }else{
+            for(let i =0 ; i < transfer.To.length; i++){
+                if(Object.keys(transfer.To[i]) == userId){
+                    console.log(`++++++++++++++++ KEY To+++++++++++++++++++++`)
+                    console.log(`inn ${transfer.To[i][userId]}`)
+                    transfer.To[i][userId] = true
+                }
+            }
+        }
+
+        await ctx.stub.putState(key, Buffer.from(JSON.stringify(transfer)));
+        console.info('============= END : Update transfer ===========');
+    }
+
 
 
     async queryTransfers(ctx){

@@ -26,9 +26,7 @@ class FabCar extends Contract {
         const lands = [
             {
                 UserId: "b@gmail.com",
-                StatusOwner: StatusOwner.Alone,
                 Owner:"Nguyen Van A",
-                IdentityCard:"385820222",
                 ThuaDatSo: 931,
                 ToBanDo5o: 3,
                 CacSoThuaGiapRanh: [919, 905,803],
@@ -77,14 +75,12 @@ class FabCar extends Contract {
 
     }
 
-    async createLand(ctx,userId,owner,idCard,thuasodat,tobandoso,cacsothuagiapranh,dientich,toadocacdinh,chieudaicaccanh,hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,thoigiandangky,url,city){
+    async createLand(ctx,userId,owner,thuasodat,tobandoso,cacsothuagiapranh,dientich,toadocacdinh,chieudaicaccanh,hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,thoigiandangky,url,city){
         console.info('============= START : Create Land ===========');
         const land = {
                 // ID:id,
                 UserId:userId,
                 Owner:owner,
-                StatusOwner: StatusOwner.Alone,
-                IdentityCard:idCard,
                 ThuaDatSo: thuasodat,
                 ToBanDo5o: tobandoso,
                 CacSoThuaGiapRanh: cacsothuagiapranh,
@@ -108,17 +104,14 @@ class FabCar extends Contract {
         console.info('============= END : Create Land ===========');
     }
 
-    async createLandCo(ctx,arrayOwner,thuasodat,tobandoso,cacsothuagiapranh,dientich,toadocacdinh,chieudaicaccanh,hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,thoigiandangky,url,city){
+    async createLandCo(ctx,arrayOwner,arrayNameOwner,thuasodat,tobandoso,cacsothuagiapranh,dientich,toadocacdinh,chieudaicaccanh,hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,thoigiandangky,url,city){
         console.info('============= START : Create Land ===========');
-        console.log(`array handle :${arrayOwner}`)
-        console.log(`array handle2 :${typeof arrayOwner}`)
         let arrayOwnerResult = arrayOwner.split(',')
-        console.log(`array arrayOwnerResult :${arrayOwnerResult}`)
-        console.log(`array arrayOwnerResult2 :${typeof arrayOwnerResult}`)
+        let arrayNameResult = arrayNameOwner.split(',')
         const land = {
                 // ID:id,
-                StatusOwner: StatusOwner.CoOwner,
-                coOwner:arrayOwnerResult,
+                UserId:arrayOwnerResult,
+                Owner:arrayNameResult,
                 ThuaDatSo: thuasodat,
                 ToBanDo5o: tobandoso,
                 CacSoThuaGiapRanh: cacsothuagiapranh,
@@ -198,7 +191,7 @@ class FabCar extends Contract {
         return allResults.length;
     }
 
-    async changeLandOwner(ctx,key,userId,newUserId, newIdCard, newOwner) {
+    async changeLandOwner(ctx,key,userId,newUserId, newOwner) {
         console.info('============= START : Update Land ===========');
 
         const landAsBytes = await ctx.stub.getState(key); // get the land from chaincode state
@@ -214,15 +207,78 @@ class FabCar extends Contract {
         newOb[newDate] = `Người sở hữu cũ :  "${userId}" chuyển cho người sở hữu mới "${newUserId}"`
         let land = JSON.parse(landAsBytes.toString());
         land.Owner = newOwner;
-        land.IdentityCard = newIdCard;
         land.UserId = newUserId;
         let newTransactions = land.Transactions;
         newTransactions.push(newOb)
         land.Transactions = newTransactions;
 
+        if(type == "one"){
+            let newOb = {};
+            newOb[newDate] = `Người sở hữu cũ :  "${userId}" chuyển cho người sở hữu mới "${newUserId}"`
+            let land = JSON.parse(landAsBytes.toString());
+            land.Owner = newOwner;
+            land.UserId = newUserId;
+            let newTransactions = land.Transactions;
+            newTransactions.push(newOb)
+            land.Transactions = newTransactions;
+        }else{
+
+        }
+       
         await ctx.stub.putState(key, Buffer.from(JSON.stringify(land)));
         console.info('============= END : Update Land ===========');
     }
+
+    // async changeLandOwnerCo(ctx,key,arrayNewOwner,type) {
+    //     console.info('============= START : Update Land ===========');
+
+    //     const landAsBytes = await ctx.stub.getState(key); // get the land from chaincode state
+    //     if (!landAsBytes || landAsBytes.length === 0) {
+    //         throw new Error(`${key} does not exist`);
+    //     }
+
+    //     let arrayNew = arrayNewOwner.split(',')
+
+    //     let date_ob = new Date();
+    //     let monthNow = date_ob.getMonth() < 10 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
+    //     let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
+
+    //     let newOb = {};
+    //     newOb[newDate] = `Người sở hữu cũ :  "${userId}" chuyển cho người sở hữu mới "${newUserId}"`
+    //     let land = JSON.parse(landAsBytes.toString());
+    //     land.UserId = arrayNew;
+    //     land.StatusOwner = StatusOwner.CoOwner
+    //     let newTransactions = land.Transactions;
+    //     newTransactions.push(newOb)
+    //     land.Transactions = newTransactions;
+        
+    //     if(type == "one"){
+    //         let newOb = {};
+    //         newOb[newDate] = `Người sở hữu cũ :  "${userId}" chuyển cho người sở hữu mới "${newUserId}"`
+    //         let land = JSON.parse(landAsBytes.toString());
+    //         land.UserId = arrayNew;
+    //         land.StatusOwner = StatusOwner.CoOwner
+    //         let newTransactions = land.Transactions;
+    //         newTransactions.push(newOb)
+    //         land.Transactions = newTransactions;
+
+    //     }else{
+    //         let newOb = {};
+    //         newOb[newDate] = `Người sở hữu cũ :  "${userId}" chuyển cho người sở hữu mới "${newUserId}"`
+    //         let land = JSON.parse(landAsBytes.toString());
+    //         land.CoOwner = arrayNew;
+    //         let newTransactions = land.Transactions;
+    //         newTransactions.push(newOb)
+    //         land.Transactions = newTransactions;
+
+    //     }
+
+
+
+    //     await ctx.stub.putState(key, Buffer.from(JSON.stringify(land)));
+    //     console.info('============= END : Update Land ===========');
+    // }
+
 
         async updateStatusLand(ctx,key,status) {
         console.info('============= START : Update Land ===========');
@@ -288,7 +344,7 @@ class FabCar extends Contract {
 
     async queryLandByUserCo(ctx,userId){
         let queryString = {}
-        queryString.selector = { "coOwner": {
+        queryString.selector = { "UserId": {
             "$elemMatch": {
                "$eq": userId
             }

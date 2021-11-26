@@ -91,10 +91,10 @@
              <tr>
                <% if(user.role == 'user'){ %>
                   <td><%= element.key %> </a></td> 
-                  <%if(element.value.StatusOwner == "Một người"){%>
-                    <td><%= element.value.UserId %></td>
+                  <%if(typeof element.value.UserId == "object"){%>
+                    <td><%= element.value.UserId.join(",") %></td>
                   <%}else{%>
-                    <td><%= element.value.coOwner %></td>
+                    <td><%= element.value.UserId %></td>
                   <%}%>
                   <td><%= element.value.ThoiGianDangKy %></td>
                   <%if(element.value.Status == "Chưa duyệt"){%>
@@ -116,10 +116,10 @@
       
                 <% }else{%>
                   <td> <a href="./detail/<%= element.Key %>"><%= element.key %> </a></td>
-                  <%if(element.value.StatusOwner == "Một người"){%>
-                    <td><%= element.value.UserId %></td>
+                  <%if(typeof element.value.UserId == "object"){%>
+                    <td><%= element.value.UserId.join(",") %></td>
                   <%}else{%>
-                    <td><%= element.value.coOwner %></td>
+                    <td><%= element.value.UserId %></td>
                   <%}%>
                   <td><%= element.value.ThoiGianDangKy %></td>
                   <%if(element.value.Status == "Đang chuyển"){%>

@@ -85,6 +85,7 @@
                       <td style="text-align:center">
                         <form action="/processTransfer" method="POST">
                             <input type="hidden" name="keyTransfer" value=<%= element.key%> >
+                            <input type="hidden" name="position" value="from">
                             <input type="hidden" name="confirmed" value=<%= check %> >
                             <button type="submit" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Tiến độ chuyển đất</button>
                         </form>
@@ -96,6 +97,7 @@
                       <td style="text-align:center">
                         <form action="/processTransfer" method="POST">
                             <input type="hidden" name="keyTransfer" value=<%= element.key%> >
+                            <input type="hidden" name="position" value="from">
                             <input type="hidden" name="confirmed" value=<%= check %> >
                             <button type="submit" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Tiến độ chuyển đất</button>
                         </form>

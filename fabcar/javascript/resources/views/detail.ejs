@@ -24,6 +24,7 @@
   <%}else{%>
     <form action="/processTransfer" method="POST">
       <input type="hidden" name="keyTransfer" value=<%= keyTransfer %>>
+      <input type="hidden" name="position" value=<%= position %>>
       <input type="hidden" name="confirmed" value=<%= confirmed %>>
       <button type="submit" class="bg-green-700 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">Nhận mảnh đất này</button>
     </form>
@@ -36,10 +37,10 @@
     <tbody>
       <tr>
         <td width="210px">  Người sở hữu</td>
-        <%if(detail.StatusOwner == "Một người"){%>
-          <td><%= detail.UserId %></td>
+        <%if( typeof detail.UserId == "object"){%>
+          <td><%= detail.UserId.join(',') %></td>
         <%}else{%>
-          <td><%= detail.coOwner %></td>
+          <td><%= detail.UserId %></td>
         <%}%>
 
       </tr>
