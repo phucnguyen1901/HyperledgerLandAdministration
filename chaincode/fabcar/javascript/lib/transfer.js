@@ -151,9 +151,11 @@ class Transfer extends Contract {
         let transfer = JSON.parse(transferAsBytes.toString());
         if(role == 'user'){
             transfer.ConfirmFromReceiver = true;
-        }else{
+        }else if(role == 'manager'){
             transfer.ConfirmFromAdmin = true;
             transfer.TimeEnd = time;
+        }else{
+            //
         }
 
         await ctx.stub.putState(key, Buffer.from(JSON.stringify(transfer)));
@@ -338,19 +340,19 @@ class Transfer extends Contract {
     }
 
 
-    async queryTransferRequest(ctx,userId,land){
-        let queryString = {}
-        queryString.selector = {"docType":"trans","From":userId,"Land":land};
-        let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
-        let result = await this.getIteratorData(iterator);
-        if(result < 1){
-            queryString.selector = {"docType":"trans","To":userId,"Land":land};
-            let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
-            let result = await this.getIteratorData(iterator);
-            return JSON.stringify(result);
-        }
-        return JSON.stringify(result);
-    }
+    // async queryTransferRequest(ctx,userId,land){
+    //     let queryString = {}
+    //     queryString.selector = {"docType":"trans","From":userId,"Land":land};
+    //     let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
+    //     let result = await this.getIteratorData(iterator);
+    //     if(result < 1){
+    //         queryString.selector = {"docType":"trans","To":userId,"Land":land};
+    //         let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
+    //         let result = await this.getIteratorData(iterator);
+    //         return JSON.stringify(result);
+    //     }
+    //     return JSON.stringify(result);
+    // }
 
     async queryTransferOne(ctx,key){
         const transAsBytes = await ctx.stub.getState(key); // get the car from chaincode state

@@ -191,20 +191,31 @@ class FabCar extends Contract {
         return allResults.length;
     }
 
-    async changeLandOwner(ctx,key,userId,newUserId, newOwner) {
+    async changeLandOwner(ctx,key,oldUserId,newUserId,newOwner,time) {
         console.info('============= START : Update Land ===========');
 
         const landAsBytes = await ctx.stub.getState(key); // get the land from chaincode state
         if (!landAsBytes || landAsBytes.length === 0) {
             throw new Error(`${key} does not exist`);
         }
+        
+        if(oldUserId.includes(",")){
+            oldUserId = oldUserId.split(',')
+        }
 
-        let date_ob = new Date();
-        let monthNow = date_ob.getMonth() < 10 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
-        let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
+        if(newUserId.includes(",")){
+            newUserId = newUserId.split(',')
+        }
+
+
+        if(newOwner.includes(",")){
+            newOwner = newOwner.split(',')
+        }
+
+
 
         let newOb = {};
-        newOb[newDate] = `Người sở hữu cũ :  "${userId}" chuyển cho người sở hữu mới "${newUserId}"`
+        newOb[time] = `Người sở hữu cũ :  { ${oldUserId.join('-')} } chuyển cho người sở hữu mới { ${newUserId} }`
         let land = JSON.parse(landAsBytes.toString());
         land.Owner = newOwner;
         land.UserId = newUserId;
@@ -212,19 +223,6 @@ class FabCar extends Contract {
         newTransactions.push(newOb)
         land.Transactions = newTransactions;
 
-        if(type == "one"){
-            let newOb = {};
-            newOb[newDate] = `Người sở hữu cũ :  "${userId}" chuyển cho người sở hữu mới "${newUserId}"`
-            let land = JSON.parse(landAsBytes.toString());
-            land.Owner = newOwner;
-            land.UserId = newUserId;
-            let newTransactions = land.Transactions;
-            newTransactions.push(newOb)
-            land.Transactions = newTransactions;
-        }else{
-
-        }
-       
         await ctx.stub.putState(key, Buffer.from(JSON.stringify(land)));
         console.info('============= END : Update Land ===========');
     }

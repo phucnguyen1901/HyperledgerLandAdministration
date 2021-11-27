@@ -62,6 +62,13 @@
             <li class="ml-12">
               <a href="/receiveLand" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Đất nhận</a>
             </li>
+            <%}else if(user.role == "admin"){%>
+              <li class="ml-12">
+                <a href="/transferLandOwner" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Thêm quản lý</a>
+              </li>
+              <li class="ml-12">
+                <a href="/receiveLand" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Xóa quản lý</a>
+              </li>
             <%}%>
 
             <li class="ml-12 ">

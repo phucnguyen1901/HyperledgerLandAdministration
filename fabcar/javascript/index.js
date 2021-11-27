@@ -107,6 +107,16 @@ app.get('/fast',userController().fast)
 app.post('/returnError',authMiddleware.requireAuth, transferController().returnError)
 
 
+//admin
+app.get('/admin',authMiddleware.requireAuth,userController().uiAdmin)
+
+
+
+
+
+
+
+
 app.listen(3000,()=>console.log("Server started with port 3000"));
 
 

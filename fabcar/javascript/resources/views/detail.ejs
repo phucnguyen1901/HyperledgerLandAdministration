@@ -36,12 +36,22 @@
   <table class="table table-bordered">
     <tbody>
       <tr>
-        <td width="210px">  Người sở hữu</td>
+        <td width="210px">  UserId</td>
         <%if( typeof detail.UserId == "object"){%>
-          <td><%= detail.UserId.join(',') %></td>
+          <td><b><%= detail.UserId.join(',') %></b></td>
         <%}else{%>
-          <td><%= detail.UserId %></td>
+          <td><b><%= detail.UserId %></b></td>
         <%}%>
+      </tr>
+      <tr>
+
+      <td width="210px">  Người sở hữu</td>
+      <%if( typeof detail.Owner == "object"){%>
+        <td><b><%= detail.Owner.join(',') %></b></td>
+      <%}else{%>
+        <td><b><%= detail.Owner %></b></td>
+      <%}%>
+
 
       </tr>
         <tr>
@@ -82,6 +92,31 @@
     
     </tbody>
   </table>
+</div>
+
+
+<div class="container">
+  <h2>Lịch sử chuyển nhượng</h2>
+  <br>
+  <table class="table table-bordered"> 
+    <tbody>
+      <tr>
+        <th>Thời gian</th>
+        <th>Thông tin</th>
+      </tr>
+      <%for(let el of detail.Transactions){%>
+        <tr>
+          <td><%= Object.keys(el)[0]%></td>
+          <td><%= Object.values(el)[0]%></td>
+        </tr>
+      <%}%>
+      <tr>
+        
+      </tr>
+    </tbody>
+
+  </table>
+
 </div>
 
 <div class="container">

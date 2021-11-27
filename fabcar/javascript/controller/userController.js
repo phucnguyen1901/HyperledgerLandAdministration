@@ -55,7 +55,12 @@ function userController(){
                             let ListMessages = await getMessage(email);
                             let countMessages = ListMessages.filter(e => e["Seen"] == false)
                             req.session.noty = {"listMessages":ListMessages, "countMessages":countMessages.length}
-                            return res.redirect('/')
+                            if(user.role == 'admin'){
+                                return res.redirect('/admin')
+                            }else{
+                                return res.redirect('/')
+                            }
+
                         }
                         else{
                             req.flash('message','Sai email hoặc mật khẩu')
@@ -106,20 +111,11 @@ function userController(){
             
         },
 
-    //     async checkRegister(req,res){
-    //           const {numberPhone,idCard,fullname,userId,password,passwordR} = req.body;   
-    //         if(numberPhone == "" || idCard=="" || fullname == "" || userId == "" || password == ""){
-    //             return res.render('register',{numberPhone:numberPhone,idCard:idCard})
-    //         }
+        async uiAdmin(req,res){
             
-    //         if(password != passwordR){
-    //             return res.render('register',{message:""})
-    //         }
-    //         // await saveUser(userId,fullname,numberPhone,idCard)
-            
-    //         res.render("handleRegister");
-    //     }
-
+            return res.render('admin')
+        }
+     
     }
 }
 

@@ -12,7 +12,7 @@
     }
   %>
 
-  <%if(user.role == 'admin'){%>
+  <%if(user.role == 'manager'){%>
     <div class="flex mt-8">
     <a href="" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mr-8">Tất cả đất</a>
     <a href="/requestAllTransferLand" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Tất cả yêu cầu chuyển đất</a>
@@ -78,11 +78,13 @@
                 <th>Trạng thái</th>
                 <th>Sửa thông tin</th>
                 <th>Chuyển quyền sở hữu</th>
-              <% }else{%>
+              <% }else if(user.role == 'manager'){%>
                 <th>Mã</th>
                 <th>Người sở hữu</th>
                 <th>Thời gian đăng ký</th>
                 <th>Cập nhật trạng thái</th>
+              <%}else{%>
+
               <%}%>
             </tr>
           </thead>
@@ -114,7 +116,7 @@
                     <%} %>
                   </td>
       
-                <% }else{%>
+                <% }else if(user.role == 'manager'){%>
                   <td> <a href="./detail/<%= element.Key %>"><%= element.key %> </a></td>
                   <%if(typeof element.value.UserId == "object"){%>
                     <td><%= element.value.UserId.join(",") %></td>
@@ -171,6 +173,8 @@
                                 </td>
                   <%}%>
                   
+                <%}else{%>
+                  <!-- admin  -->
                 <%}%>
                   </tr>
       
