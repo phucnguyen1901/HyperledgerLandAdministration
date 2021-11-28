@@ -1,6 +1,6 @@
 
 
-const { getFirestore , collection, getDocs, setDoc, addDoc, query, where, serverTimestamp, orderBy} = require("firebase/firestore")
+const { getFirestore ,doc, collection, getDocs, setDoc, addDoc, deleteDoc, query, where, serverTimestamp, orderBy} = require("firebase/firestore")
 const app = require('./config')
 
 const db = getFirestore(app);
@@ -22,6 +22,57 @@ async function saveUser(userId,fullname,numberPhone,idCard,password){
         }
 
 }
+
+async function saveUserManager(userId,password,nameOffice,city){
+
+    try {
+       const docRef = await addDoc(collection(db, "users"), {
+           userId:userId,
+           password: password,
+           nameOffice:nameOffice,
+           city: city,
+           role:"manager"
+       });
+           console.log("Document written with ID: ", docRef.id);
+       } catch (e) {
+           console.error("Error adding document: ", e);
+       }
+
+}
+
+
+async function deleteUserManager(userId) {
+
+    try {
+        console.log("Get user")
+        const q = query(collection(db, "users"), where("userId", "==", userId));
+        const citySnapshot = await getDocs(q);
+        console.log(`user delete : ${citySnapshot.docs[0]}`);
+        const cityList = citySnapshot.docs.map(doc => doc.id);
+        console.log(cityList);
+        await deleteDoc(doc(db, "users", cityList[0]));
+        console.log(`Deleted ${userId}`)
+    } catch (error) {
+        console.log("ERROR delete user")
+        throw(error)
+    }
+
+
+}
+
+async function getAllUserManager() {
+    console.log("Get All user Manger")
+    const q = query(collection(db, "users"), where("role", "==", "manager"));
+    const citySnapshot = await getDocs(q);
+    if(citySnapshot.docs.length > 0){
+      const cityList = citySnapshot.docs.map(doc => doc.data());
+      console.log(cityList);
+      return cityList;
+    }else{
+        console.log("Login Failed")
+        return [];
+    }
+  }
 
 
 
@@ -99,7 +150,7 @@ async function updateMessage(userId){
 
 
 
-module.exports = {saveUser,getUser,saveMessage, getMessage}
+module.exports = {saveUser,getUser,saveMessage, getMessage, saveUserManager,deleteUserManager,getAllUserManager}
 
 
 

@@ -35,11 +35,19 @@
         class="container mx-auto flex items-center justify-between p-4 py-4 border-b border-gray-600"
       >
         <div>
-          <a href="/"><img id="logo" src="/images/logo.png" alt="logo" style="height:50px;"/></a>
+          <%if(user.role == 'admin'){%>
+            <a href="/admin"><img id="logo" src="/images/logo.png" alt="logo" style="height:50px;"/></a>
+          <%}else{%>
+            <a href="/"><img id="logo" src="/images/logo.png" alt="logo" style="height:50px;"/></a>
+          <%}%>
         </div>
         <div>
           <ul class="flex items-center">
-            <p class="text-blue-500"> Xin chào <%= user.fullname%></p>
+            <%if(user.role == 'manager'){%>
+              <p class="text-blue-500"> Xin chào, <%= user.nameOffice%></p>
+            <%}else{%>
+              <p class="text-blue-500"> Xin chào, <%= user.fullname%></p>
+            <%}%>
            
             &emsp;
             <button  id="notification">
@@ -64,10 +72,10 @@
             </li>
             <%}else if(user.role == "admin"){%>
               <li class="ml-12">
-                <a href="/transferLandOwner" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Thêm quản lý</a>
+                <a href="/adminAddManager" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Thêm quản lý</a>
               </li>
               <li class="ml-12">
-                <a href="/receiveLand" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Xóa quản lý</a>
+                <a href="/adminDeleteManager" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Xóa quản lý</a>
               </li>
             <%}%>
 

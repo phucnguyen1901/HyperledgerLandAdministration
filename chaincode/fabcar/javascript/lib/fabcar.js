@@ -375,6 +375,20 @@ class FabCar extends Contract {
         }
     }
 
+    async searchWithCondition(ctx,keySearch,typeSearch){
+        let query  = {"docType":"land"};
+        query[typeSearch] = keySearch;
+        let queryString = {}
+        queryString.selector = query;
+        console.log(`QUERYY: ${JSON.stringify(query)}`)
+        console.log(`QUERYYYYYYYYYYYYYYYYYYYY: ${JSON.stringify(queryString)}`)
+
+        let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
+        let result = await this.getIteratorData(iterator);
+        console.log(`RESULT : ${JSON.stringify(result)}`)
+        return JSON.stringify(result);
+    }
+
 }
 
 module.exports = FabCar;

@@ -463,17 +463,17 @@ function homeController() {
     },
 
     async updateStatusLandAdmin(req,res){
-      const {key,status} = req.body;
+      const {key,status,userId} = req.body;
       console.log(key);
       console.log(status);
       try {
           await updateLand(req.session.user.userId,key,status)
           req.flash("success",`Cập nhật thành công mã đất ${key} của người sở hữu ${userId} với trạng thái mới ${status}`)
-          await saveMessage(req.session.user.userId, `Đã duyệt đất có mã số ${key} đã được duyệt thành công`)
-          await saveMessage(userId, `Đất có mã số ${key} đã được duyệt thành công`)
+          await saveMessage(userId, `Đã duyệt đất có mã số ${key} đã được duyệt thành công`)
+          await saveMessage(req.session.user.userId, `Đất có mã số ${key} đã được duyệt thành công`)
           res.redirect("/")
       } catch (error) {
-          req.flash("success",`Cập nhật thất bại`)
+          req.flash("error",`Cập nhật thất bại`)
           res.redirect("/")
       }
     

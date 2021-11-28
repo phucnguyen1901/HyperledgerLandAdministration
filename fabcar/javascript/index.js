@@ -109,6 +109,16 @@ app.post('/returnError',authMiddleware.requireAuth, transferController().returnE
 
 //admin
 app.get('/admin',authMiddleware.requireAuth,userController().uiAdmin)
+app.get('/adminAddManager',authMiddleware.requireAuth,userController().adminAddManager)
+app.get('/adminDeleteManager',authMiddleware.requireAuth,userController().adminDeleteManager)
+
+app.post('/handleAddManager',authMiddleware.requireAuth,userController().handleAddManager)
+app.post('/adminDeleteManager',authMiddleware.requireAuth,userController().adminDeleteManager)
+
+
+//search
+
+app.post('/searchWithCondition',authMiddleware.requireAuth,userController().searchWithCondition)
 
 
 

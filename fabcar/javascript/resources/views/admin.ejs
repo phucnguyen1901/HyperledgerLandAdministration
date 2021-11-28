@@ -1,6 +1,31 @@
 
 
+<div class="container d-flex justify-content-center">
+
+
+    <table class="table table-striped mt-6">
+        <tr>
+            <td>Tên văn phòng</td>
+            <td>Email</td>
+            <td>Tỉnh TP</td>
+            <td>Xóa</td>
+        </tr>
+        <%for(let el of listUserManager){%>
+            <tr>
+                <td><%=el.nameOffice%></td>
+                <td><%=el.userId%></td>
+                <td><%=el.city%></td>
+                <td>
+                    <form action="/adminDeleteManager" method="POST">
+                        <input type="hidden" name="userId" value=<%= el.userId %> >
+                        <button type="submit" class="btn btn-danger">Xóa ngay</button>
+                    </form>
+                </td>
+            </tr>
+        <%}%>
+    </table>
 
 
 
-<h1>Đây là trang dành cho admin</h1>
+</div>
+
