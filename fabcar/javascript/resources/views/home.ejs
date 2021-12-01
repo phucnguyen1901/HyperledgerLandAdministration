@@ -1,0 +1,137 @@
+
+
+
+  <%
+    if(success.length > 0){
+  %>
+    <div id="flash" class="alert alert-success d-flex justify-content-between" style="text-align:center;">
+      <%= success %>
+    <button id="delete">X</button>
+    </div>
+  <%
+    }
+  %>
+
+ <div class="container d-flex flex-column justify-content-center" style="background: rgba(0, 0, 0, 0.8); min-height: 550px;">        
+  <div class="s002" id="searchData">
+
+   
+  </div>
+    <% if(menu.length > 0) {%>
+        <table class="table table-striped mt-6">
+          <thead>
+            <tr>
+              <% if(user.role == 'user'){ %>
+                <th>Mã</th>
+                <th>Người sở hữu</th>
+                <th>Thời gian đăng ký</th>
+                <th>Trạng thái</th>
+                <th>Sửa thông tin</th>
+                <th>Chuyển quyền sở hữu</th>
+              <% }else if(user.role == 'manager'){%>
+                <th>Mã</th>
+                <th>Người sở hữu</th>
+                <th>Thời gian đăng ký</th>
+                <th>Tỉnh/TP</th>
+                <th>Cập nhật trạng thái</th>
+              <%}else{%>
+
+              <%}%>
+            </tr>
+          </thead>
+
+          <tbody id="allLand">
+          
+          </tbody>
+         
+        </table>
+            <%}else{%>
+              <div class="h-64 w-full">
+                <a href="/addAsset" class="w-full btn btn-outline-success mt-32">Bạn chưa có đất , Đăng ký ngay !</a>
+
+              </div>
+              <%}%>
+
+    
+    
+  </div>
+
+
+
+
+ <script>
+   if(document.getElementById("delete")){
+    document.getElementById("delete").addEventListener("click",function(){
+      document.getElementById("flash").remove()
+    })
+   }
+
+   document.getElementById("updateLand").addEventListener('click',function(){
+     document.getElementById("formUpdateLand").submit();
+   })
+
+
+
+ </script>
+
+<script src="/js/search/extention/choices.js"></script>
+<script src="/js/search/extention/flatpickr.js"></script>
+<script>
+  flatpickr(".datepicker",
+  {});
+
+</script>
+<script>
+  const choices = new Choices('[data-trigger]',
+  {
+    searchEnabled: false,
+    itemSelectText: '',
+  });
+
+</script>
+
+
+
+<script>
+
+  $(document).ready(function(){
+    let typeSearch = $("select#selectType").val();
+    let value = this.value;
+    $.ajax({type: "POST",url: "/searchWithCondition", data: {keySearch:"",typeSearch:typeSearch}, success: function(result){
+                $("#allLand").html(result);
+              }});
+
+    });
+
+   $(document).ready(function(){
+        $("#search").on('input',function(e){
+            let typeSearch = $("select#selectType").val();
+            let value = this.value;
+            $.ajax({type: "POST",url: "/searchWithCondition", data: {keySearch:value,typeSearch:typeSearch}, success: function(result){
+              $("#allLand").html(result);
+            }});
+
+          });
+
+      });
+
+    $(document).ready(function(){
+        $("#selectType").change(function(e){
+            let typeSearch = $("select#selectType").val();
+            $.ajax({type: "POST",url: "/typeOfSearch", data: {typeSearch:typeSearch}, success: function(result){
+              $("#searchData").html(result);
+            }});
+
+          });
+
+      });
+
+    // $(document).ready(function(){
+    //   let typeSearch = $("select#selectType").val();
+    //         $.ajax({type: "POST",url: "/typeOfSearch", data: {typeSearch:typeSearch}, success: function(result){
+    //           $("#searchData").html(result);
+    //         }});
+
+    // });
+
+</script>

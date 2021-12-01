@@ -1,0 +1,55 @@
+
+
+<% if(messages.error) {%>
+    <div class="d-flex justify-content-center">
+    <div id="flash" style="width: 50%;" class="alert alert-success d-flex justify-content-between" style="text-align:center;">
+        <%= messages.success %>
+      <button id="delete">X</button>
+      </div>
+    </div>
+<%}%>
+
+<% if(messages.success) {%>
+    <div class="d-flex justify-content-center">
+    <div id="flash" style="width: 50%;" class="alert alert-success d-flex justify-content-between" style="text-align:center;">
+        <%= messages.success %>
+      <button id="delete">X</button>
+      </div>
+    </div>
+<%}%>
+
+
+
+<br>
+<div class="d-flex justify-content-center">
+    <form style="width: 30%;" method="POST" action="/handleSaveInfo">
+        <div class="form-group">
+            <label for="exampleInputEmail1">Họ tên</label>
+            <input type="text" name="fullname" class="form-control" placeholder="Nhập Họ tên" value="<%=user.fullname%>">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">CMND/CCCD</label>
+          <input type="text" name="idCard" class="form-control"  placeholder="Nhập CMND/CCCD" value="<%=user.idCard%>">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Số điện thoại</label>
+            <input type="text" name="numberPhone" class="form-control" placeholder="Nhập số điện thoại" value="<%=user.numberPhone%>">
+            <small id="emailHelp" class="form-text text-muted">Nhập số điện thoại theo định dạng ví dụ : 0945123654</small>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Mã nạp tiền / chuyển tiền</label>
+            <input type="text" class="form-control" value="<%=AcountIdToken%>" disabled >
+        </div>
+        <button type="submit" class="btn btn-primary">Lưu</button>
+      </form>
+    
+</div>
+
+
+<script>
+if(document.getElementById("delete")){
+    document.getElementById("delete").addEventListener("click",function(){
+      document.getElementById("flash").remove()
+    })
+   }
+</script>

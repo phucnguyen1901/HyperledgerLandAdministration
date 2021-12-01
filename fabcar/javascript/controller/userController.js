@@ -2,7 +2,7 @@
 
 // import {firebase} from 'firebase'
 
-const { saveMessage ,getUser, saveUser , getAllUserManager,getMessage, saveUserManager,deleteUserManager} = require('./saveUser');
+const { saveMessage ,getUser, saveUser, updateInfo, getAllUserManager,getMessage, saveUserManager,deleteUserManager} = require('./saveUser');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -13,10 +13,19 @@ const organizationsCA = ['ca.org1.example.com','ca.org2.example.com'];
 const mspOrg = ['Org1MSP','Org2MSP'];
 const affiliations = ['org1.department1','org2.department2'];
 
-//search
+//default data
+const queryAllLand = require("../queryAllLands")
+const queryAllLandCo = require("../queryAllLandsCo")
 
+//search
 const search = require('../searchWithCondition')
 
+const addToken = require('../inkvode_token')
+const getBalanceToken = require('../inkvode_token_getBalance');
+const getAccountId = require('../inkvode_token_getAccountId');
+
+
+const Noty = require("noty");
 
 function userController(){
     return {
@@ -60,6 +69,7 @@ function userController(){
                     let user = listUser[0];
                     bcrypt.compare(password, user.password,async function(err, result) {
                         if(result){
+
                             if(user.role == 'user'){
                                 req.session.user = {"fullname":user.fullname,"role": user.role, "idCard":user.idCard,"userId":user.userId}
                             }else{
@@ -124,7 +134,17 @@ function userController(){
             
         },
 
+        //admin
         async uiAdmin(req,res){
+            // let countWallet = await getBalanceToken(user.userId);
+            // console.log(`countwallet: ${countWallet}`)
+            await addToken(req.session.user.userId,"400","");
+            let balance = await getBalanceToken(req.session.user.userId)
+            console.log(`BlanceeeeeeeeeeeeeE: ${balance}`)
+            // let check1 = await getClientToken(req.session.user.userId)
+            // let check2 = await getClientBalance(req.session.user.userId)
+            // console.log(`clientTOken : ${check1}`)
+            // console.log(`clientTOken2 : ${check2}`) 
             let listUserManager = await getAllUserManager()
             return res.render('admin',{listUserManager:listUserManager, success: req.flash('success'),error: req.flash('error')})
         },
@@ -173,18 +193,107 @@ function userController(){
             }
         
         },
+
+        //get ui add token
+        async addToken(req,res){
+
+            return res.render("addToken")
+        },
+
+        //handle add token
+        async handleAddToken(req,res){
+            const userId = req.session.user.userId;
+            const {amount, recipient} = req.body;
+            await addToken(userId,amount,recipient);
+            
+            return res.redirect('/addToken')
+        },
+
+        
+
         //Search
         async searchWithCondition(req,res){
             const {keySearch, typeSearch} = req.body;
             console.log(`key: ${keySearch}`)
             console.log(`type: ${typeSearch}`)
 
+            let date_ob = new Date();
+            let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
+            let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
+            let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
+            let thoigiandangky = `${time} - ${newDate}`;
+            
+            let dateTest = new Date('2021/11/20')
+            let dateTest2 = new Date('2021/11/21')
+
+            console.log(`DATE: ${dateTest < dateTest2}`)
+
+            if(keySearch == ""){
+                let allMenu;
+                if(req.session.user.role == "user"){
+                  const menuString = await queryAllLand(req.session.user.userId,req.session.user.role); 
+                  const menuCoString = await queryAllLandCo(req.session.user.userId,req.session.user.role);
+                  const menu = JSON.parse(menuString);
+                  const menuCo = JSON.parse(menuCoString);
+                  allMenu = [...menu,...menuCo];
+                }else if(req.session.user.role == "manager"){
+                  const menuString = await queryAllLand(req.session.user.userId,req.session.user.role); 
+                  const menu = JSON.parse(menuString);
+                  allMenu = menu;
+                  
+                }else{
+                  // admin
+                }
+
+                return res.render('searchWithCondition',{layout:false,menu : allMenu})
+            }else{
+                const userId = req.session.user.userId;
+                let listLandString = await search(userId,keySearch,typeSearch);
+                let listLand = JSON.parse(listLandString);
+                console.log(`list land : ${listLand}`)
+                 return res.render('searchWithCondition',{layout:false,menu : listLand})
+            }
+        },
+
+        //typeof search
+
+        async typeOfSearch(req,res){
+
+            const {typeOfSearch} = req.body;
+
+            return res.render('typeOfSearch',{typeOfSearch: typeOfSearch})
+        },
+
+        //infomation
+        async infomation(req,res){
             const userId = req.session.user.userId;
-            let listLandString = await search(userId,keySearch,typeSearch);
-            let listLand = JSON.parse(listLandString);
-            console.log(`list land : ${listLand}`)
-            return res.render('searchWithCondition',{layout:false,menu : listLand})
-            // res.send("OK")
+            let listUser = await getUser(userId);
+            let user = listUser[0];
+            console.log(user.fullname)
+            user.numberPhone = "0"+user.numberPhone.slice(3);
+
+            //token id
+            // await addToken(userId,"5000")
+            let AcountIdToken = await getAccountId(userId)
+
+            return res.render('info',{user:user,AcountIdToken:AcountIdToken})
+        },
+
+        async handleSaveInfo(req,res){
+
+            const { fullname , idCard, numberPhone } = req.body;
+            const userId = req.session.user.userId;
+
+            try {
+                await updateInfo(userId,fullname,numberPhone,idCard);  
+                req.flash('success', 'Lưu thành công');
+                return res.redirect('/info')
+            } catch (error) {
+                req.flash('error', 'Lưu không thành công');
+                return res.redirect('/info')
+            }
+
+          
         }
      
     }

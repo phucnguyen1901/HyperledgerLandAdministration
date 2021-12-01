@@ -1,6 +1,6 @@
 
 
-const { getFirestore ,doc, collection, getDocs, setDoc, addDoc, deleteDoc, query, where, serverTimestamp, orderBy} = require("firebase/firestore")
+const { getFirestore ,doc, collection, getDocs, setDoc, addDoc, deleteDoc,updateDoc, query, where, serverTimestamp, orderBy} = require("firebase/firestore")
 const app = require('./config')
 
 const db = getFirestore(app);
@@ -148,9 +148,43 @@ async function updateMessage(userId){
 }
 
 
+async function getKeyWith(userId) {
+  console.log("Get key")
+  const q = query(collection(db, "users"), where("userId", "==", userId));
+  const citySnapshot = await getDocs(q);
+  if(citySnapshot.docs.length > 0){
+    const cityList = citySnapshot.docs.map(doc => doc.id);
+    return cityList;
+  }else{
+      console.log("get key Failed")
+      return [];
+  }
+}
 
 
-module.exports = {saveUser,getUser,saveMessage, getMessage, saveUserManager,deleteUserManager,getAllUserManager}
+async function updateInfo(userId,fullname,numberPhone,idCard){
+
+    if(numberPhone[0] == "0"){
+        numberPhone = "+84"+numberPhone.slice(1);
+    }
+
+    try {
+        const key = await getKeyWith(userId)
+        await updateDoc(doc(db,"users",key[0]),{
+            fullname: fullname,
+            numberPhone:numberPhone,
+            idCard: idCard,
+    })
+        
+   } catch (e) {
+        console.error("Error adding document: ", e);
+    }
+
+}
+
+
+
+module.exports = {saveUser,getUser,saveMessage,updateInfo, getMessage, saveUserManager,deleteUserManager,getAllUserManager}
 
 
 

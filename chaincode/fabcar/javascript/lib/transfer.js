@@ -11,6 +11,23 @@
 const { Contract } = require('fabric-contract-api');
 
 class Transfer extends Contract {
+
+async createToken(ctx){
+        console.info('============= START : Create transfer ===========');
+        console.log("tao token moi ")
+        const transfer = {
+                Land:"land",
+                TimeStart: "time",
+                TimeEnd: "-/-/-",
+                From: "userTransfer1",
+                To: "userReceive1",
+                ConfirmFromReceiver: false,
+                ConfirmFromAdmin: false,
+                docType: "token"
+        };
+        await ctx.stub.putState(`TOKENS7`, Buffer.from(JSON.stringify(transfer)));
+        console.info('============= END : Create transfer ===========');
+    }
     
     async createTransfer(ctx,land,userTransfer1,userReceive1,time){
         console.info('============= START : Create transfer ===========');

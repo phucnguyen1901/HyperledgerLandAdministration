@@ -8,7 +8,9 @@
 
 const FabCar = require('./lib/fabcar');
 const Transfer = require('./lib/transfer')
+const Token = require('./lib/erc20Token')
 
 module.exports.FabCar = FabCar;
 module.exports.Transfer = Transfer;
-module.exports.contracts = [ FabCar, Transfer];
+module.exports.Token = Token;
+module.exports.contracts = [ FabCar, Transfer, Token];

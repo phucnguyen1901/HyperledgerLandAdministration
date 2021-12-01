@@ -29,7 +29,8 @@
         "fabric-network": "^2.2.4",
         "firebase": "^9.1.3",
         "formidable": "^2.0.1",
-        "nodemon": "^2.0.13"
+        "nodemon": "^2.0.13",
+        "noty": "^3.2.0-beta-deprecated"
     },
     "devDependencies": {
         "chai": "^4.2.0",

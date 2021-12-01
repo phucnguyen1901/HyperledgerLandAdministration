@@ -156,10 +156,11 @@ function homeController() {
       const {thuasodat,tobandoso,dientich,hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,url,laneOfCity} = req.body;
 
       let date_ob = new Date();
-      let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()}` : `${date_ob.getMonth()}`;
-      let newDate = `${date_ob.getDay()}/${monthNow}/${date_ob.getFullYear()}`;
+      let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
+      let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
       let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
       let thoigiandangky = `${time} - ${newDate}`;
+
       const userId = req.session.user.userId;
       const owner = req.session.user.fullname;
       const idCard = req.session.user.idCard;
@@ -189,8 +190,8 @@ function homeController() {
       }
 
       let date_ob = new Date();
-      let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()}` : `${date_ob.getMonth()}`;
-      let newDate = `${date_ob.getDay()}/${monthNow}/${date_ob.getFullYear()}`;
+      let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
+      let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
       let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
       let thoigiandangky = `${time} - ${newDate}`;
       const userId = req.session.user.userId;
@@ -240,8 +241,8 @@ function homeController() {
             if(land.UserId == userId){
 
               let date_ob = new Date();
-              let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()}` : `${date_ob.getMonth()}`;
-              let newDate = `${date_ob.getDay()}/${monthNow}/${date_ob.getFullYear()}`;
+              let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
+              let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
               let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
               let thoigiandangky = `${time} - ${newDate}`;
 
@@ -261,8 +262,8 @@ function homeController() {
             if(land.UserId.includes(userId)){
               console.log("DA VAO DAY ROIIIIIIIIIIIIIIIIIIIIIIIIIIIIi : "+land.UserId)
               let date_ob = new Date();
-              let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()}` : `${date_ob.getMonth()}`;
-              let newDate = `${date_ob.getDay()}/${monthNow}/${date_ob.getFullYear()}`;
+              let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
+              let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
               let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
               let thoigiandangky = `${time} - ${newDate}`;
               
@@ -311,9 +312,10 @@ function homeController() {
           let land = JSON.parse(landString);
           if(typeof land.UserId != "object"){
             if(land.UserId == userId){
+
               let date_ob = new Date();
-              let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()}` : `${date_ob.getMonth()}`;
-              let newDate = `${date_ob.getDay()}/${monthNow}/${date_ob.getFullYear()}`;
+              let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
+              let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
               let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
               let thoigiandangky = `${time} - ${newDate}`;
               
@@ -332,9 +334,10 @@ function homeController() {
             }
           }else{
             if(land.UserId.includes(userId)){
+
               let date_ob = new Date();
-              let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()}` : `${date_ob.getMonth()}`;
-              let newDate = `${date_ob.getDay()}/${monthNow}/${date_ob.getFullYear()}`;
+              let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
+              let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
               let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
               let thoigiandangky = `${time} - ${newDate}`;
 
@@ -401,8 +404,8 @@ function homeController() {
       try {
 
         let date_ob = new Date();
-        let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()}` : `${date_ob.getMonth()}`;
-        let newDate = `${date_ob.getDay()}/${monthNow}/${date_ob.getFullYear()}`;
+        let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
+        let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
         let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
         let thoigiandangky = `${time} - ${newDate}`;
 
@@ -494,8 +497,8 @@ function homeController() {
         let listNameOwner = [];
 
         let date_ob = new Date();
-        let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()}` : `${date_ob.getMonth()}`;
-        let newDate = `${date_ob.getDay()}/${monthNow}/${date_ob.getFullYear()}`;
+        let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
+        let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
         let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
         let thoigiandangky = `${time} - ${newDate}`;
 
@@ -531,8 +534,8 @@ function homeController() {
           let owner = listNewUser[0].fullname;
 
           let date_ob = new Date();
-          let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()}` : `${date_ob.getMonth()}`;
-          let newDate = `${date_ob.getDay()}/${monthNow}/${date_ob.getFullYear()}`;
+          let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
+          let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
           let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
           let thoigiandangky = `${time} - ${newDate}`;
 
@@ -540,8 +543,6 @@ function homeController() {
           for(let el of oldUserId){
             listOldUserHandle.push(Object.keys(el)[0])
           }
-
-  
 
           await changeLandOwner(land,userId,listOldUserHandle,newUserId,owner,thoigiandangky)
           await updateLand(userId,land,"Đã duyệt")

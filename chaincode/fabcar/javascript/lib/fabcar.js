@@ -70,6 +70,17 @@ class FabCar extends Contract {
             console.info('Added <--> ', Transfers[i]);
         }
 
+        const Tokens = [
+            {
+              "TOKEN": "20000"
+            }
+        ]
+         for (let i = 0; i < Tokens.length; i++) {
+            Tokens[i].docType = 'token';
+            await ctx.stub.putState('TOKENS' + i, Buffer.from(JSON.stringify(Tokens[i])));
+            console.info('Added <--> ', Tokens[i]);
+        }
+
         console.info('============= END : Initialize Ledger ===========');
 
 

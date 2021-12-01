@@ -22,4 +22,14 @@ module.exports.requireAuth = async (req, res, next) => {
   next();
 };
 
+module.exports.checkManager = async (req, res, next) => {
+  if (req.session.user.role != "manager") {
+    res.redirect("/");
+    return;
+  }
+
+  next();
+};
+
+
 
