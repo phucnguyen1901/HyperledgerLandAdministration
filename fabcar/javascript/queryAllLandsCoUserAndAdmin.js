@@ -1,4 +1,3 @@
-
 /*
  * Copyright IBM Corp. All Rights Reserved.
  *
@@ -8,14 +7,15 @@
 'use strict';
 
 const { Gateway, Wallets } = require('fabric-network');
-const fs = require('fs');
 const path = require('path');
+const fs = require('fs');
 
-async function main(userId) {
+
+async function main(userId,role) {
     try {
         // load the network configuration
         const ccpPath = path.resolve(__dirname, '..', '..', 'test-network', 'organizations', 'peerOrganizations', 'org1.example.com', 'connection-org1.json');
-        let ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
+        const ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), 'wallet');
@@ -25,7 +25,7 @@ async function main(userId) {
         // Check to see if we've already enrolled the user.
         const identity = await wallet.get(userId);
         if (!identity) {
-            console.log('An identity for the user "appUser" does not exist in the wallet');
+            console.log(`An identity for the user "${userId}" does not exist in the wallet`);
             console.log('Run the registerUser.js application before retrying');
             return;
         }
@@ -38,20 +38,29 @@ async function main(userId) {
         const network = await gateway.getNetwork('mychannel');
 
         // Get the contract from the network.
-        const contract = network.getContract('fabcar','Token');
-        console.log("Get Balance token")
-        // Submit the specified transaction.
-        // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
-        // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR12', 'Dave')
-        let balance = await contract.submitTransaction('ClientAccountBalance');
-        console.log('Transaction has been submitted '+balance.toString());
+        const contract = network.getContract('fabcar');
+
+        // Evaluate the specified transaction.
+        // queryCar transaction - requires 1 argument, ex: ('queryCar', 'CAR4')
+        // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')
+        // const result = await contract.evaluateTransaction('queryAllLands',{"selector":{"IdentityCard":"35852514222"}});
+        // const result = await contract.evaluateTransaction('queryAllLands',{"selector":{"docType":"land","owner":"tom"}});
+        let result;
+        if(role == "user"){
+            result = await contract.evaluateTransaction('queryLandByUserCo',userId);
+        }else{
+            result = await contract.evaluateTransaction('queryLandByAdmin');
+        }
+
+        // console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
+        console.log(`Transaction has been evaluated, result is: ${result}`);
 
         // Disconnect from the gateway.
         await gateway.disconnect();
-        return balance.toString()
-
+        return result.toString();
+        
     } catch (error) {
-        console.error(`Failed to submit transaction: ${error}`);
+        console.error(`Failed to evaluate transaction: ${error}`);
         process.exit(1);
     }
 }
@@ -59,15 +68,3 @@ async function main(userId) {
 // main();
 
 module.exports = main;
-
-
-
-
-
-
-
-
-
-
-
-

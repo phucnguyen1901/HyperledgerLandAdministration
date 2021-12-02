@@ -15,7 +15,10 @@ const affiliations = ['org1.department1','org2.department2'];
 
 //default data
 const queryAllLand = require("../queryAllLands")
+const queryAllLandsCoUserAndAdmin = require("../queryAllLandsCoUserAndAdmin")
 const queryAllLandCo = require("../queryAllLandsCo")
+
+
 
 //search
 const search = require('../searchWithCondition')
@@ -26,6 +29,7 @@ const getAccountId = require('../inkvode_token_getAccountId');
 
 
 const Noty = require("noty");
+const { Query } = require('@firebase/firestore');
 
 function userController(){
     return {
@@ -138,9 +142,6 @@ function userController(){
         async uiAdmin(req,res){
             // let countWallet = await getBalanceToken(user.userId);
             // console.log(`countwallet: ${countWallet}`)
-            await addToken(req.session.user.userId,"400","");
-            let balance = await getBalanceToken(req.session.user.userId)
-            console.log(`BlanceeeeeeeeeeeeeE: ${balance}`)
             // let check1 = await getClientToken(req.session.user.userId)
             // let check2 = await getClientBalance(req.session.user.userId)
             // console.log(`clientTOken : ${check1}`)
@@ -200,12 +201,14 @@ function userController(){
             return res.render("addToken")
         },
 
-        //handle add token
+        //handle add tokenP
         async handleAddToken(req,res){
             const userId = req.session.user.userId;
             const {amount, recipient} = req.body;
+
             await addToken(userId,amount,recipient);
-            
+
+            req.flash('success',"Đã nạp tiền thành công");
             return res.redirect('/addToken')
         },
 
@@ -213,46 +216,112 @@ function userController(){
 
         //Search
         async searchWithCondition(req,res){
-            const {keySearch, typeSearch} = req.body;
+            const userId = req.session.user.userId;
+            const {keySearch, typeSearch, fromTime,toTime} = req.body;
             console.log(`key: ${keySearch}`)
             console.log(`type: ${typeSearch}`)
+            console.log(`fromTime: ${fromTime}`)
 
-            let date_ob = new Date();
-            let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
-            let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
-            let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
-            let thoigiandangky = `${time} - ${newDate}`;
-            
-            let dateTest = new Date('2021/11/20')
-            let dateTest2 = new Date('2021/11/21')
+            let query  = {"docType":"land"};
 
-            console.log(`DATE: ${dateTest < dateTest2}`)
+            let allMenu;
+            let listLaneCo = [];
+            let status;
 
-            if(keySearch == ""){
-                let allMenu;
-                if(req.session.user.role == "user"){
-                  const menuString = await queryAllLand(req.session.user.userId,req.session.user.role); 
-                  const menuCoString = await queryAllLandCo(req.session.user.userId,req.session.user.role);
-                  const menu = JSON.parse(menuString);
-                  const menuCo = JSON.parse(menuCoString);
-                  allMenu = [...menu,...menuCo];
-                }else if(req.session.user.role == "manager"){
-                  const menuString = await queryAllLand(req.session.user.userId,req.session.user.role); 
-                  const menu = JSON.parse(menuString);
-                  allMenu = menu;
-                  
-                }else{
-                  // admin
-                }
-
-                return res.render('searchWithCondition',{layout:false,menu : allMenu})
+            if(typeSearch == "approved"){
+                query["Status"] = "Đã duyệt";
+                status = "Đã duyệt";
+            }else if(typeSearch == "notApprovedYet"){
+                query["Status"] = "Chưa duyệt";
+                status = "Chưa duyệt";
+            }else if(typeSearch == "transfering"){
+                query["Status"] = "Đang chuyển";
+                status = "Đang chuyển";
             }else{
-                const userId = req.session.user.userId;
-                let listLandString = await search(userId,keySearch,typeSearch);
-                let listLand = JSON.parse(listLandString);
-                console.log(`list land : ${listLand}`)
-                 return res.render('searchWithCondition',{layout:false,menu : listLand})
+
             }
+
+
+            if(keySearch != ""){
+                console.log("DA VAO DAYyyyyyyyyyyyyyyyyyyyyyyy")
+                query["UserId"] = keySearch.trim();
+                let listLaneCoString = await queryAllLandCo(keySearch.trim());
+                let listLaneCoFilter = JSON.parse(listLaneCoString);
+                listLaneCo = listLaneCoFilter.filter((element) => element.Status==status);
+
+            }
+            console.log(`locao: ${JSON.stringify(listLaneCo)}`)
+
+            if(fromTime != "" && toTime != ""){
+                let dateFromTime = new Date(fromTime);
+                let dateFromTo = new Date(toTime);
+                let list1;
+                console.log(`locao: ${JSON.stringify(listLaneCo)}`)
+                for(let i = 0; i < listLaneCo.length; i++){
+                    console.log("chi so "+i)
+                    // let arrayDate = listLaneCo[i].ThoiGianDangKy.split('-')
+                    // let splitDate= arrayDate[1].split('/');
+                    // let convertDateString = splitDate[2]+'-'+splitDate[1]+'-'+splitDate[0];
+                    // let dateLand = new Date(convertDateString)
+                    // console.log(`convertDateString`+splitDate)
+                    // console.log(`splitDate`+splitDate)
+                    // console.log(`dateString`+dateString)
+                    // console.log(`dateLand`+dateLand)
+                    // if(dateLand >= fromTime && dateLand <= toTime){
+                    //     list1.push(listLaneCo[i])
+                    // };
+                }
+                console.log(`dateFromTime : ${dateFromTime}`)
+                console.log(`dateFromTo : ${dateFromTo}`)
+                console.log(`list1 : ${list1}`)
+
+
+            }
+
+            let listAllLandString = await search(userId,JSON.stringify(query));
+            let listAllLand = JSON.parse(listAllLandString);
+            console.log(`quer2y2 : ${JSON.stringify(listAllLand)}`)
+            allMenu = [...listAllLand,...listLaneCo];
+            return res.render("home",{ menu: allMenu, keySearch:keySearch, typeSearch:status, success: req.flash('success')});
+
+
+
+            // let date_ob = new Date();
+            // let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
+            // let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
+            // let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
+            // let thoigiandangky = `${time} - ${newDate}`;
+            
+            // let dateTest = new Date('2021/11/20')
+            // let dateTest2 = new Date('2021/11/21')
+
+            // console.log(`DATE: ${dateTest < dateTest2}`)
+
+            // if(keySearch == ""){
+            //     let allMenu;
+            //     if(req.session.user.role == "user"){
+            //       const menuString = await queryAllLand(req.session.user.userId,req.session.user.role); 
+            //       const menuCoString = await queryAllLandCo(req.session.user.userId,req.session.user.role);
+            //       const menu = JSON.parse(menuString);
+            //       const menuCo = JSON.parse(menuCoString);
+            //       allMenu = [...menu,...menuCo];
+            //     }else if(req.session.user.role == "manager"){
+            //       const menuString = await queryAllLand(req.session.user.userId,req.session.user.role); 
+            //       const menu = JSON.parse(menuString);
+            //       allMenu = menu;
+                  
+            //     }else{
+            //       // admin
+            //     }
+
+            //     return res.render('searchWithCondition',{layout:false,menu : allMenu})
+            // }else{
+            //     const userId = req.session.user.userId;
+            //     let listLandString = await search(userId,keySearch,typeSearch);
+            //     let listLand = JSON.parse(listLandString);
+            //     console.log(`list land : ${listLand}`)
+            //      return res.render('searchWithCondition',{layout:false,menu : listLand})
+            // }
         },
 
         //typeof search
@@ -260,8 +329,9 @@ function userController(){
         async typeOfSearch(req,res){
 
             const {typeOfSearch} = req.body;
+            console.log(`typeof ${typeOfSearch}`)
 
-            return res.render('typeOfSearch',{typeOfSearch: typeOfSearch})
+            return res.render('typeOfSearch',{layout:false,typeOfSearch: typeOfSearch})
         },
 
         //infomation
@@ -272,11 +342,7 @@ function userController(){
             console.log(user.fullname)
             user.numberPhone = "0"+user.numberPhone.slice(3);
 
-            //token id
-            // await addToken(userId,"5000")
-            let AcountIdToken = await getAccountId(userId)
-
-            return res.render('info',{user:user,AcountIdToken:AcountIdToken})
+            return res.render('info',{user:user})
         },
 
         async handleSaveInfo(req,res){
@@ -294,6 +360,15 @@ function userController(){
             }
 
           
+        },
+
+        // wallet
+        
+        async walletUser(req,res){
+            const userId = req.session.user.userId;
+            let balance = await getBalanceToken(userId)
+            let acountIdToken = await getAccountId(userId)
+            return res.render("walletUser",{acountIdToken:acountIdToken,balance:balance})
         }
      
     }

@@ -38,8 +38,50 @@ class FabCar extends Contract {
                 MucDichSuDung: "Đất đai nông thôn",
                 ThoiHanSuDung: "Lâu dài",
                 NguocGocSuDung:"Nhà nưóc giao đất có thu tiền sử dụng",
-                ThoiGianDangKy: "11/09/2021",
+                ThoiGianDangKy: "09:12-11/10/2021",
                 Status: "Đã duyệt",
+                UrlImage: "",
+                Transactions: [],
+                LaneOfCity: "TP.HCM"
+
+            },
+            {
+                UserId: "c@gmail.com",
+                Owner:"Nguyen Van B",
+                ThuaDatSo: 931,
+                ToBanDo5o: 3,
+                CacSoThuaGiapRanh: [919, 905,803],
+                DienTich: 393.1,
+                ToaDoCacDinh: { "D1": [406836.70,1183891.04],"D2": [406836.75,1183891.44],
+                "D3": [406836.80,1183891.37],"D4": [406836.79,1183891.40]},
+                ChieuDaiCacCanh: {"C12": 20.5, "C23": 1.12, "C34" :7.53, "C41" :15.5},
+                HinhThucSuDung:"Sử dụng riêng",
+                MucDichSuDung: "Đất đai nông thôn",
+                ThoiHanSuDung: "Lâu dài",
+                NguocGocSuDung:"Nhà nưóc giao đất có thu tiền sử dụng",
+                ThoiGianDangKy: "09:12-11/11/2021",
+                Status: "Chưa duyệt",
+                UrlImage: "",
+                Transactions: [],
+                LaneOfCity: "TP.HCM"
+
+            },
+            {
+                UserId: ["c@gmail.com","b@gmail.com"],
+                Owner:["Nguyen Van B"],
+                ThuaDatSo: 931,
+                ToBanDo5o: 3,
+                CacSoThuaGiapRanh: [919, 905,803],
+                DienTich: 393.1,
+                ToaDoCacDinh: { "D1": [406836.70,1183891.04],"D2": [406836.75,1183891.44],
+                "D3": [406836.80,1183891.37],"D4": [406836.79,1183891.40]},
+                ChieuDaiCacCanh: {"C12": 20.5, "C23": 1.12, "C34" :7.53, "C41" :15.5},
+                HinhThucSuDung:"Sử dụng riêng",
+                MucDichSuDung: "Đất đai nông thôn",
+                ThoiHanSuDung: "Lâu dài",
+                NguocGocSuDung:"Nhà nưóc giao đất có thu tiền sử dụng",
+                ThoiGianDangKy: "09:12-11/09/2021",
+                Status: "Đang chuyển",
                 UrlImage: "",
                 Transactions: [],
                 LaneOfCity: "TP.HCM"
@@ -386,17 +428,18 @@ class FabCar extends Contract {
         }
     }
 
-    async searchWithCondition(ctx,keySearch,typeSearch){
-        let query  = {"docType":"land"};
-        query[typeSearch] = keySearch;
+    async searchWithCondition(ctx,query){
+        // let query  = {"docType":"land"};
+        // query[typeSearch] = keySearch;
         let queryString = {}
-        queryString.selector = query;
+
+        queryString.selector = JSON.parse(query);
         console.log(`QUERYY: ${JSON.stringify(query)}`)
         console.log(`QUERYYYYYYYYYYYYYYYYYYYY: ${JSON.stringify(queryString)}`)
 
         let iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
         let result = await this.getIteratorData(iterator);
-        console.log(`RESULT : ${JSON.stringify(result)}`)
+
         return JSON.stringify(result);
     }
 

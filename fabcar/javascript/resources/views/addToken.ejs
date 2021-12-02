@@ -1,4 +1,22 @@
 
+<% if(messages.error) {%>
+    <div class="d-flex justify-content-center">
+    <div id="flash" style="width: 50%;" class="alert alert-success d-flex justify-content-between" style="text-align:center;">
+        <%= messages.success %>
+      <button id="delete">X</button>
+      </div>
+    </div>
+<%}%>
+
+<% if(messages.success) {%>
+    <div class="d-flex justify-content-center">
+    <div id="flash" style="width: 50%;" class="alert alert-success d-flex justify-content-between" style="text-align:center;">
+        <%= messages.success %>
+      <button id="delete">X</button>
+      </div>
+    </div>
+<%}%>
+
 
 
 <br>
@@ -7,11 +25,11 @@
     <form style="width: 30%;" method="POST" action="/handleAddToken">
         <div class="form-group">
             <label for="exampleInputEmail1">Mã nhận tiền</label>
-            <input type="text" name="amount" class="form-control" placeholder="Nhập mã người nhận" >
+            <input type="text" name="recipient" class="form-control" placeholder="Nhập mã người nhận" >
         </div>
         <div class="form-group">
             <label for="exampleInputEmail1">Số tiền</label>
-            <input type="text" name="recipient" class="form-control" placeholder="Nhập số tiền" >
+            <input type="text" name="amount" class="form-control" placeholder="Nhập số tiền" >
             <small class="form-text text-muted">1 = 1.000.000.000 vnd</small>
 
         </div>

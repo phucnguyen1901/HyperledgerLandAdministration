@@ -133,6 +133,9 @@ app.post('/handleSaveInfo',authMiddleware.requireAuth, userController().handleSa
 app.get('/addToken',authMiddleware.checkManager, userController().addToken)
 app.post('/handleAddToken',authMiddleware.checkManager, userController().handleAddToken)
 
+//wallet user
+app.get('/walletUser',authMiddleware.requireAuth, userController().walletUser)
+
 
 
 

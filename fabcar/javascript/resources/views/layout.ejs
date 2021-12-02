@@ -59,21 +59,23 @@
                 <%} %>
             </button>
             <% if(user.role == "user"){%>
-            <li class="ml-12">
+            <li class="ml-10">
               <a href="/" class="text-blue-500 hover:text-red-500 focus:outline-none" style="font-size: 20px;">Đất của tôi</a>
             </li>
-
-            <li class="ml-12">
+            <li class="ml-10">
               <a href="/addAsset" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Thêm mới</a>
             </li>
-            <li class="ml-12">
+            <li class="ml-10">
               <a href="/transferLandOwner" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Đất chuyển</a>
             </li>
-            <li class="ml-12">
+            <li class="ml-10">
               <a href="/receiveLand" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Đất nhận</a>
             </li>
-            <li class="ml-12">
+            <li class="ml-10">
               <a href="/info" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Thông tin cá nhân</a>
+            </li>
+            <li class="ml-10">
+              <a href="/walletUser" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Ví</a>
             </li>
             <%}else if(user.role == "admin"){%>
               <li class="ml-12">

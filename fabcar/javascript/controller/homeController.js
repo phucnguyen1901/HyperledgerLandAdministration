@@ -1,6 +1,6 @@
 
 const queryAllLand = require("../queryAllLands")
-const queryAllLandCo = require("../queryAllLandsCo")
+const queryAllLandCoAndAdmin = require("../queryAllLandsCoUserAndAdmin")
 const query = require("../queryLand")
 const invokeLandOne = require('../invoke_land_One')
 const invokeLandCo = require('../invoke_land_Co')
@@ -54,7 +54,7 @@ function homeController() {
             let allMenu;
             if(req.session.user.role == "user"){
               const menuString = await queryAllLand(req.session.user.userId,req.session.user.role); 
-              const menuCoString = await queryAllLandCo(req.session.user.userId,req.session.user.role);
+              const menuCoString = await queryAllLandCoAndAdmin(req.session.user.userId,req.session.user.role);
               const menu = JSON.parse(menuString);
               const menuCo = JSON.parse(menuCoString);
               allMenu = [...menu,...menuCo];
@@ -65,7 +65,7 @@ function homeController() {
             }else{
               // admin
             }
-            return res.render("home",{ menu: allMenu, success: req.flash('success')});
+            return res.render("home",{ menu: allMenu, keySearch:"",typeSearch:"",  success: req.flash('success')});
 
         } catch (error) {
           console.log("Login khong thanh cong : "+error)
@@ -93,7 +93,10 @@ function homeController() {
           return res.render("detail",{ detail: notFound });
         }
 
-        return res.render("detail",{ detail: obj, key: key, requestPerson: 'transferUser'});
+        let requestPerson;
+        if(req.session.user.role == "manager") requestPerson = "manager";
+
+        return res.render("detail",{ detail: obj, key: key, requestPerson: requestPerson});
 
     },
 
@@ -159,7 +162,7 @@ function homeController() {
       let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
       let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
       let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
-      let thoigiandangky = `${time} - ${newDate}`;
+      let thoigiandangky = `${time}-${newDate}`;
 
       const userId = req.session.user.userId;
       const owner = req.session.user.fullname;
@@ -193,7 +196,7 @@ function homeController() {
       let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
       let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
       let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
-      let thoigiandangky = `${time} - ${newDate}`;
+      let thoigiandangky = `${time}-${newDate}`;
       const userId = req.session.user.userId;
       const toadocacdinh = '{"D1": [406836.70,1183891.04],"D2": [406836.75,1183891.44],"D3": [406836.80,1183891.37],"D4": [406836.79,1183891.40]}';
       const chieudaicaccanh = '{"C12": 20.5, "C23": 1.12, "C34":7.53, "C41" :15.5}';
@@ -244,7 +247,7 @@ function homeController() {
               let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
               let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
               let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
-              let thoigiandangky = `${time} - ${newDate}`;
+              let thoigiandangky = `${time}-${newDate}`;
 
               await createTransfer(key,userId,owner0,thoigiandangky)
               await updateLand(userId,key,"Đang chuyển1")
@@ -265,7 +268,7 @@ function homeController() {
               let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
               let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
               let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
-              let thoigiandangky = `${time} - ${newDate}`;
+              let thoigiandangky = `${time}-${newDate}`;
               
               await createTransferCoToOne(key,userId,land.UserId,owner0,thoigiandangky)
               await updateLand(userId,key,"Đang chuyển1")
@@ -317,7 +320,7 @@ function homeController() {
               let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
               let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
               let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
-              let thoigiandangky = `${time} - ${newDate}`;
+              let thoigiandangky = `${time}-${newDate}`;
               
 
               await createTransferOneToCo(key,userId,userId,listOwner,thoigiandangky)
@@ -339,7 +342,7 @@ function homeController() {
               let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
               let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
               let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
-              let thoigiandangky = `${time} - ${newDate}`;
+              let thoigiandangky = `${time}-${newDate}`;
 
               await createTransferCoToCo(key,userId,land.UserId,listOwner,thoigiandangky)
               await updateLand(userId,key,"Đang chuyển1")
@@ -407,7 +410,7 @@ function homeController() {
         let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
         let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
         let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
-        let thoigiandangky = `${time} - ${newDate}`;
+        let thoigiandangky = `${time}-${newDate}`;
 
         await updateTransfer(req.session.user.userId,key,req.session.user.role,thoigiandangky);
         await saveMessage(req.session.user.userId,"Bạn đã nhận đất thành công")
@@ -500,7 +503,7 @@ function homeController() {
         let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
         let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
         let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
-        let thoigiandangky = `${time} - ${newDate}`;
+        let thoigiandangky = `${time}-${newDate}`;
 
         if(typeof newUserId == 'object'){
 
@@ -537,7 +540,7 @@ function homeController() {
           let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
           let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
           let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
-          let thoigiandangky = `${time} - ${newDate}`;
+          let thoigiandangky = `${time}-${newDate}`;
 
           let listOldUserHandle = []
           for(let el of oldUserId){

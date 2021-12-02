@@ -11,7 +11,7 @@ const path = require('path');
 const fs = require('fs');
 
 
-async function main(userId,role) {
+async function main(userId) {
     try {
         // load the network configuration
         const ccpPath = path.resolve(__dirname, '..', '..', 'test-network', 'organizations', 'peerOrganizations', 'org1.example.com', 'connection-org1.json');
@@ -45,12 +45,8 @@ async function main(userId,role) {
         // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')
         // const result = await contract.evaluateTransaction('queryAllLands',{"selector":{"IdentityCard":"35852514222"}});
         // const result = await contract.evaluateTransaction('queryAllLands',{"selector":{"docType":"land","owner":"tom"}});
-        let result;
-        if(role == "user"){
-            result = await contract.evaluateTransaction('queryLandByUserCo',userId);
-        }else{
-            result = await contract.evaluateTransaction('queryLandByAdmin');
-        }
+        let result = await contract.evaluateTransaction('queryLandByUserCo',userId);
+
 
         // console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
         console.log(`Transaction has been evaluated, result is: ${result}`);

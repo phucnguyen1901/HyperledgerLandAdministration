@@ -303,7 +303,7 @@ class Token extends Contract {
      * @param {Integer} amount amount of tokens to be minted
      * @returns {Object} The balance
      */
-    async Mint(ctx, amount) {
+    async Mint(ctx, amount, recipient) {
 
         // Check minter authorization - this sample assumes Org1 is the central banker with privilege to mint new tokens
         const clientMSPID = ctx.clientIdentity.getMSPID();
@@ -312,8 +312,13 @@ class Token extends Contract {
         }
 
         // Get ID of submitting client identity
-        const minter = ctx.clientIdentity.getID();
-        // const minter = recepient;
+        // const minter = ctx.clientIdentity.getID();
+
+        const minter = recipient;
+
+        console.log("minter : "+minter)
+
+        // console.log("minter2 : "+minter2)
         
 
         const amountInt = parseInt(amount);
@@ -411,11 +416,14 @@ class Token extends Contract {
     async ClientAccountBalance(ctx) {
         // Get ID of submitting client identity
         const clientAccountID = ctx.clientIdentity.getID();
+
+        console.log(`client ACOUNT: ${clientAccountID}`)
         // const clientAccountID = acountId;
         const balanceKey = ctx.stub.createCompositeKey(balancePrefix, [clientAccountID]);
         const balanceBytes = await ctx.stub.getState(balanceKey);
         if (!balanceBytes || balanceBytes.length === 0) {
-            throw new Error(`the account ${clientAccountID} does not exist`);
+            // throw new Error(`the account ${clientAccountID} does not exist`);
+            return 0;
         }
         const balance = parseInt(balanceBytes.toString());
 
