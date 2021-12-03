@@ -97,6 +97,14 @@ app.get('/blank',authMiddleware.requireAuth, homeController().blank)
 app.get('/addAssetFormOwner/:count',authMiddleware.requireAuth, homeController().addAssetFormOwner)
 app.post('/checkUserExistAndReturnInfo',authMiddleware.requireAuth, transferController().checkUserExistAndReturnInfo)
 
+// add coordinates
+app.post('/addCoordinatesForm',authMiddleware.requireAuth, homeController().addCoordinatesForm)
+
+//add lengths
+app.post('/addLength',authMiddleware.requireAuth, homeController().addLength)
+
+
+
 app.get('/transferLandOne/:key',authMiddleware.requireAuth, transferController().transferLandOne)
 app.get('/transferLandCo/:key',authMiddleware.requireAuth, transferController().transferLandCo)
 

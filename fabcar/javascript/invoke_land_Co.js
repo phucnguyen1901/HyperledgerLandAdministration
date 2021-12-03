@@ -40,7 +40,24 @@ async function main(userId,arrayOwner,arrayNameOwner,thuasodat,tobandoso,cacsoth
         const contract = network.getContract('fabcar');
         console.log("Create land Co")
         // console.log(` Array Owner : ${arrayOwner.split(',')}`) 
-        console.log(` Array Owner : ${typeof arrayOwner}`)
+        console.log(` Array Owner1 : ${arrayOwner}`)
+        console.log(` Array Owner2 : ${arrayNameOwner}`)
+        console.log(` Array Owner3 : ${ thuasodat}`)
+        console.log(` Array Owner4 : ${ tobandoso}`)
+        console.log(` Array Owner5 : ${ cacsothuagiapranh}`)
+        console.log(` Array Owner7: ${ dientich}`)
+        console.log(` Array Owner6 : ${ toadocacdinh}`)
+        console.log(` Array Owner8 : ${ chieudaicaccanh}`)
+        console.log(` Array Owner9 : ${ arrayOwner}`)
+        console.log(` 412321321321 : ${hinhthucsudung}`)
+        console.log(` sdsad : ${mucdichsudung}`)
+        console.log(` sdsad : ${thoihansudung}`)
+        console.log(` sdsad : ${nguongocsudung}`)
+        console.log(` sdsad : ${thoigiandangky}`)
+        console.log(` sdsad : ${url}`)
+        console.log(` sdsad : ${laneOfCity}`)
+
+
         // Submit the specified transaction.
         // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
         // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR12', 'Dave')

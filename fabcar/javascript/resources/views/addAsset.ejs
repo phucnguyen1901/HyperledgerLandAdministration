@@ -1,6 +1,6 @@
 
 
-<form  id="formAdd" action="./handleAddAsset" method="post" enctype="multipart/form-data" onsubmit="return false;">
+<form  id="formAdd" action="./handleAddAsset" method="post" enctype="multipart/form-data">
     <div class="form-group">
       <label>Người sở hữu</label>
       <input type="text" class="form-control" name="owner" placeholder="Người sở hữu" value="<%= user.fullname%>" disabled>
@@ -22,31 +22,31 @@
         <select name="hinhthucsudung" class="text-green-700 form-control block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-1 px-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
           <option disabled class="text-blue-700"
           >* Nhận quyền sử dụng đất từ Nhà nước</option>
-          <option selected="selected"
+          <option selected="selected" value="Được Nhà nước giao đất"
           > &emsp;- Được Nhà nước giao đất.</option>
-          <option 
+          <option  value="Được Nhà nước cho thuê đất"
           > &emsp;- Được Nhà nước cho thuê đất.</option>
-          <option 
+          <option value="Được Nhà nước cho phép chuyển mục đích sử dụng đất"
           > &emsp;- Được Nhà nước cho phép chuyển mục đích sử dụng đất.</option>
-          <option 
+          <option value="Được Nhà nước công nhận quyền sử dụng đất"
           > &emsp;- Được Nhà nước công nhận quyền sử dụng đất.</option>
           <option disabled class="text-blue-700"
           >* Nhận quyền sử dụng đất từ chủ thể sử dụng đất khác:</option>
           <option disabled
           > &emsp;- Nhận chuyển quyền sử dụng đất:</option>
-          <option 
+          <option value="Nhận chuyển đổi"
           > &emsp; &emsp;+ Nhận chuyển đổi.</option>
-          <option 
+          <option value="Nhận chuyển nhượng"
           >  &emsp; &emsp;+ Nhận chuyển nhượng.</option>
-          <option 
+          <option value="Nhận thừa kế"
           >  &emsp; &emsp;+ Nhận thừa kế.</option>
-          <option 
+          <option value="Nhận tặng cho"
           >  &emsp; &emsp;+ Nhận tặng cho.</option>
-          <option 
+          <option value="Nhận góp vốn"
           >  &emsp; &emsp;+ Nhận góp vốn.</option>
-          <option 
+          <option value="Thuê quyền sử dụng đất từ chủ thể sử dụng đất khác"
           > &emsp;- Thuê quyền sử dụng đất từ chủ thể sử dụng đất khác.</option>
-          <option 
+          <option value="Thuê lại quyền sử dụng đất từ chủ thể sử dụng đất khác"
           > &emsp;- Thuê lại quyền sử dụng đất từ chủ thể sử dụng đất khác.</option>
           <option 
           > * Khác</option>
@@ -76,23 +76,23 @@
           > &emsp;- Đất nông nghiệp khác</option>
           <option disabled class="text-blue-700"
           >* Nhóm đất phi nông nghiệp bao gồm các loại đất sau đây::</option>
-          <option 
+          <option value="Đất ở gồm đất ở tại nông thôn, đất ở tại đô thị"
           > &emsp;- Đất ở gồm đất ở tại nông thôn, đất ở tại đô thị:</option>
-          <option 
+          <option value="Đất sử dụng vào mục đích quốc phòng, an ninh"
           > &emsp;- Đất sử dụng vào mục đích quốc phòng, an ninh</option>
-          <option 
+          <option  value="Đất xây dựng công trình sự nghiệp"
           > &emsp;-  Đất xây dựng công trình sự nghiệp</option>
-          <option 
+          <option  value="Đất sản xuất, kinh doanh phi nông nghiệp"
           > &emsp;-  Đất sản xuất, kinh doanh phi nông nghiệp</option>
-          <option 
+          <option  value="Đất sử dụng vào mục đích công cộng"
           > &emsp;- Đất sử dụng vào mục đích công cộng</option>
-          <option 
+          <option  value="Đất cơ sở tôn giáo, tín ngưỡng"
           > &emsp;- Đất cơ sở tôn giáo, tín ngưỡng</option>
-          <option 
+          <option  value="Đất làm nghĩa trang, nghĩa địa, nhà tang lễ, nhà hỏa táng"
           > &emsp;- Đất làm nghĩa trang, nghĩa địa, nhà tang lễ, nhà hỏa táng</option>
-          <option 
-          > &emsp;- Đất sông, ngòi, kênh, rạch, suối và mặt nước chuyên dùng</option>
-          <option 
+          <option  value="Đất sử dụng vào mục đích quốc phòng, an ninh"
+          > &emsp;- Đất sử dụng vào mục đích quốc phòng, an ninh</option>
+          <option  value="Đất phi nông nghiệp khác"
           > &emsp;- Đất phi nông nghiệp khác</option>
           <option class="text-blue-700"
           > * Nhóm đất chưa sử dụng gồm các loại đất chưa xác định mục đích sử dụng</option>
@@ -102,30 +102,30 @@
       <div class="form-group">
         <label>Thời hạn sử dụng	</label>
         <select name="thoihansudung" class="text-green-700 form-control block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-1 px-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
-          <option selected="selected"
+          <option selected="selected" value="Đất sử dụng ổn định lâu dài"
           > &emsp;- Đất sử dụng ổn định lâu dài</option>
-          <option 
+          <option value="Đất sử dụng có thời hạn"
           > &emsp;- Đất sử dụng có thời hạn</option>
         </select>
       </div>
       <div class="form-group">
         <label>Nguồn gốc sử dụng	</label>
         <select name="nguongocsudung" class="text-green-700 form-control block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-1 px-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
-          <option selected="selected"
+          <option selected="selected" value="Nhà nước giao đất không thu tiền sử dụng đất"
           > &emsp;- Nhà nước giao đất không thu tiền sử dụng đất</option>
-          <option 
+          <option value="Nhà nước giao đất có thu tiền sử dụng đất"
           > &emsp;- Nhà nước giao đất có thu tiền sử dụng đất</option>
-          <option 
+          <option value="Nhà nước cho thuê đất trả tiền một lần"
           > &emsp;- Nhà nước cho thuê đất trả tiền một lần</option>
-          <option 
+          <option value="Nhà nước cho thuê đất trả tiền hàng năm"
           > &emsp;- Nhà nước cho thuê đất trả tiền hàng năm</option>
-          <option 
+          <option value="Công nhận QSDĐ như giao đất có thu tiền sử dụng đất"
           > &emsp;- Công nhận QSDĐ như giao đất có thu tiền sử dụng đất</option>
-          <option 
+          <option value="Công nhận QSDĐ như giao đất không thu tiền sử dụng đất"
           > &emsp;- Công nhận QSDĐ như giao đất không thu tiền sử dụng đất</option>
-          <option 
+          <option value="Thuê đất trả tiền một lần của doanh nghiệp đầu tư hạ tầng khu công nghiệp"
           > &emsp;- Thuê đất trả tiền một lần của doanh nghiệp đầu tư hạ tầng khu công nghiệp</option>
-          <option 
+          <option value="Thuê đất trả tiền hàng năm của doanh nghiệp đầu tư hạ tầng khu công nghiệp"
           > &emsp;- Thuê đất trả tiền hàng năm của doanh nghiệp đầu tư hạ tầng khu công nghiệp</option>
         </select>
       </div>
@@ -133,29 +133,69 @@
       <div class="form-group">
         <label>Đất thuộc tỉnh/TP</label>
         <select name="laneOfCity" class="text-green-700 form-control block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-1 px-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
-          <option selected="selected"
+          <option selected="selected" value="TP.HCM"
           > &emsp;- TP.HCM</option>
-          <option 
+          <option  value="TP.Cần Thơ"
           > &emsp;- TP.Cần Thơ</option>
         </select>
       </div>
-      
-      <div class="form-group">
-        <label>Thêm ảnh	</label>
-         <input id="image" name="image" type="file" alt="Submit" width="48" height="48" multiple="multiple">
-      </div>
 
-      <div class="form-group">
-         <input id="url" name="url" type="hidden" alt="Submit" width="48" height="48" multiple="multiple">
+
+      <div class="form-group">        
+        <label>Số đỉnh của mảnh đất </label>
+        <input id="countCoordinates" class="form-control" name="countCoordinates" type="text" placeholder="Đất có bao nhiêu đỉnh">
+     </div>
+
+     <div id="showCoordinates">
+
+     </div>
+
+     <br>
+     <div class="form-group">        
+      <label>Số cạnh của mảnh đất </label>
+      <input id="countLengths" class="form-control" name="countLengths" type="text" placeholder="Đất có bao nhiêu đỉnh">
+     </div>
+
+      <div id="showLengths">
+
       </div>
      
+     <br>
+     <div class="form-group">
+      <label>Thêm ảnh	</label>
+       <input id="image" name="image" type="file" alt="Submit" width="48" height="48" multiple="multiple">
+    </div>
 
+    <div class="form-group">
+       <input id="url" name="url" type="hidden" alt="Submit" width="48" height="48" multiple="multiple">
+    </div>
     <button id="addButton" class="btn btn-primary">Đăng ký</button>
   </form>
 
 <div style="height: 100px;"></div>
 
-<script type="module">
+<script>
+
+  $(document).ready(function(){
+    $('#countCoordinates').on('input',function(e){
+        $.ajax({type: "POST",url: "/addCoordinatesForm",data:{count:this.value} ,success: function(result){
+          $("#showCoordinates").html(result);
+        }});
+      });
+  });
+
+  $(document).ready(function(){
+    $('#countLengths').on('input',function(e){
+        $.ajax({type: "POST",url: "/addLength",data:{count:this.value} ,success: function(result){
+          $("#showLengths").html(result);
+        }});
+      });
+  });
+
+</script>
+
+
+<!-- <script type="module">
   import app from '/js/config.js';
   import { getStorage, ref, uploadBytes,uploadBytesResumable,getDownloadURL } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-storage.js";
 
@@ -206,5 +246,5 @@
 
   })
 
-</script>
+</script> -->
 

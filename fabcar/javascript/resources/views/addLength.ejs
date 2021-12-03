@@ -1,0 +1,19 @@
+
+
+
+
+
+<% for(let i = 0; i < count; i++){ %>
+    <br>
+    <% if( i === count-1){ %>
+        <label for="">Chiều dài cạnh <%= i+1%>-<%= count-i %></label>
+    <% }else{ %>
+        <label for="">Chiều dài cạnh <%= i+1%>-<%=  i+2 %></label>
+    <% } %>
+    <input class="form-control" type="text" placeholder="Nhập chiều dài (m)" name="length<%= i%>">
+<%}%>
+
+
+
+
+
