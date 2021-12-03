@@ -65,7 +65,7 @@ function homeController() {
             }else{
               // admin
             }
-            return res.render("home",{ menu: allMenu, keySearch:"",typeSearch:"",  success: req.flash('success')});
+            return res.render("home",{ menu: allMenu, keySearch:"",typeSearch:"UserId",  success: req.flash('success')});
 
         } catch (error) {
           console.log("Login khong thanh cong : "+error)

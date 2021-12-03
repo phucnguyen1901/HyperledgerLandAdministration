@@ -238,90 +238,61 @@ function userController(){
                 query["Status"] = "Đang chuyển";
                 status = "Đang chuyển";
             }else{
-
+                status = "UserId";
             }
 
-
-            if(keySearch != ""){
+            console.log(keySearch == undefined)
+            if(keySearch != "" && keySearch != undefined){
                 console.log("DA VAO DAYyyyyyyyyyyyyyyyyyyyyyyy")
                 query["UserId"] = keySearch.trim();
                 let listLaneCoString = await queryAllLandCo(keySearch.trim());
                 let listLaneCoFilter = JSON.parse(listLaneCoString);
                 listLaneCo = listLaneCoFilter.filter((element) => element.Status==status);
 
+            }else{
+
             }
+
             console.log(`locao: ${JSON.stringify(listLaneCo)}`)
 
-            if(fromTime != "" && toTime != ""){
-                let dateFromTime = new Date(fromTime);
-                let dateFromTo = new Date(toTime);
-                let list1;
-                console.log(`locao: ${JSON.stringify(listLaneCo)}`)
-                for(let i = 0; i < listLaneCo.length; i++){
-                    console.log("chi so "+i)
-                    // let arrayDate = listLaneCo[i].ThoiGianDangKy.split('-')
-                    // let splitDate= arrayDate[1].split('/');
-                    // let convertDateString = splitDate[2]+'-'+splitDate[1]+'-'+splitDate[0];
-                    // let dateLand = new Date(convertDateString)
-                    // console.log(`convertDateString`+splitDate)
-                    // console.log(`splitDate`+splitDate)
-                    // console.log(`dateString`+dateString)
-                    // console.log(`dateLand`+dateLand)
-                    // if(dateLand >= fromTime && dateLand <= toTime){
-                    //     list1.push(listLaneCo[i])
-                    // };
-                }
-                console.log(`dateFromTime : ${dateFromTime}`)
-                console.log(`dateFromTo : ${dateFromTo}`)
-                console.log(`list1 : ${list1}`)
-
-
-            }
+            
 
             let listAllLandString = await search(userId,JSON.stringify(query));
             let listAllLand = JSON.parse(listAllLandString);
             console.log(`quer2y2 : ${JSON.stringify(listAllLand)}`)
             allMenu = [...listAllLand,...listLaneCo];
+
+            console.log(`so sanh ${fromTime > toTime}`)
+
+            if(fromTime != "" && toTime != ""){
+                let dateFromTime = new Date(fromTime);
+                let dateFromTo = new Date(toTime);
+                let list1 = [];
+                console.log(`locao: ${JSON.stringify(listLaneCo)}`)
+                for(let i = 0; i < allMenu.length; i++){
+
+                    let arrayDate = allMenu[i].value.ThoiGianDangKy.split('-')
+                    let splitDate= arrayDate[1].split('/');
+                    let convertDateString = splitDate[2]+'-'+splitDate[1]+'-'+splitDate[0];
+                    let dateLand = new Date(convertDateString)
+
+                    // console.log(dateLand > fromTime)
+                    // console.log(dateLand > toTime)
+                    if(dates.inRange(dateLand,fromTime,toTime)){
+                        list1.push(allMenu[i])
+                    };
+                }
+                console.log(`dateFromTime : ${dateFromTime}`)
+                console.log(`dateFromTo : ${dateFromTo}`)
+                console.log(`list1 : ${list1}`)
+
+                allMenu = list1;
+
+            }
+
             return res.render("home",{ menu: allMenu, keySearch:keySearch, typeSearch:status, success: req.flash('success')});
 
 
-
-            // let date_ob = new Date();
-            // let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
-            // let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
-            // let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
-            // let thoigiandangky = `${time} - ${newDate}`;
-            
-            // let dateTest = new Date('2021/11/20')
-            // let dateTest2 = new Date('2021/11/21')
-
-            // console.log(`DATE: ${dateTest < dateTest2}`)
-
-            // if(keySearch == ""){
-            //     let allMenu;
-            //     if(req.session.user.role == "user"){
-            //       const menuString = await queryAllLand(req.session.user.userId,req.session.user.role); 
-            //       const menuCoString = await queryAllLandCo(req.session.user.userId,req.session.user.role);
-            //       const menu = JSON.parse(menuString);
-            //       const menuCo = JSON.parse(menuCoString);
-            //       allMenu = [...menu,...menuCo];
-            //     }else if(req.session.user.role == "manager"){
-            //       const menuString = await queryAllLand(req.session.user.userId,req.session.user.role); 
-            //       const menu = JSON.parse(menuString);
-            //       allMenu = menu;
-                  
-            //     }else{
-            //       // admin
-            //     }
-
-            //     return res.render('searchWithCondition',{layout:false,menu : allMenu})
-            // }else{
-            //     const userId = req.session.user.userId;
-            //     let listLandString = await search(userId,keySearch,typeSearch);
-            //     let listLand = JSON.parse(listLandString);
-            //     console.log(`list land : ${listLand}`)
-            //      return res.render('searchWithCondition',{layout:false,menu : listLand})
-            // }
         },
 
         //typeof search
@@ -373,5 +344,60 @@ function userController(){
      
     }
 }
+
+var dates = {
+    convert:function(d) {
+        // Converts the date in d to a date-object. The input can be:
+        //   a date object: returned without modification
+        //  an array      : Interpreted as [year,month,day]. NOTE: month is 0-11.
+        //   a number     : Interpreted as number of milliseconds
+        //                  since 1 Jan 1970 (a timestamp) 
+        //   a string     : Any format supported by the javascript engine, like
+        //                  "YYYY/MM/DD", "MM/DD/YYYY", "Jan 31 2009" etc.
+        //  an object     : Interpreted as an object with year, month and date
+        //                  attributes.  **NOTE** month is 0-11.
+        return (
+            d.constructor === Date ? d :
+            d.constructor === Array ? new Date(d[0],d[1],d[2]) :
+            d.constructor === Number ? new Date(d) :
+            d.constructor === String ? new Date(d) :
+            typeof d === "object" ? new Date(d.year,d.month,d.date) :
+            NaN
+        );
+    },
+    compare:function(a,b) {
+        // Compare two dates (could be of any type supported by the convert
+        // function above) and returns:
+        //  -1 : if a < b
+        //   0 : if a = b
+        //   1 : if a > b
+        // NaN : if a or b is an illegal date
+        // NOTE: The code inside isFinite does an assignment (=).
+        return (
+            isFinite(a=this.convert(a).valueOf()) &&
+            isFinite(b=this.convert(b).valueOf()) ?
+            (a>b)-(a<b) :
+            NaN
+        );
+    },
+    inRange:function(d,start,end) {
+        // Checks if date in d is between dates in start and end.
+        // Returns a boolean or NaN:
+        //    true  : if d is between start and end (inclusive)
+        //    false : if d is before start or after end
+        //    NaN   : if one or more of the dates is illegal.
+        // NOTE: The code inside isFinite does an assignment (=).
+       return (
+            isFinite(d=this.convert(d).valueOf()) &&
+            isFinite(start=this.convert(start).valueOf()) &&
+            isFinite(end=this.convert(end).valueOf()) ?
+            start <= d && d <= end :
+            NaN
+        );
+    }
+}
+
+
+
 
 module.exports = userController;
