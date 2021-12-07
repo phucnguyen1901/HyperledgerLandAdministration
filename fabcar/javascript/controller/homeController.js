@@ -37,6 +37,10 @@ const formidable = require('formidable');
 const saveMessageTransferLandSuccessLoop = require('./saveMessageLoop')
 
 
+const modifyLand = require('../modifyLand')
+const { stringify } = require("@firebase/util")
+
+
 
 
 const StatusLane = {
@@ -153,13 +157,29 @@ function homeController() {
     },
 
     async addAssetFormOwner(req,res){
-      const count = req.params.count;
-      res.render("addAssetFormOwner",{layout:false,count:count})
+      const {count, listCoOwner} = req.body;
+
+      let data = []
+      if(listCoOwner != ""){
+        data = listCoOwner.split(',')
+
+      }
+
+      let userId = req.session.user.userId;
+      let result = []
+      for(let el of data){
+        if(el !== userId){
+          result.push(el)
+        }
+      }
+
+      res.render("addAssetFormOwner",{layout:false,count:count,data:result})
     },
 
     //add coordinates
     async addCoordinatesForm(req,res){
-      const count = req.body.count;
+      const {count} = req.body;
+
       console.log("count : "+count)
       res.render("addCoordinatesForm",{layout:false,count:count})
     },
@@ -171,24 +191,49 @@ function homeController() {
       res.render("addLength",{layout:false,count:count})
     },
 
+
+    //các số thửa giáp ranh
+    async addParcels(req,res){
+      const { count , parcels} = req.body;
+      let data = []
+      console.log(parcels);
+      if(parcels != ""){
+        data = parcels.split(",")
+      }
+      console.log('count ne : '+parcels)
+      res.render('addParcels',{layout:false,count:count, data: data})
+    },
+
+
+    
+
     async handleAddAsset(req,res){
-      const {thuasodat,tobandoso,dientich,hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,url,landOfCity,countCoordinates , countLengths} = req.body;
+      const {thuasodat,tobandoso,dientich,hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,url,landOfCity,countCoordinates , countLengths ,countParcels} = req.body;
 
       let coordinates = {};
       
-      for(let i = 0; i < countCoordinates; i++){
-        coordinates[`D${i+1}`] = [req.body[`long${i}`],req.body[`lat${i}`]]
+      for(let i = 0; i < parseInt(countCoordinates); i++){
+        coordinates[`D${i+1}`] = [parseFloat(req.body[`long${i}`]),parseFloat(req.body[`lat${i}`])]
       }
 
       let lengths = {};
 
-      for(let i = 0; i < countLengths; i++){
+      for(let i = 0; i < parseInt(countLengths); i++){
         if(i === countLengths - 1){
-          lengths[`C${i+1}${countLengths-i}`] = req.body[`length${i}`]
+          lengths[`C${i+1}${countLengths-i}`] = parseFloat(req.body[`length${i}`])
         }else{
           lengths[`C${i+1}${i+2}`] = parseFloat(req.body[`length${i}`])
         }
       }
+
+      let parcels = []
+      for(let i = 0; i < countParcels; i++){
+        parcels.push(parseInt(req.body[`parcel${i}`]))
+      }
+      // console.log(thuasodat,tobandoso,dientich,hinhthucsudung,mucdichsudung,
+      //   thoihansudung,nguongocsudung,url,landOfCity,countCoordinates ,
+      //   countLengths ,countParcels)
+      // console.log(parcels)
 
       let date_ob = new Date();
       let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
@@ -200,7 +245,7 @@ function homeController() {
       const owner = req.session.user.fullname;
       const idCard = req.session.user.idCard;
 
-      await invokeLandOne(userId,owner,thuasodat,tobandoso,[123,124,125],dientich, JSON.stringify(coordinates),
+      await invokeLandOne(userId,owner,thuasodat,tobandoso,parcels,dientich, JSON.stringify(coordinates),
       JSON.stringify(lengths),
       hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,thoigiandangky,url,landOfCity);
       await saveMessage(userId,"Bạn đã thêm một mảnh đất mới")
@@ -208,11 +253,9 @@ function homeController() {
       res.redirect('/');
     },
 
-
     async handleAddAssetCo(req,res){
-      const {thuasodat,tobandoso,dientich,hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,url,landOfCity,countOwner, countCoordinates, countLengths} = req.body;
-      console.log("landofcity"+landOfCity);
-      // res.send("OK")
+      const {thuasodat,tobandoso,dientich,hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,url,landOfCity,countOwner, countCoordinates, countLengths, countParcels} = req.body;
+
       let listOwner = [req.session.user.userId];
       let listNameOwner = [];
       for(let i = 0; i < countOwner; i++){
@@ -240,16 +283,21 @@ function homeController() {
         }
       }
 
+      let parcels = []
+      for(let i = 0; i < countParcels; i++){
+        parcels.push(req.body[`parcel${i}`])
+      }
+
+
       let date_ob = new Date();
       let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
       let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
       let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
       let thoigiandangky = `${time}-${newDate}`;
       const userId = req.session.user.userId;
-      const toadocacdinh = '{"D1": [406836.70,1183891.04],"D2": [406836.75,1183891.44],"D3": [406836.80,1183891.37],"D4": [406836.79,1183891.40]}';
-      const chieudaicaccanh = '{"C12": 20.5, "C23": 1.12, "C34":7.53, "C41" :15.5}';
+   
       try {
-        await invokeLandCo(userId,listOwner,listNameOwner,thuasodat,tobandoso,[123,124,125],dientich,JSON.stringify(coordinates),
+        await invokeLandCo(userId,listOwner,listNameOwner,thuasodat,tobandoso,parcels,dientich,JSON.stringify(coordinates),
         JSON.stringify(lengths),
         hinhthucsudung,mucdichsudung,thoihansudung,nguongocsudung,thoigiandangky,url,landOfCity);
         for(let i = 0; i < listOwner.length; i++){
@@ -638,6 +686,117 @@ function homeController() {
         req.flash('success',`Hủy chuyển không thành công`)
         res.redirect('/')
       }
+
+    },
+
+    //modify land
+
+    async modifyUI(req,res){
+      const key = req.params.key;
+      const userId = req.session.user.userId;
+      let landString = await query(key,userId);
+      let land = JSON.parse(landString)
+
+      return res.render("modifyLand",{land:land,key:key})
+    },
+
+    async handleModifyLand(req,res){
+      const {key, userIdOwner , owner , 
+        thuasodat,tobandoso,
+        dientich,hinhthucsudung,mucdichsudung,thoihansudung,
+        nguongocsudung,url,landOfCity,countCoordinates,countLengths,
+        countParcels , lengthsOld, coordinatesOld, countOwner} = req.body;
+
+        console.log("ALL : "+key, userIdOwner , owner , 
+        thuasodat,tobandoso,
+        dientich,hinhthucsudung,mucdichsudung,thoihansudung,
+        nguongocsudung,url,landOfCity,countCoordinates,
+        countLengths,countParcels, lengthsOld, coordinatesOld)
+
+
+        let coordinatesNew;
+        let lengthsNew;
+        let userIdNew;
+
+        let coordinates = {};
+        let lengths = {};
+        let parcels = []
+
+        if(countCoordinates != ""){
+          for(let i = 0; i < parseInt(countCoordinates); i++){
+            coordinates[`D${i+1}`] = [parseFloat(req.body[`long${i}`]),parseFloat(req.body[`lat${i}`])]
+          }
+          coordinatesNew = JSON.stringify(coordinates);
+    
+        }else{
+          coordinatesNew = coordinatesOld
+        }
+
+        console.log("COOR: "+coordinatesNew)
+
+
+        for(let i = 0; i < parseInt(countParcels); i++){
+          parcels.push(parseInt(req.body[`parcel${i}`]))
+        }
+
+
+        if(countLengths != ""){
+          console.log("COUNT LENGTH : "+countLengths)
+          for(let i = 0; i < countLengths; i++){
+            if(i === countLengths - 1){
+              lengths[`C${i+1}${countLengths-i}`] = parseFloat(req.body[`length${i}`])
+            }else{
+              lengths[`C${i+1}${i+2}`] = parseFloat(req.body[`length${i}`])
+            }
+          }
+          lengthsNew = JSON.stringify(lengths);
+        }else{
+          lengthsNew = lengthsOld
+        }
+
+
+        let listOwner = [];
+        let listNameOwner = [];
+
+        if(countOwner !== undefined){
+           listOwner = [req.session.user.userId];
+           listNameOwner = [];
+          for(let i = 0; i < countOwner; i++){
+            listOwner.push(req.body[`owner${i}`]);
+          }
+    
+          for(let i = 0; i < listOwner.length;i++){
+            let listUser = await getUser(listOwner[i]);
+            listNameOwner.push(listUser[0].fullname)
+          }
+        }else{
+          listOwner = userIdOwner;
+          listNameOwner = owner;
+        }
+    
+
+
+      let userId = req.session.user.userId;
+
+      console.log("ALLLLLL: "+userId,key, listOwner , listNameOwner ,thuasodat,tobandoso, 
+      parcels,dientich,coordinatesNew,lengthsNew,
+      hinhthucsudung,mucdichsudung,
+      thoihansudung,nguongocsudung,url,landOfCity)
+      console.log("GOOD " +  lengthsNew)
+      console.log("GOOD2 " + typeof lengthsNew)
+
+      try {
+        await modifyLand(userId,key, listOwner , listNameOwner ,thuasodat,tobandoso, 
+          parcels,dientich,coordinatesNew,lengthsNew,
+          hinhthucsudung,mucdichsudung,
+          thoihansudung,nguongocsudung,url,landOfCity)
+        
+        req.flash("success","Bạn đẫ thay đổi thông tin đất có mã "+key)
+        return res.redirect('/')
+      } catch (error) {
+        console.log("ERROR : "+error)
+      }
+
 
     }
 

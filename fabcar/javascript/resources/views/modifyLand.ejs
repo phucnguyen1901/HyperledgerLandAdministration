@@ -1,0 +1,369 @@
+
+<div class="container">
+
+  <form  id="formAdd" action="/handleModifyLand" method="post" enctype="multipart/form-data" >
+    <div class="form-group">
+      <label>Thửa đất số</label>
+      <input type="text"  class="form-control" name="thuasodat" placeholder="Nhập " value=<%= land.ThuaDatSo %>>
+    </div>
+    <div class="form-group">
+      <label>Tờ bản đồ số	</label>
+      <input type="text" class="form-control" name="tobandoso" placeholder="Nhập " value=<%= land.ToBanDo5o %> >
+    </div>
+    <div class="form-group">
+      <label>Diện tích (m2)</label>
+      <input type="text" class="form-control" name="dientich" placeholder="Nhập "  value=<%= land.DienTich %> >
+    </div>
+
+    <div class="form-group">
+      <label>Hình thức sử dụng</label>
+      <select name="hinhthucsudung" class="text-green-700 form-control block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-1 px-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+        <option disabled class="text-blue-700"
+        >* Nhận quyền sử dụng đất từ Nhà nước</option>
+        <option  value="Được Nhà nước giao đất" 
+        <%= land.HinhThucSuDung === "Được Nhà nước giao đất" ? "selected" : "" %>
+        > &emsp;- Được Nhà nước giao đất.</option>
+        <option  value="Được Nhà nước cho thuê đất" 
+        <%= land.HinhThucSuDung === "Được Nhà nước cho thuê đất" ? "selected" : "" %>
+        > &emsp;- Được Nhà nước cho thuê đất.</option>
+        <option value="Được Nhà nước cho phép chuyển mục đích sử dụng đất"
+        <%= land.HinhThucSuDung === "Được Nhà nước cho phép chuyển mục đích sử dụng đất" ? "selected" : "" %>
+        > &emsp;- Được Nhà nước cho phép chuyển mục đích sử dụng đất.</option>
+        <option value="Được Nhà nước công nhận quyền sử dụng đất"
+        <%= land.HinhThucSuDung === "Được Nhà nước công nhận quyền sử dụng đất" ? "selected" : "" %>
+        > &emsp;- Được Nhà nước công nhận quyền sử dụng đất.</option>
+        <option disabled class="text-blue-700"
+        >* Nhận quyền sử dụng đất từ chủ thể sử dụng đất khác:</option>
+        <option disabled
+        > &emsp;- Nhận chuyển quyền sử dụng đất:</option>
+        <option value="Nhận chuyển đổi"
+        <%= land.HinhThucSuDung === "Nhận chuyển đổi" ? "selected" : "" %>
+        > &emsp; &emsp;+ Nhận chuyển đổi.</option>
+        <option value="Nhận chuyển nhượng"
+        <%= land.HinhThucSuDung === "Nhận chuyển nhượng" ? "selected" : "" %>
+        >  &emsp; &emsp;+ Nhận chuyển nhượng.</option>
+        <option value="Nhận thừa kế"
+        <%= land.HinhThucSuDung === "Nhận thừa kế " ? "selected" : "" %>
+        >  &emsp; &emsp;+ Nhận thừa kế .</option>
+        <option value="Nhận tặng cho"
+        <%= land.HinhThucSuDung === " Nhận tặng cho" ? "selected" : "" %>
+        >  &emsp; &emsp;+ Nhận tặng cho.</option>
+        <option value="Nhận góp vốn"
+        <%= land.HinhThucSuDung === "Nhận góp vốn" ? "selected" : "" %>
+        >  &emsp; &emsp;+ Nhận góp vốn.</option>
+        <option value="Thuê quyền sử dụng đất từ chủ thể sử dụng đất khác"
+        <%= land.HinhThucSuDung === "Thuê quyền sử dụng đất từ chủ thể sử dụng đất khác" ? "selected" : "" %>
+        > &emsp;- Thuê quyền sử dụng đất từ chủ thể sử dụng đất khác.</option>
+        <option value="Thuê lại quyền sử dụng đất từ chủ thể sử dụng đất khác"
+        <%= land.HinhThucSuDung === "Thuê lại quyền sử dụng đất từ chủ thể sử dụng đất khác" ? "selected" : "" %>
+        > &emsp;- Thuê lại quyền sử dụng đất từ chủ thể sử dụng đất khác.</option>
+        <option value="Khác"
+        <%= land.HinhThucSuDung === "Khác" ? "selected" : "" %>
+        > * Khác</option>
+        
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Mục đích sử dụng	</label>
+      <select name="mucdichsudung" class="text-green-700 form-control block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-1 px-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+        <option disabled class="text-blue-700"
+        >* Nhóm đất nông nghiệp bao gồm các loại đất sau đây:</option>
+        <option value="Đất trồng cây hàng năm gồm đất trồng lúa và đất trồng cây hàng năm khác" 
+        <%= land.MucDichSuDung === "Đất trồng cây hàng năm gồm đất trồng lúa và đất trồng cây hàng năm khác" ? "selected" : "" %>
+        > &emsp;- Đất trồng cây hàng năm gồm đất trồng lúa và đất trồng cây hàng năm khác</option>
+        <option value="Đất trồng cây lâu năm"
+        <%= land.MucDichSuDung === "Đất trồng cây lâu năm" ? "selected" : "" %>
+        > &emsp;- Đất trồng cây lâu năm</option>
+        <option value="Đất rừng sản xuất"
+        <%= land.MucDichSuDung === " Đất rừng sản xuất" ? "selected" : "" %>
+        > &emsp;- Đất rừng sản xuất</option>
+        <option value="Đất rừng phòng hộ"
+        <%= land.MucDichSuDung === "Đất rừng phòng hộ" ? "selected" : "" %>
+        > &emsp;- Đất rừng phòng hộ</option>
+        <option value="Đất rừng đặc dụng"
+        <%= land.MucDichSuDung === "Đất rừng đặc dụng" ? "selected" : "" %>
+        > &emsp;- Đất rừng đặc dụng</option>
+        <option value="Đất nuôi trồng thủy sản"
+        <%= land.MucDichSuDung === " Đất nuôi trồng thủy sản" ? "selected" : "" %>
+        > &emsp;- Đất nuôi trồng thủy sản</option>
+        <option value="Đất làm muối"
+        <%= land.MucDichSuDung === " Đất làm muối" ? "selected" : "" %>
+        > &emsp;- Đất làm muối</option>
+        <option value="Đất nông nghiệp khác"
+        <%= land.MucDichSuDung === "Đất nông nghiệp khác" ? "selected" : "" %>
+        > &emsp;- Đất nông nghiệp khác</option>
+        <option disabled class="text-blue-700"
+        >* Nhóm đất phi nông nghiệp bao gồm các loại đất sau đây::</option>
+        <option value="Đất ở gồm đất ở tại nông thôn, đất ở tại đô thị"
+        <%= land.MucDichSuDung === "Đất ở gồm đất ở tại nông thôn, đất ở tại đô thị" ? "selected" : "" %>
+        > &emsp;- Đất ở gồm đất ở tại nông thôn, đất ở tại đô thị:</option>
+        <option value="Đất sử dụng vào mục đích quốc phòng, an ninh"
+        <%= land.MucDichSuDung === "Đất sử dụng vào mục đích quốc phòng, an ninh" ? "selected" : "" %>
+        > &emsp;- Đất sử dụng vào mục đích quốc phòng, an ninh</option>
+        <option  value="Đất xây dựng công trình sự nghiệp"
+        <%= land.MucDichSuDung === "Đất xây dựng công trình sự nghiệp" ? "selected" : "" %>
+        > &emsp;-  Đất xây dựng công trình sự nghiệp</option>
+        <option  value="Đất sản xuất, kinh doanh phi nông nghiệp"
+        <%= land.MucDichSuDung === "Đất sản xuất, kinh doanh phi nông nghiệp" ? "selected" : "" %>
+        > &emsp;-  Đất sản xuất, kinh doanh phi nông nghiệp</option>
+        <option  value="Đất sử dụng vào mục đích công cộng"
+        <%= land.MucDichSuDung === "Đất sử dụng vào mục đích công cộng" ? "selected" : "" %>
+        > &emsp;- Đất sử dụng vào mục đích công cộng</option>
+        <option  value="Đất cơ sở tôn giáo, tín ngưỡng"
+        <%= land.MucDichSuDung === "Đất cơ sở tôn giáo, tín ngưỡng" ? "selected" : "" %>
+        > &emsp;- Đất cơ sở tôn giáo, tín ngưỡng</option>
+        <option  value="Đất làm nghĩa trang, nghĩa địa, nhà tang lễ, nhà hỏa táng"
+        <%= land.MucDichSuDung === "Đất làm nghĩa trang, nghĩa địa, nhà tang lễ, nhà hỏa táng" ? "selected" : "" %>
+        > &emsp;- Đất làm nghĩa trang, nghĩa địa, nhà tang lễ, nhà hỏa táng</option>
+        <option  value="Đất sử dụng vào mục đích quốc phòng, an ninh"
+        <%= land.MucDichSuDung === "Đất sử dụng vào mục đích quốc phòng, an ninh" ? "selected" : "" %>
+        > &emsp;- Đất sử dụng vào mục đích quốc phòng, an ninh</option>
+        <option  value="Đất phi nông nghiệp khác"
+        <%= land.MucDichSuDung === "Đất phi nông nghiệp khác" ? "selected" : "" %>
+        > &emsp;- Đất phi nông nghiệp khác</option>
+        <option class="text-blue-700"
+        > * Nhóm đất chưa sử dụng gồm các loại đất chưa xác định mục đích sử dụng</option>
+        
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Thời hạn sử dụng	</label>
+      <select name="thoihansudung" class="text-green-700 form-control block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-1 px-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+        <option value="Đất sử dụng ổn định lâu dài"
+        <%= land.ThoiHanSuDung === "Đất sử dụng ổn định lâu dài" ? "selected" : "" %>
+        > &emsp;- Đất sử dụng ổn định lâu dài</option>
+        <option value="Đất sử dụng có thời hạn"
+        <%= land.ThoiHanSuDung === "Đất sử dụng có thời hạn" ? "selected" : "" %>
+        > &emsp;- Đất sử dụng có thời hạn</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Nguồn gốc sử dụng	</label>
+      <select name="nguongocsudung" class="text-green-700 form-control block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-1 px-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+        <option  value="Nhà nước giao đất không thu tiền sử dụng đất"
+        <%= land.NguocGocSuDung === "Nhà nước giao đất không thu tiền sử dụng đất" ? "selected" : "" %>
+        > &emsp;- Nhà nước giao đất không thu tiền sử dụng đất</option>
+        <option value="Nhà nước giao đất có thu tiền sử dụng đất"
+        <%= land.NguocGocSuDung === "Nhà nước giao đất có thu tiền sử dụng đất" ? "selected" : "" %>
+        > &emsp;- Nhà nước giao đất có thu tiền sử dụng đất</option>
+        <option value="Nhà nước cho thuê đất trả tiền một lần"
+        <%= land.NguocGocSuDung === "Nhà nước cho thuê đất trả tiền một lần" ? "selected" : "" %>
+        > &emsp;- Nhà nước cho thuê đất trả tiền một lần</option>
+        <option value="Nhà nước cho thuê đất trả tiền hàng năm"
+        <%= land.NguocGocSuDung === "Nhà nước cho thuê đất trả tiền hàng năm" ? "selected" : "" %>
+        > &emsp;- Nhà nước cho thuê đất trả tiền hàng năm</option>
+        <option value="Công nhận QSDĐ như giao đất có thu tiền sử dụng đất"
+        <%= land.NguocGocSuDung === "Công nhận QSDĐ như giao đất có thu tiền sử dụng đất" ? "selected" : "" %>
+        > &emsp;- Công nhận QSDĐ như giao đất có thu tiền sử dụng đất</option>
+        <option value="Công nhận QSDĐ như giao đất không thu tiền sử dụng đất"
+        <%= land.NguocGocSuDung === "Công nhận QSDĐ như giao đất không thu tiền sử dụng đất" ? "selected" : "" %>
+        > &emsp;- Công nhận QSDĐ như giao đất không thu tiền sử dụng đất</option>
+        <option value="Thuê đất trả tiền một lần của doanh nghiệp đầu tư hạ tầng khu công nghiệp"
+        <%= land.NguocGocSuDung === "Thuê đất trả tiền một lần của doanh nghiệp đầu tư hạ tầng khu công nghiệp" ? "selected" : "" %>
+        > &emsp;- Thuê đất trả tiền một lần của doanh nghiệp đầu tư hạ tầng khu công nghiệp</option>
+        <option value="Thuê đất trả tiền hàng năm của doanh nghiệp đầu tư hạ tầng khu công nghiệp"
+        <%= land.NguocGocSuDung === "Thuê đất trả tiền hàng năm của doanh nghiệp đầu tư hạ tầng khu công nghiệp" ? "selected" : "" %>
+        > &emsp;- Thuê đất trả tiền hàng năm của doanh nghiệp đầu tư hạ tầng khu công nghiệp</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Đất thuộc tỉnh/TP</label>
+      <select name="landOfCity" class="text-green-700 form-control block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-1 px-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+        <option  value="TP.HCM"
+        <%= land.city === "TP.HCM" ? "selected" : "" %>
+        > &emsp;- TP.HCM</option>
+        <option  value="TP.Cần Thơ"
+        <%= land.city === "TP.Cần Thơ" ? "selected" : "" %>
+        > &emsp;- TP.Cần Thơ</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Người sở hữu</label>
+      <input type="text" class="form-control" name="owner" placeholder="Người sở hữu" value="<%= land.UserId %> (<%=land.Owner %>)"  disabled>
+    </div>
+
+    <%if(typeof land.UserId == 'object'){%>
+      <div class="form-group">
+        <label>Thêm bao nhiêu người cùng sở hữu</label>
+        <input id="countOwner" value="<%= land.UserId.length - 1  %>" type="text" class="form-control" name="countOwner" placeholder="Nhập ">
+      </div>
+
+      <div id="count">
+
+      </div>
+    <%}%>
+
+    
+    <div id="accordion" >
+      <div class="card">
+        <div class="card-header" id="headingOne" style="background: rgba(0, 0, 0, 0.8);">
+          <h5 class="mb-0">
+            <a class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+             Sửa tọa độ của các đỉnh mảnh đất
+            </a>
+          </h5>
+        </div>
+    
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+          <div class="card-body" style="background: rgba(0, 0, 0, 0.8);">
+            <div class="form-group">        
+              <label>Số đỉnh của mảnh đất </label>
+              <input id="countCoordinates" class="form-control" name="countCoordinates" type="text" placeholder="Đất có bao nhiêu đỉnh">
+          </div>
+
+          <div id="showCoordinates">
+
+          </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" id="headingTwo" style="background: rgba(0, 0, 0, 0.8);">
+          <h5 class="mb-0">
+            <a class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              Sửa chiều dài của các cạnh mảnh đất
+            </a>
+          </h5>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+          <div class="card-body" style="background: rgba(0, 0, 0, 0.8);">
+            <div class="form-group">        
+              <label>Số cạnh của mảnh đất </label>
+              <input id="countLengths" class="form-control" name="countLengths" type="text" placeholder="Đất có bao nhiêu  cạnh">
+             </div>
+          
+              <div id="showLengths">
+          
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" id="headingThree" style="background: rgba(0, 0, 0, 0.8);">
+          <h5 class="mb-0">
+            <a class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+              Sửa các thửa giáp ranh của mảnh đất
+            </a>
+          </h5>
+        </div>
+        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+          <div class="card-body" style="background: rgba(0, 0, 0, 0.8);">
+            <div class="form-group">        
+              <label>Số thửa giáp ranh của mảnh đất </label>
+              <input id="countParcels" value=<%= land.CacSoThuaGiapRanh.split(',').length %> class="form-control" name="countParcels" type="text" placeholder="Đất có bao nhiêu đỉnh">
+             </div>
+         
+              <div id="showParcels">
+         
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    
+    <div class="form-group">
+      <label>Thêm ảnh	</label>
+       <input id="image" name="image" type="file" alt="Submit" width="48" height="48" multiple="multiple">
+    </div>
+    
+
+    <div class="form-group">
+       <input id="url" name="url" type="hidden" alt="Submit" width="48" height="48" multiple="multiple">
+    </div>
+
+
+    <input type="hidden" value="<%= JSON.stringify(land.ToaDoCacDinh) %>" name="coordinatesOld">
+    <input type="hidden" value="<%= JSON.stringify(land.ChieuDaiCacCanh) %>" name="lengthsOld">
+    <input type="hidden" value="<%= land.Owner %>" name="owner">
+    <input type="hidden" value="<%= land.UserId %>" name="userIdOwner">
+    <input type="hidden" value="<%= key %>" name="key">
+
+
+
+
+
+  <button id="addButton" class="btn btn-primary">Đăng ký</button>
+</form>
+
+<div style="height: 100px;"></div>
+
+
+
+
+<script>
+
+      let listCoOwner = "<%= land.UserId %>"
+
+      let checkData = listCoOwner.split(',')
+
+      if(checkData.length != 1){
+        $(document).ready(function(){
+        $.ajax({type:"POST",url: "/addAssetFormOwner",data:{count:0,listCoOwner:listCoOwner}, success: function(result){
+          $("#count").html(result);
+        }});
+
+      });
+      }
+
+  let listParcels = "<%= land.CacSoThuaGiapRanh %>"
+
+  $(document).ready(function(){
+        $.ajax({type: "POST",url: "/addParcels",data:{count:0,parcels:listParcels} ,success: function(result){
+          $("#showParcels").html(result);
+        }});
+    });
+
+
+    $(document).ready(function(){
+        $('#countOwner').on('input',function(e){
+            $.ajax({type:"POST",url: "/addAssetFormOwner",data:{count:this.value,listCoOwner:""}, success: function(result){
+              $("#count").html(result);
+            }});
+          });
+
+      });
+
+      $(document).ready(function(){
+      $('#countCoordinates').on('input',function(e){
+          $.ajax({type: "POST",url: "/addCoordinatesForm",data:{count:this.value} ,success: function(result){
+            $("#showCoordinates").html(result);
+          }});
+        });
+    });
+
+    $(document).ready(function(){
+      $('#countLengths').on('input',function(e){
+          $.ajax({type: "POST",url: "/addLength",data:{count:this.value} ,success: function(result){
+            $("#showLengths").html(result);
+          }});
+        });
+    });
+
+    $(document).ready(function(){
+      $('#countParcels').on('input',function(e){
+        console.log("GOOOOOD")
+          $.ajax({type: "POST",url: "/addParcels",data:{count:this.value,parcels:""} ,success: function(result){
+            $("#showParcels").html(result);
+          }});
+        });
+    });
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+</div>

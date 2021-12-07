@@ -94,7 +94,7 @@ app.get('/addAssetCo',authMiddleware.requireAuth, homeController().addAssetCo)
 app.get('/blank',authMiddleware.requireAuth, homeController().blank)
 
 
-app.get('/addAssetFormOwner/:count',authMiddleware.requireAuth, homeController().addAssetFormOwner)
+app.post('/addAssetFormOwner',authMiddleware.requireAuth, homeController().addAssetFormOwner)
 app.post('/checkUserExistAndReturnInfo',authMiddleware.requireAuth, transferController().checkUserExistAndReturnInfo)
 
 // add coordinates
@@ -102,7 +102,8 @@ app.post('/addCoordinatesForm',authMiddleware.requireAuth, homeController().addC
 
 //add lengths
 app.post('/addLength',authMiddleware.requireAuth, homeController().addLength)
-
+//add parcels
+app.post('/addParcels',authMiddleware.requireAuth, homeController().addParcels)
 
 
 app.get('/transferLandOne/:key',authMiddleware.requireAuth, transferController().transferLandOne)
@@ -143,6 +144,10 @@ app.post('/handleAddToken',authMiddleware.checkManager, userController().handleA
 
 //wallet user
 app.get('/walletUser',authMiddleware.requireAuth, userController().walletUser)
+
+//modify
+app.get('/modifyUI/:key',authMiddleware.requireAuth, homeController().modifyUI)
+app.post('/handleModifyLand',authMiddleware.requireAuth, homeController().handleModifyLand)
 
 
 

@@ -1,14 +1,13 @@
 
 
+    <% for(let i = 0; i < count; i++){ %>
+        <br>
+        <label for="">Tọa độ đỉnh <%= i+1%></label>
+        <input class="form-control" type="text" placeholder="longitude" name="long<%= i%>">
+        <input class="form-control" type="text" placeholder="latitude" name="lat<%= i%>">
+    <%}%>
 
 
-
-<% for(let i = 0; i < count; i++){ %>
-    <br>
-    <label for="">Tọa độ đỉnh <%= i+1%></label>
-    <input class="form-control" type="text" placeholder="longitude" name="long<%= i%>">
-    <input class="form-control" type="text" placeholder="latitude" name="lat<%= i%>">
-<%}%>
 
 
 

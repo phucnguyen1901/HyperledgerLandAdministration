@@ -29,7 +29,7 @@ class FabCar extends Contract {
                 Owner:"Nguyen Van A",
                 ThuaDatSo: 931,
                 ToBanDo5o: 3,
-                CacSoThuaGiapRanh: [919, 905,803],
+                CacSoThuaGiapRanh: '919, 905,803',
                 DienTich: 393.1,
                 ToaDoCacDinh: { "D1": [406836.70,1183891.04],"D2": [406836.75,1183891.44],
                 "D3": [406836.80,1183891.37],"D4": [406836.79,1183891.40]},
@@ -46,11 +46,11 @@ class FabCar extends Contract {
 
             },
             {
-                UserId: "c@gmail.com",
+                UserId: "b@gmail.com",
                 Owner:"Nguyen Van B",
                 ThuaDatSo: 931,
                 ToBanDo5o: 3,
-                CacSoThuaGiapRanh: [919, 905,803],
+                CacSoThuaGiapRanh: '919, 905,803',
                 DienTich: 393.1,
                 ToaDoCacDinh: { "D1": [406836.70,1183891.04],"D2": [406836.75,1183891.44],
                 "D3": [406836.80,1183891.37],"D4": [406836.79,1183891.40]},
@@ -67,11 +67,54 @@ class FabCar extends Contract {
 
             },
             {
-                UserId: ["c@gmail.com","b@gmail.com"],
-                Owner:["Nguyen Van B"],
+                UserId: "b@gmail.com",
+                Owner:"Nguyen Van B",
                 ThuaDatSo: 931,
                 ToBanDo5o: 3,
-                CacSoThuaGiapRanh: [919, 905,803],
+                CacSoThuaGiapRanh: '919, 905,803',
+                DienTich: 393.1,
+                ToaDoCacDinh: { "D1": [406836.70,1183891.04],"D2": [406836.75,1183891.44],
+                "D3": [406836.80,1183891.37],"D4": [406836.79,1183891.40]},
+                ChieuDaiCacCanh: {"C12": 20.5, "C23": 1.12, "C34" :7.53, "C41" :15.5},
+                HinhThucSuDung:"Sử dụng riêng",
+                MucDichSuDung: "Đất đai nông thôn",
+                ThoiHanSuDung: "Lâu dài",
+                NguocGocSuDung:"Nhà nưóc giao đất có thu tiền sử dụng",
+                ThoiGianDangKy: "09:12-11/11/2021",
+                Status: "Chưa duyệt",
+                UrlImage: "",
+                Transactions: [],
+                LaneOfCity: "TP.HCM"
+
+            },
+            {
+                UserId: "b@gmail.com",
+                Owner:"Nguyen Van B",
+                ThuaDatSo: 931,
+                ToBanDo5o: 3,
+                CacSoThuaGiapRanh: '919, 905,803',
+                DienTich: 393.1,
+                ToaDoCacDinh: { "D1": [406836.70,1183891.04],"D2": [406836.75,1183891.44],
+                "D3": [406836.80,1183891.37],"D4": [406836.79,1183891.40]},
+                ChieuDaiCacCanh: {"C12": 20.5, "C23": 1.12, "C34" :7.53, "C41" :15.5},
+                HinhThucSuDung:"Sử dụng riêng",
+                MucDichSuDung: "Đất đai nông thôn",
+                ThoiHanSuDung: "Lâu dài",
+                NguocGocSuDung:"Nhà nưóc giao đất có thu tiền sử dụng",
+                ThoiGianDangKy: "09:12-11/11/2021",
+                Status: "Chưa duyệt",
+                UrlImage: "",
+                Transactions: [],
+                LaneOfCity: "TP.HCM"
+
+            },
+            
+            {
+                UserId: ["e@gmail.com","b@gmail.com"],
+                Owner:["Nguyen Van E","Nguyen Van B"],
+                ThuaDatSo: 931,
+                ToBanDo5o: 3,
+                CacSoThuaGiapRanh: '919, 905,803',
                 DienTich: 393.1,
                 ToaDoCacDinh: { "D1": [406836.70,1183891.04],"D2": [406836.75,1183891.44],
                 "D3": [406836.80,1183891.37],"D4": [406836.79,1183891.40]},
@@ -82,6 +125,69 @@ class FabCar extends Contract {
                 NguocGocSuDung:"Nhà nưóc giao đất có thu tiền sử dụng",
                 ThoiGianDangKy: "09:12-11/09/2021",
                 Status: "Đang chuyển",
+                UrlImage: "",
+                Transactions: [],
+                LaneOfCity: "TP.HCM"
+
+            },
+            {
+                UserId: ["e@gmail.com","b@gmail.com"],
+                Owner:["Nguyen Van E","Nguyen Van B"],
+                ThuaDatSo: 931,
+                ToBanDo5o: 3,
+                CacSoThuaGiapRanh: '919, 905,803',
+                DienTich: 393.1,
+                ToaDoCacDinh: { "D1": [406836.70,1183891.04],"D2": [406836.75,1183891.44],
+                "D3": [406836.80,1183891.37],"D4": [406836.79,1183891.40]},
+                ChieuDaiCacCanh: {"C12": 20.5, "C23": 1.12, "C34" :7.53, "C41" :15.5},
+                HinhThucSuDung:"Sử dụng riêng",
+                MucDichSuDung: "Đất đai nông thôn",
+                ThoiHanSuDung: "Lâu dài",
+                NguocGocSuDung:"Nhà nưóc giao đất có thu tiền sử dụng",
+                ThoiGianDangKy: "09:12-11/09/2021",
+                Status: "Chưa duyệt",
+                UrlImage: "",
+                Transactions: [],
+                LaneOfCity: "TP.HCM"
+
+            },
+            {
+                UserId: ["e@gmail.com","b@gmail.com"],
+                Owner:["Nguyen Van E","Nguyen Van B"],
+                ThuaDatSo: 931,
+                ToBanDo5o: 3,
+                CacSoThuaGiapRanh: '919, 905,803',
+                DienTich: 393.1,
+                ToaDoCacDinh: { "D1": [406836.70,1183891.04],"D2": [406836.75,1183891.44],
+                "D3": [406836.80,1183891.37],"D4": [406836.79,1183891.40]},
+                ChieuDaiCacCanh: {"C12": 20.5, "C23": 1.12, "C34" :7.53, "C41" :15.5},
+                HinhThucSuDung:"Sử dụng riêng",
+                MucDichSuDung: "Đất đai nông thôn",
+                ThoiHanSuDung: "Lâu dài",
+                NguocGocSuDung:"Nhà nưóc giao đất có thu tiền sử dụng",
+                ThoiGianDangKy: "09:12-11/09/2021",
+                Status: "Chưa duyệt",
+                UrlImage: "",
+                Transactions: [],
+                LaneOfCity: "TP.HCM"
+
+            },
+            {
+                UserId: ["e@gmail.com","b@gmail.com"],
+                Owner:["Nguyen Van E","Nguyen Van B"],
+                ThuaDatSo: 931,
+                ToBanDo5o: 3,
+                CacSoThuaGiapRanh: '919, 905,803',
+                DienTich: 393.1,
+                ToaDoCacDinh: { "D1": [406836.70,1183891.04],"D2": [406836.75,1183891.44],
+                "D3": [406836.80,1183891.37],"D4": [406836.79,1183891.40]},
+                ChieuDaiCacCanh: {"C12": 20.5, "C23": 1.12, "C34" :7.53, "C41" :15.5},
+                HinhThucSuDung:"Sử dụng riêng",
+                MucDichSuDung: "Đất đai nông thôn",
+                ThoiHanSuDung: "Lâu dài",
+                NguocGocSuDung:"Nhà nưóc giao đất có thu tiền sử dụng",
+                ThoiGianDangKy: "09:12-11/09/2021",
+                Status: "Chưa duyệt",
                 UrlImage: "",
                 Transactions: [],
                 LaneOfCity: "TP.HCM"
@@ -331,7 +437,7 @@ class FabCar extends Contract {
     // }
 
 
-        async updateStatusLand(ctx,key,status) {
+    async updateStatusLand(ctx,key,status) {
         console.info('============= START : Update Land ===========');
 
         const updateAsBytes = await ctx.stub.getState(key); // get the land from chaincode state
@@ -441,6 +547,56 @@ class FabCar extends Contract {
         let result = await this.getIteratorData(iterator);
 
         return JSON.stringify(result);
+    }
+
+    // modify land
+
+    async modifyLand(ctx,key,userId,owner,thuasodat,tobandoso,
+        cacsothuagiapranh,dientich,toadocacdinh,chieudaicaccanh,
+        hinhthucsudung,mucdichsudung,thoihansudung,
+        nguongocsudung,url,city) {
+        console.info('============= START : Update Land ===========');
+
+        const updateAsBytes = await ctx.stub.getState(key); // get the land from chaincode state
+        if (!updateAsBytes || updateAsBytes.length === 0) {
+            throw new Error(`${key} la keylane`);
+        }
+
+        console.log("toadocacdinhh 1 " + chieudaicaccanh)
+        console.log("toadocacdinhh 2 " + typeof chieudaicaccanh)
+
+
+        console.log("toadocacdinhh 4 " + toadocacdinh)
+        console.log("toadocacdinhh 5 " + typeof toadocacdinh)
+
+        if(userId.includes(",")){
+            userId = userId.split(',')
+        }
+
+        if(owner.includes(",")){
+            owner = owner.split(',')
+        }
+
+        let land = JSON.parse(updateAsBytes.toString());
+        land.UserId = userId;
+        land.Owner = owner;
+        land.ThuaDatSo = thuasodat;
+        land.ToBanDo5o = tobandoso;
+        land.CacSoThuaGiapRanh = cacsothuagiapranh;
+        land.DienTich = dientich;
+        land.ToaDoCacDinh = JSON.parse(toadocacdinh);
+        land.ChieuDaiCacCanh = JSON.parse(chieudaicaccanh);
+        land.HinhThucSuDung = hinhthucsudung;
+        land.MucDichSuDung = mucdichsudung;
+        land.ThoiHanSuDung = thoihansudung;
+
+        land.NguocGocSuDung = nguongocsudung;
+
+        land.UrlImage = url;
+        land.LaneOfCity = city;
+
+        await ctx.stub.putState(key, Buffer.from(JSON.stringify(land)));
+        console.info('============= END : Update Land ===========');
     }
 
 }

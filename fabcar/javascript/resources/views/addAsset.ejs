@@ -132,7 +132,7 @@
 
       <div class="form-group">
         <label>Đất thuộc tỉnh/TP</label>
-        <select name="laneOfCity" class="text-green-700 form-control block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-1 px-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+        <select name="landOfCity" class="text-green-700 form-control block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-1 px-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
           <option selected="selected" value="TP.HCM"
           > &emsp;- TP.HCM</option>
           <option  value="TP.Cần Thơ"
@@ -159,6 +159,15 @@
       <div id="showLengths">
 
       </div>
+      <br>
+      <div class="form-group">        
+        <label>Số thửa giáp ranh của mảnh đất </label>
+        <input id="countParcels" class="form-control" name="countParcels" type="text" placeholder="Đất có bao nhiêu đỉnh">
+       </div>
+  
+        <div id="showParcels">
+  
+        </div>
      
      <br>
      <div class="form-group">
@@ -178,7 +187,7 @@
 
   $(document).ready(function(){
     $('#countCoordinates').on('input',function(e){
-        $.ajax({type: "POST",url: "/addCoordinatesForm",data:{count:this.value} ,success: function(result){
+        $.ajax({type: "POST",url: "/addCoordinatesForm",data:{count:this.value,listCoOwner:""} ,success: function(result){
           $("#showCoordinates").html(result);
         }});
       });
@@ -192,6 +201,16 @@
       });
   });
 
+  $(document).ready(function(){
+    $('#countParcels').on('input',function(e){
+        $.ajax({type: "POST",url: "/addParcels",data:{count:this.value,parcels:""} ,success: function(result){
+          $("#showParcels").html(result);
+        }});
+      });
+  });
+
+
+  
 </script>
 
 

@@ -157,8 +157,15 @@
      <div id="showCoordinates">
 
      </div>
-
      <br>
+     <div class="form-group">        
+       <label>Số thửa giáp ranh của mảnh đất </label>
+       <input id="countParcels" class="form-control" name="countParcels" type="text" placeholder="Đất có bao nhiêu đỉnh">
+      </div>
+ 
+       <div id="showParcels">
+ 
+       </div>
      <div class="form-group">        
       <label>Số cạnh của mảnh đất </label>
       <input id="countLengths" class="form-control" name="countLengths" type="text" placeholder="Đất có bao nhiêu  cạnh">
@@ -242,7 +249,8 @@
 
     $(document).ready(function(){
       $('#countOwner').on('input',function(e){
-          $.ajax({url: "/addAssetFormOwner/"+this.value, success: function(result){
+        console.log("OKOKOKOK")
+          $.ajax({type:"POST",url: "/addAssetFormOwner",data:{count:this.value,listCoOwner:""}, success: function(result){
             $("#count").html(result);
           }});
         });
@@ -261,6 +269,15 @@
     $('#countLengths').on('input',function(e){
         $.ajax({type: "POST",url: "/addLength",data:{count:this.value} ,success: function(result){
           $("#showLengths").html(result);
+        }});
+      });
+  });
+
+
+  $(document).ready(function(){
+    $('#countParcels').on('input',function(e){
+        $.ajax({type: "POST",url: "/addParcels",data:{count:this.value,parcels:""} ,success: function(result){
+          $("#showParcels").html(result);
         }});
       });
   });

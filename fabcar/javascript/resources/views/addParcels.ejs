@@ -1,0 +1,22 @@
+
+
+<%if(data.length == 0){%>
+    <% for(let i = 0; i < count; i++){ %>
+        <br>
+        <input class="form-control" type="text" placeholder="số thửa" name="parcel<%= i%>">
+    <%}%>
+<%}else{%>
+    <% for(let i = 0; i < data.length; i++){ %>
+        <br>
+        <input class="form-control" value="<%= data[i] %>" type="text" placeholder="số thửa" name="parcel<%= i%>">
+    <%}%>
+<%}%>
+
+
+
+
+
+
+
+
+

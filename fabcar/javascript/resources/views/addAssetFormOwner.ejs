@@ -1,6 +1,33 @@
 
+<%if(count == 0){%>
 
-<% for (var i =0; i < count;  i++ ) { %>
+
+  <% for (var i =0; i < data.length;  i++ ) { %>
+    <div class="form-group flex">
+      <input id=<%=i %> value="<%= data[i] %>"  onchange="" type="text" class="w-64 form-control" name="owner<%=i%>" placeholder="Nhập email">
+      &emsp;
+      <div id="checkInfo<%=i%>">
+      </div>
+      
+      &emsp;
+      <div style="display: none;" id="spinnerLoad<%=i%>" class="flex justify-center items-center">
+        <div
+          class="
+            animate-spin
+            rounded-full
+            h-8
+            w-8
+            border-t-2 border-b-2 border-purple-500
+          "
+        ></div>
+      </div>
+  </div>
+
+  <%}%>
+
+<%}else{%>
+
+  <% for (var i =0; i < count;  i++ ) { %>
     <div class="form-group flex">
       <input id=<%=i %>  onchange="" type="text" class="w-64 form-control" name="owner<%=i%>" placeholder="Nhập email">
       &emsp;
@@ -20,6 +47,12 @@
         ></div>
       </div>
   </div>
+
+  <%}%>
+
+<%}%>
+
+
   
   <script>
     var count = parseInt("<%= count %>");
@@ -47,5 +80,5 @@
     }
     
   </script>
-<% } %>
+
   
