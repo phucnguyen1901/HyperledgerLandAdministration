@@ -141,33 +141,72 @@
       </div>
 
 
-      <div class="form-group">        
-        <label>Số đỉnh của mảnh đất </label>
-        <input id="countCoordinates" class="form-control" name="countCoordinates" type="text" placeholder="Đất có bao nhiêu đỉnh">
-     </div>
-
-     <div id="showCoordinates">
-
-     </div>
-
-     <br>
-     <div class="form-group">        
-      <label>Số cạnh của mảnh đất </label>
-      <input id="countLengths" class="form-control" name="countLengths" type="text" placeholder="Đất có bao nhiêu đỉnh">
-     </div>
-
-      <div id="showLengths">
-
-      </div>
-      <br>
-      <div class="form-group">        
-        <label>Số thửa giáp ranh của mảnh đất </label>
-        <input id="countParcels" class="form-control" name="countParcels" type="text" placeholder="Đất có bao nhiêu đỉnh">
-       </div>
+      <div id="accordion" >
+        <div class="card">
+          <div class="card-header" id="headingOne" style="background: rgba(0, 0, 0, 0.8);">
+            <h5 class="mb-0">
+              <a class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+               Nhập tọa độ của các đỉnh mảnh đất
+              </a>
+            </h5>
+          </div>
+      
+          <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body" style="background: rgba(0, 0, 0, 0.8);">
+              <div class="form-group">        
+                <label>Số đỉnh của mảnh đất </label>
+                <input id="countCoordinates" class="form-control" name="countCoordinates" type="text" placeholder="Đất có bao nhiêu đỉnh">
+            </div>
   
-        <div id="showParcels">
+            <div id="showCoordinates">
   
+            </div>
+            </div>
+          </div>
         </div>
+        <div class="card">
+          <div class="card-header" id="headingTwo" style="background: rgba(0, 0, 0, 0.8);">
+            <h5 class="mb-0">
+              <a class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                Nhập chiều dài của các cạnh mảnh đất
+              </a>
+            </h5>
+          </div>
+          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+            <div class="card-body" style="background: rgba(0, 0, 0, 0.8);">
+              <div class="form-group">        
+                <label>Số cạnh của mảnh đất </label>
+                <input id="countLengths" class="form-control" name="countLengths" type="text" placeholder="Đất có bao nhiêu  cạnh">
+               </div>
+            
+                <div id="showLengths">
+            
+                </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header" id="headingThree" style="background: rgba(0, 0, 0, 0.8);">
+            <h5 class="mb-0">
+              <a class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                Nhập các thửa giáp ranh của mảnh đất
+              </a>
+            </h5>
+          </div>
+          <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+            <div class="card-body" style="background: rgba(0, 0, 0, 0.8);">
+              <div class="form-group">        
+                <label>Số thửa giáp ranh của mảnh đất </label>
+                <input id="countParcels"  class="form-control" name="countParcels" type="text" placeholder="Đất có bao nhiêu đỉnh">
+               </div>
+           
+                <div id="showParcels">
+           
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
      
      <br>
      <div class="form-group">

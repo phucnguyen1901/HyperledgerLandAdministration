@@ -270,14 +270,14 @@ function homeController() {
       let coordinates = {};
       
       for(let i = 0; i < countCoordinates; i++){
-        coordinates[`D${i+1}`] = [req.body[`long${i}`],req.body[`lat${i}`]]
+        coordinates[`D${i+1}`] = [parseFloat(req.body[`long${i}`]),parseFloat(req.body[`lat${i}`])]
       }
 
       let lengths = {};
 
       for(let i = 0; i < countLengths; i++){
         if(i === countLengths - 1){
-          lengths[`C${i+1}${countLengths-i}`] = req.body[`length${i}`]
+          lengths[`C${i+1}${countLengths-i}`] = parseFloat(req.body[`length${i}`])
         }else{
           lengths[`C${i+1}${i+2}`] = parseFloat(req.body[`length${i}`])
         }

@@ -129,13 +129,13 @@
 
 <div class="container">
   <h1>Toạ độ các đỉnh của mảnh đất </h1>
-  <% for (const [key, value] of Object.entries(JSON.parse(detail.ToaDoCacDinh))){  %>
+  <% for (const [key, value] of Object.entries(detail.ToaDoCacDinh)){  %>
       Đỉnh <b><%= key %> <br></b> Latitude: <b><%= value[0] %> </b><br> Longitude: <b><%= value[1] %></b> <br>
 
   <% } %>
 <br>
   <h1>Chiều dài các cạnh </h1>
-  <% for (const [key, value] of Object.entries(JSON.parse(detail.ChieuDaiCacCanh))){  %>
+  <% for (const [key, value] of Object.entries(detail.ChieuDaiCacCanh)){  %>
     Cạnh <b><%= key %> : <%= value %> </b>m<br>
   <% } %>
 

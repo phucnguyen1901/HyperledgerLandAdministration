@@ -227,6 +227,7 @@ function userController(){
             let allMenu;
             let listLaneCo = [];
             let status;
+            let listAllLand
 
             if(typeSearch == "approved"){
                 query["Status"] = "Đã duyệt";
@@ -247,22 +248,23 @@ function userController(){
                 query["UserId"] = keySearch.trim();
                 let listLaneCoString = await queryAllLandCo(keySearch.trim());
                 let listLaneCoFilter = JSON.parse(listLaneCoString);
-                listLaneCo = listLaneCoFilter.filter((element) => element.Status==status);
-
-            }else{
-
-            }
-
-            console.log(`locao: ${JSON.stringify(listLaneCo)}`)
+                if(status != "UserId"){
+                    listLaneCo = listLaneCoFilter.filter((element) => element.Status==status);
+                }else{
+                    listLaneCo = listLaneCoFilter;
+                }
+                let listAllLandString = await search(userId,JSON.stringify(query));
+                listAllLand = JSON.parse(listAllLandString);
 
             
+            }else{
+                let listAllLandString = await search(userId,JSON.stringify(query));
+                listAllLand = JSON.parse(listAllLandString);
+            }
 
-            let listAllLandString = await search(userId,JSON.stringify(query));
-            let listAllLand = JSON.parse(listAllLandString);
-            console.log(`quer2y2 : ${JSON.stringify(listAllLand)}`)
+         
             allMenu = [...listAllLand,...listLaneCo];
 
-            console.log(`so sanh ${fromTime > toTime}`)
 
             if(fromTime != "" && toTime != ""){
                 let dateFromTime = new Date(fromTime);

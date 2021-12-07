@@ -171,10 +171,10 @@
       <label>Đất thuộc tỉnh/TP</label>
       <select name="landOfCity" class="text-green-700 form-control block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-1 px-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
         <option  value="TP.HCM"
-        <%= land.city === "TP.HCM" ? "selected" : "" %>
+        <%= land.LaneOfCity === "TP.HCM" ? "selected" : "" %>
         > &emsp;- TP.HCM</option>
         <option  value="TP.Cần Thơ"
-        <%= land.city === "TP.Cần Thơ" ? "selected" : "" %>
+        <%= land.LaneOfCity === "TP.Cần Thơ" ? "selected" : "" %>
         > &emsp;- TP.Cần Thơ</option>
       </select>
     </div>
@@ -286,7 +286,7 @@
 
 
 
-  <button id="addButton" class="btn btn-primary">Đăng ký</button>
+  <button id="addButton" class="btn btn-primary">Sửa</button>
 </form>
 
 <div style="height: 100px;"></div>

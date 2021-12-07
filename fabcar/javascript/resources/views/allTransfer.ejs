@@ -62,7 +62,8 @@
                       }
                     }
                     if(countConfirmFromTransfer == 0){%>
-                        <td style="text-align:center; color:green;">Đã xác nhận</td>
+                      <td style="text-align:center; color:green;">Đã xác nhận</td>
+                      <%  if(!element.value.ConfirmFromAdmin){ %>
                         <td style="text-align:center;">
                             <form action="/confirmTransferAdmin" method="POST">
                                 <input type="hidden" name="key" value=<%= element.key %> >
@@ -70,6 +71,9 @@
 
                             </form>
                           </td>
+                          <% }else{ %>
+                            <td style="text-align:center; color:green;">Admin đã xác nhận</td>
+                          <%}%>
                     <%}else{%>
                         <td style="text-align:center; color:red;">Người nhận chưa xác nhận <br> {<%= array.join("/")%>} </td>
                     <%}%>
@@ -88,7 +92,7 @@
 
                                     </form>
                                   </td>
-                            <% }else{ %>
+                            <% }else{ %>  
                                 <td style="text-align:center; color:green;">Admin đã xác nhận</td>
                             <%}%>
 

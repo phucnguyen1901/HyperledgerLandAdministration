@@ -62,21 +62,11 @@
 
   $(document).ready(function(){
     $('#countOwner').on('input',function(e){
-        $.ajax({url: "/addAssetFormOwner/"+this.value, success: function(result){
+        $.ajax({ type: "POST",url: "/addAssetFormOwner",data:{count:this.value,listCoOwner:""}, success: function(result){
           $("#count").html(result);
         }});
       });
 
   });
-
-  // $(document).ready(function(){
-  //   $('#confirm').click(function(e){
-
-  //       $.ajax({url: "/addAssetFormOwner/"+this.value, success: function(result){
-  //         $("#count").html(result);
-  //       }});
-  //     });
-
-  // });
 
 </script>
