@@ -11,7 +11,7 @@ const { Gateway, Wallets } = require('fabric-network');
 const fs = require('fs');
 const path = require('path');
 
-async function main(userId) {
+async function main(userId,from,to,amount) {
     try {
         // load the network configuration
         const ccpPath = path.resolve(__dirname, '..', '..', 'test-network', 'organizations', 'peerOrganizations', 'org1.example.com', 'connection-org1.json');
@@ -39,16 +39,20 @@ async function main(userId) {
 
         // Get the contract from the network.
         const contract = network.getContract('fabcar','Token');
-        console.log("Get Balance token")
+        console.log("Create token")
         // Submit the specified transaction.
         // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
         // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR12', 'Dave')
-        let balance = await contract.submitTransaction('ClientAccountBalance',userId);
-        console.log('Transaction has been submitted '+balance.toString());
+        let result =  await contract.submitTransaction('Transfer',from,to, amount);
+        console.log("Create token successfully")
+        if(result){
+            console.log("Transfer successfully")
+        }else{
+            console.log("Transfer failed")
 
+        }
         // Disconnect from the gateway.
         await gateway.disconnect();
-        return balance.toString()
 
     } catch (error) {
         console.error(`Failed to submit transaction: ${error}`);

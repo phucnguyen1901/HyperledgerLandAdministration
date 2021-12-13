@@ -2,7 +2,7 @@
 <% if(messages.error) {%>
     <div class="d-flex justify-content-center">
     <div id="flash" style="width: 50%;" class="alert alert-success d-flex justify-content-between" style="text-align:center;">
-        <%= messages.success %>
+        <%= messages.error %>
       <button id="delete">X</button>
       </div>
     </div>
@@ -34,15 +34,43 @@
 
         </div>
 
-        <button type="submit" class="btn btn-primary">Nạp tiền</button>
+        <button id="addToken" type="submit" class="btn btn-primary">Nạp tiền</button>
       </form>
     
 </div>
 
 
+<script>
+    if(document.getElementById("delete")){
+        document.getElementById("delete").addEventListener("click",function(){
+            document.getElementById("flash").remove()
+        })
+    }
+</script>
 
 
 
 
 
+<script>
 
+    $("#addToken").click(function(){
+          $('#loading').html(
+            `
+            <div class="flex justify-center items-center" style="position:absolute;height:80%;width:100%;background:rgba(0, 0, 0, 0.5);">
+                <div
+                class="
+                    animate-spin
+                    rounded-full
+                    h-16
+                    w-16
+                    border-t-2 border-b-2 border-purple-500
+                "
+                ></div>&emsp;
+                <div>LOADING...</div>
+            </div>
+            `
+            )
+          // $("#submitTransferToken").submit()
+  })
+  </script>

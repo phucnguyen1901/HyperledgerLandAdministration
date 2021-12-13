@@ -1,9 +1,9 @@
 
   <%
-    if(messages.error > 0){
+    if(messages.error){
   %>
     <div id="flash" class="alert alert-danger d-flex justify-content-between" style="text-align:center;">
-      <%= message.error %>
+      <%= messages.error %>
     <button id="delete">X</button>
     </div>
   <%
@@ -11,10 +11,10 @@
   %>
 
     <%
-    if(success.length > 0){
+    if(messages.success){
   %>
     <div id="flash" class="alert alert-success d-flex justify-content-between" style="text-align:center;">
-      <%= success %>
+      <%= messages.success %>
     <button id="delete">X</button>
     </div>
   <%
@@ -32,6 +32,7 @@
             <th style="text-align:center;">NGƯỜI CHUYỂN</th>
             <th style="text-align:center;">NGƯỜI NHẬN</th>
             <th style="text-align:center;">THỜI GIAN CHUYỂN</th>
+            <th style="text-align:center;">SỐ TIỀN</th>
             <th style="text-align:center;">TRẠNG THÁI</th> 
             <th style="text-align:center;">Tiến độ</th> 
             <th style="text-align:center;">HỦY</th> 
@@ -68,6 +69,7 @@
 
                  
                     <td style="text-align:center"><%= element.value.TimeStart%></td>
+                    <td style="text-align:center"><%= element.value.Money%></td>
                     <%if(typeof element.value.From == 'object'){
                       let check;
                       for(let el of element.value.From){

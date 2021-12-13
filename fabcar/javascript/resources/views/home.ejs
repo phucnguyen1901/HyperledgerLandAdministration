@@ -1,6 +1,4 @@
 
-
-
   <%
     if(success.length > 0){
   %>
@@ -12,9 +10,9 @@
     }
   %>
 
-  <%if(user.role == "manager"){%>
+
+
     <div class="container d-flex justify-content-center" style="min-height: 100px;">        
-  
       <div class="s002" id="searchData">
         <form method="POST" action="/searchWithCondition">
           <div class="inner-form">
@@ -45,7 +43,10 @@
                 </svg>
               </div>
               <select data-trigger="" name="typeSearch" id="selectType">
-                <option  <%=  typeSearch === "UserId" ? "selected" : ""    %>value="UserId" >UserId</option>
+                <% if(user.role != "user"){%>
+                  <option  <%=  typeSearch === "UserId" ? "selected" : ""    %>value="UserId" >UserId</option>
+                <%}else{}%>
+                <option  <%=  typeSearch === "keyLand" ? "selected" : ""  %> value="keyLand">Mã đất</option>
                 <option  <%=  typeSearch === "Đã duyệt" ? "selected" : ""  %> value="approved">Đã duyệt</option>
                 <option  <%=  typeSearch === "Chưa duyệt" ? "selected" : ""  %> value="notApprovedYet">Chưa duyệt</option>
                 <option  <%=  typeSearch === "Đang chuyển" ? "selected" : "" %> value="transfering">Đang chuyển</option>
@@ -59,12 +60,12 @@
           </div>
         </form>
       </div>
-  <%}%>
 
- 
+    </div >
 
-   
-  </div>
+
+    <div class="container">
+
     <% if(menu.length > 0) {%>
         <table class="table table-striped mt-6">
           <thead>
@@ -159,12 +160,12 @@
                                             <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
-                                        <div class="modal-body" id="<%= element.key%>">
+                                        <div class="modal-body text-black" id="<%= element.key%>">
                                             Bạn muốn cập nhật trạng thái mã đất <%= element.key%>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button id="updateLand" onclick="this.form.submit()" type="button" class="btn btn-primary">Save changes</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                            <button id="updateLand" onclick="this.form.submit()" type="button" class="btn btn-primary">Xác nhận</button>
                                         </div>
                                         </div>
                                     </div>
@@ -206,7 +207,6 @@
 
 
 
-
  <script>
    if(document.getElementById("delete")){
     document.getElementById("delete").addEventListener("click",function(){
@@ -242,17 +242,56 @@
 
 <script>
 
+  // $("a").click(function(){
+  //   $('#loading').html(
+  //   `
+  //   <div class="flex justify-center items-center" style="position:absolute;height:80%;width:100%;background:rgba(0, 0, 0, 0.8);">
+  //       <div
+  //       class="
+  //           animate-spin
+  //           rounded-full
+  //           h-16
+  //           w-16
+  //           border-t-2 border-b-2 border-purple-500
+  //       "
+  //       ></div>
+  //   </div>
+  //   `
+  // )
+  // })
+
+
+    // let typeSearch = "<%= typeSearch %>"
+
     $(document).ready(function(){
-      $("#selectType").change(function(e){
-        let typeSearch = $("select#selectType").val();
+      let typeSearch = $("select#selectType").val();
         console.log(typeSearch)
-        if(typeSearch == 'UserId'){
+        if(typeSearch == 'UserId' || typeSearch == "keyLand"){
           console.log("OK")
           $("#search").prop('disabled', false);
           $("#search").css('background-color', "brown");
           $("#search").css('background-color', "white");
         }else{
           $("#search").prop('disabled', true);
+          $("#search").val("");
+          $("#search").css('background-color', "black");
+
+        }
+
+    });
+
+    $(document).ready(function(){
+      $("#selectType").change(function(e){
+        let typeSearch = $("select#selectType").val();
+        console.log(typeSearch)
+        if(typeSearch == 'UserId' || typeSearch == "keyLand"){
+          console.log("OK")
+          $("#search").prop('disabled', false);
+          $("#search").css('background-color', "brown");
+          $("#search").css('background-color', "white");
+        }else{
+          $("#search").prop('disabled', true);
+          $("#search").val("");
           $("#search").css('background-color', "black");
 
         }

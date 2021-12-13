@@ -23,13 +23,16 @@ const queryAllLandCo = require("../queryAllLandsCo")
 //search
 const search = require('../searchWithCondition')
 
+//token
 const addToken = require('../inkvode_token')
 const getBalanceToken = require('../inkvode_token_getBalance');
 const getAccountId = require('../inkvode_token_getAccountId');
+const transferToken = require('../inkvode_token_transfer')
 
 
 const Noty = require("noty");
 const { Query } = require('@firebase/firestore');
+const { json } = require('express');
 
 function userController(){
     return {
@@ -67,6 +70,7 @@ function userController(){
         },
 
         async handleLogin(req,res){
+                
                 const { email,password }  = req.body;
                 const listUser = await getUser(email);
                 if(listUser.length > 0){
@@ -140,12 +144,6 @@ function userController(){
 
         //admin
         async uiAdmin(req,res){
-            // let countWallet = await getBalanceToken(user.userId);
-            // console.log(`countwallet: ${countWallet}`)
-            // let check1 = await getClientToken(req.session.user.userId)
-            // let check2 = await getClientBalance(req.session.user.userId)
-            // console.log(`clientTOken : ${check1}`)
-            // console.log(`clientTOken2 : ${check2}`) 
             let listUserManager = await getAllUserManager()
             return res.render('admin',{listUserManager:listUserManager, success: req.flash('success'),error: req.flash('error')})
         },
@@ -212,22 +210,49 @@ function userController(){
             return res.redirect('/addToken')
         },
 
-        
+        //statistical
+        async statistical(req,res){
+            const {typeSearch, fromTime,toTime} = req.body;
+            let result;
+            if(fromTime != "" && toTime != ""){
+                let dateFromTime = new Date(fromTime);
+                let dateFromTo = new Date(toTime);
+                let list1 = [];
+                let listAllLandString = await queryAllLandsCoUserAndAdmin(req.session.user.userId,res.session.user.role);
+                let listAllLand = JSON.parse(listAllLandString);
+
+                for(let i = 0; i < listAllLand.length; i++){
+
+                    let arrayDate = listAllLand[i].value.ThoiGianDangKy.split('-')
+                    let splitDate= arrayDate[1].split('/');
+                    let convertDateString = splitDate[2]+'-'+splitDate[1]+'-'+splitDate[0];
+                    let dateLand = new Date(convertDateString)
+
+                    if(dates.inRange(dateLand,fromTime,toTime)){
+                        list1.push(listAllLand[i])
+                    };
+                }
+                console.log(`dateFromTime : ${dateFromTime}`)
+                console.log(`dateFromTo : ${dateFromTo}`)
+                console.log(`list1 : ${list1}`)
+                result = list1;
+            }
+
+        },
 
         //Search
         async searchWithCondition(req,res){
             const userId = req.session.user.userId;
             const {keySearch, typeSearch, fromTime,toTime} = req.body;
-            console.log(`key: ${keySearch}`)
-            console.log(`type: ${typeSearch}`)
-            console.log(`fromTime: ${fromTime}`)
+
+            const roleUser = req.session.user.role;
 
             let query  = {"docType":"land"};
 
             let allMenu;
-            let listLaneCo = [];
+            let listLandCo = [];
             let status;
-            let listAllLand
+            let listAllLand = [];
 
             if(typeSearch == "approved"){
                 query["Status"] = "Đã duyệt";
@@ -238,39 +263,114 @@ function userController(){
             }else if(typeSearch == "transfering"){
                 query["Status"] = "Đang chuyển";
                 status = "Đang chuyển";
-            }else{
+            }else if(typeSearch == "keyLand"){
+                status = "keyLand";
+            } else {
                 status = "UserId";
             }
+          
 
             console.log(keySearch == undefined)
             if(keySearch != "" && keySearch != undefined){
-                console.log("DA VAO DAYyyyyyyyyyyyyyyyyyyyyyyy")
-                query["UserId"] = keySearch.trim();
-                let listLaneCoString = await queryAllLandCo(keySearch.trim());
-                let listLaneCoFilter = JSON.parse(listLaneCoString);
-                if(status != "UserId"){
-                    listLaneCo = listLaneCoFilter.filter((element) => element.Status==status);
-                }else{
-                    listLaneCo = listLaneCoFilter;
+                console.log("DA VAO DAYyyyyyyyyyyyyyyyyyyyyyyy ")
+                let listLandCoString;
+                let listLandCoFilter;
+
+                if(status != "UserId" && status != "keyLand"){
+                    listLandCoString = await search(userId,JSON.stringify(query));;
+                    listLandCoFilter = JSON.parse(listLandCoString);
+                    listLandCo = listLandCoFilter.filter((element) => element.Status==status);
                 }
-                let listAllLandString = await search(userId,JSON.stringify(query));
-                listAllLand = JSON.parse(listAllLandString);
+
+                if(status == "UserId"){
+                    listLandCoString = await queryAllLandCo(userId,keySearch.trim());
+                    listLandCoFilter = JSON.parse(listLandCoString);
+                    listLandCo = listLandCoFilter;
+                    query['UserId'] = keySearch.trim();
+                    console.log("QUERY : "+query)
+                    let listAllLandString = await search(userId,JSON.stringify(query));
+                    listAllLand = JSON.parse(listAllLandString);
+                }
+                
+                  
+                if(status == "keyLand"){
+                    if(roleUser == "user"){
+                        const menuString = await queryAllLand(req.session.user.userId,req.session.user.role); 
+                        const menuCoString = await queryAllLandsCoUserAndAdmin(req.session.user.userId,req.session.user.role);
+                        const menu = JSON.parse(menuString);
+                        const menuCo = JSON.parse(menuCoString);
+                        let result = [...menu,...menuCo];
+                        console.log("RESULT : "+ JSON.stringify(result))
+                        for(let i = 0 ; i < result.length; i++){
+
+                            console.log("OKOK")
+                         
+                            let getKeyInResult = result[i]["key"];
+                            let keyUserInput = keySearch.trim();
+
+                            console.log("getKeyInResult "+getKeyInResult )
+                            console.log("keyUserInput "+keyUserInput )
+
+    
+                            if(getKeyInResult == keyUserInput){
+                                console.log("DA BANG")
+                                listAllLand.push(result[i])
+                            }
+                        }
+                    }else{
+                        let listAllLandString = await search(userId,JSON.stringify(query));
+                        listLandCoFilter = JSON.parse(listAllLandString);
+                        for(let i = 0 ; i < listLandCoFilter.length; i++){
+                         
+                            let getKeyInResult = listLandCoFilter[i]["key"];
+                            let keyUserInput = keySearch.trim();
+    
+                            if(getKeyInResult == keyUserInput){
+                                console.log("DA BANG")
+                                listAllLand.push(listLandCoFilter[i])
+                            }
+                        }
+                    }
+                   
+                }
+
 
             
             }else{
-                let listAllLandString = await search(userId,JSON.stringify(query));
-                listAllLand = JSON.parse(listAllLandString);
+                if(roleUser == "user"){
+                    if(status != "keyLand"){
+
+                        const menuString = await queryAllLand(req.session.user.userId,req.session.user.role); 
+                        const menuCoString = await queryAllLandsCoUserAndAdmin(req.session.user.userId,req.session.user.role);
+                        const menu = JSON.parse(menuString);
+                        const menuCo = JSON.parse(menuCoString);
+                        let result = [...menu,...menuCo];
+                        listAllLand = result.filter((element) => element.value.Status==status);
+
+                    }else{
+                        const menuString = await queryAllLand(req.session.user.userId,req.session.user.role); 
+                        const menuCoString = await queryAllLandsCoUserAndAdmin(req.session.user.userId,req.session.user.role);
+                        const menu = JSON.parse(menuString);
+                        const menuCo = JSON.parse(menuCoString);
+                        listAllLand = [...menu,...menuCo];
+                    }
+
+                }else{
+                    let listAllLandString = await search(userId,JSON.stringify(query));
+                    listAllLand = JSON.parse(listAllLandString);
+                }
+               
             }
 
          
-            allMenu = [...listAllLand,...listLaneCo];
+            allMenu = [...listAllLand,...listLandCo];
 
 
             if(fromTime != "" && toTime != ""){
                 let dateFromTime = new Date(fromTime);
                 let dateFromTo = new Date(toTime);
                 let list1 = [];
-                console.log(`locao: ${JSON.stringify(listLaneCo)}`)
+                console.log(`locao: ${JSON.stringify(listLandCo)}`)
                 for(let i = 0; i < allMenu.length; i++){
 
                     let arrayDate = allMenu[i].value.ThoiGianDangKy.split('-')
@@ -342,6 +442,21 @@ function userController(){
             let balance = await getBalanceToken(userId)
             let acountIdToken = await getAccountId(userId)
             return res.render("walletUser",{acountIdToken:acountIdToken,balance:balance})
+        },
+
+        // transfer token
+        async handleTransferToken(req,res){
+
+            const {from, to, amount} = req.body;
+            try {
+                await transferToken(req.session.user.userId, from, to, amount)
+                req.flash("success","Chuyển tiền thành công")
+                return res.redirect('/walletUser')
+            } catch (error) {
+                req.flash("error","Có lỗi xảy ra")
+                return res.redirect('/walletUser')
+            }
+         
         }
      
     }

@@ -1,3 +1,20 @@
+<% if(messages.error) {%>
+  <div class="d-flex justify-content-center">
+  <div id="flash" style="width: 50%;" class="alert alert-success d-flex justify-content-between" style="text-align:center;">
+      <%= messages.success %>
+    <button id="delete">X</button>
+    </div>
+  </div>
+<%}%>
+
+<% if(messages.success) {%>
+  <div class="d-flex justify-content-center">
+  <div id="flash" style="width: 50%;" class="alert alert-success d-flex justify-content-between" style="text-align:center;">
+      <%= messages.success %>
+    <button id="delete">X</button>
+    </div>
+  </div>
+<%}%>
 
 
 
@@ -9,13 +26,70 @@
         <input type="text" class="form-control" value="<%=acountIdToken%>" disabled >
     </div>
 
+    <p>
+        <button class="btn btn-success" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+          Chuyển tiền 
+        </button>
+        <!-- <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+          Button with data-target
+        </button> -->
+      </p>
+      <br>
+      <div class="collapse" id="collapseExample">
+        <div class="card card-body " style="background: rgba(78, 78, 78, 0.2);">
+            <form action="/handleTransferToken" method="POST" style="width: 40%;">
+                <div  class="form-group"> 
+                    <label for="">Mã nhận tiền </label>
+                    <input name="to"  class="form-control" type="text" placeholder="Nhập mã nhận tiền">
+                    <label for="">Số tiền </label>
+                    <input name="amount"  class="form-control" type="text" placeholder="Nhập số tiền muốn chuyển">
+                    <input name="from"  class="form-control" type="hidden" value="<%=acountIdToken%>" >
+                    <br>
+                    <button id="submitTransferToken" class="btn btn-success" type="submit" >Xác nhận</button>
+                </div>
+             
+            </form>
+        </div>
+      </div>
+
 </div>
 
 
+<script>
+
+      $("#submitTransferToken").click(function(){
+            $('#loading').html(
+              `
+              <div class="flex justify-center items-center" style="position:absolute;height:80%;width:100%;background:rgba(0, 0, 0, 0.5);">
+                  <div
+                  class="
+                      animate-spin
+                      rounded-full
+                      h-16
+                      w-16
+                      border-t-2 border-b-2 border-purple-500
+                  "
+                  ></div>&emsp;
+                  <div>LOADING...</div>
+              </div>
+              `
+              )
+            // $("#submitTransferToken").submit()
+    })
+</script>
 
 
 
 
+
+
+<script>
+  if(document.getElementById("delete")){
+      document.getElementById("delete").addEventListener("click",function(){
+          document.getElementById("flash").remove()
+      })
+  }
+</script>
 
 
 

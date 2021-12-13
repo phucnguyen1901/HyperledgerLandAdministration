@@ -49,8 +49,7 @@
             <%}else{%>
               <p class="text-blue-500"> Xin chào, <%= user.fullname%></p>
             <%}%>
-            &emsp;
-           
+
             &emsp;
             <button  id="notification">
                 <i class="fa fa-bell" aria-hidden="true" style="color:lightgreen; font-size: 25px;" ></i>
@@ -92,6 +91,9 @@
                 <a href="/requestAllTransferLand" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Tất cả yêu cầu chuyển đất</a>
               </li>
               <li class="ml-12">
+                <a href="/statistical" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Thống kê</a>
+              </li>
+              <li class="ml-12">
                 <a href="/addToken" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Nạp tiền</a>
               </li>
             <%}%>
@@ -128,9 +130,13 @@
     <input type="hidden" value="<%= noty.countMessages%>" id="MessageLength">
     <input type="hidden" value="<%= user.userId%>" id="UserId">
 
-  
-    <%- body %>
     
+    <div id="loading">
+
+    </div>
+    <%- body %>
+
+
 </body>
 </html>
 
@@ -138,3 +144,26 @@
   <script type="module" src="/js/handleMessage.js"></script>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+
+  <script>
+      $("a").click(function(){
+    $('#loading').html(
+    `
+    <div class="flex justify-center items-center" style="position:absolute;height:80%;width:100%;background:rgba(0, 0, 0, 0.5);">
+        <div
+        class="
+            animate-spin
+            rounded-full
+            h-16
+            w-16
+            border-t-2 border-b-2 border-purple-500
+        "
+        ></div>&emsp;
+        <div>LOADING...</div>
+    </div>
+    `
+  )
+  })
+  </script>

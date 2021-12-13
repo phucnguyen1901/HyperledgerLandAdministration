@@ -12,24 +12,8 @@ const { Contract } = require('fabric-contract-api');
 
 class Transfer extends Contract {
 
-async createToken(ctx){
-        console.info('============= START : Create transfer ===========');
-        console.log("tao token moi ")
-        const transfer = {
-                Land:"land",
-                TimeStart: "time",
-                TimeEnd: "-/-/-",
-                From: "userTransfer1",
-                To: "userReceive1",
-                ConfirmFromReceiver: false,
-                ConfirmFromAdmin: false,
-                docType: "token"
-        };
-        await ctx.stub.putState(`TOKENS7`, Buffer.from(JSON.stringify(transfer)));
-        console.info('============= END : Create transfer ===========');
-    }
     
-    async createTransfer(ctx,land,userTransfer1,userReceive1,time){
+    async createTransfer(ctx,land,userTransfer1,userReceive1,time,amount){
         console.info('============= START : Create transfer ===========');
         const transfer = {
                 Land:land,
@@ -39,6 +23,7 @@ async createToken(ctx){
                 To: userReceive1,
                 ConfirmFromReceiver: false,
                 ConfirmFromAdmin: false,
+                Money:amount,
                 docType: "trans"
         };
         let resultString = await this.checkLengthTransfer(ctx);
@@ -47,7 +32,7 @@ async createToken(ctx){
         console.info('============= END : Create transfer ===========');
     }
 
-    async createTransferOneOwnerForCo(ctx,land,userTransfer,arrayUserReceive,time){
+    async createTransferOneOwnerForCo(ctx,land,userTransfer,arrayUserReceive,time,amount){
         console.info('============= START : Create transfer ===========');
         let arrayTo = arrayUserReceive.split(',')
         let arrayReceive = []
@@ -64,6 +49,7 @@ async createToken(ctx){
                 From: userTransfer,
                 To: arrayReceive,
                 ConfirmFromAdmin: false,
+                Money:amount,
                 docType: "trans"
         };
         let resultString = await this.checkLengthTransfer(ctx);
@@ -72,7 +58,7 @@ async createToken(ctx){
         console.info('============= END : Create transfer ===========');
     }
 
-    async createTransferCoOwnerForOne(ctx,land,arrayUserTransferList,userReceive1,time){
+    async createTransferCoOwnerForOne(ctx,land,arrayUserTransferList,userReceive1,time,amount){
         console.info('============= START : Create transfer ===========');
 
         let arrayF = arrayUserTransferList.split(',')
@@ -97,6 +83,7 @@ async createToken(ctx){
                 To: userReceive1,
                 ConfirmFromReceiver: false,
                 ConfirmFromAdmin: false,
+                Money:amount,
                 docType: "trans"
         };
         let resultString = await this.checkLengthTransfer(ctx);
@@ -106,7 +93,7 @@ async createToken(ctx){
     }
 
 
-    async createTransferCoOwnerForCo(ctx,land,arrayUserTransfer,arrayUserReceiver,time){
+    async createTransferCoOwnerForCo(ctx,land,arrayUserTransfer,arrayUserReceiver,time,amount){
         console.info('============= START : Create transfer ===========');
         let arrayFrom = arrayUserTransfer.split(',')
         let arrayTo = arrayUserReceiver.split(',')
@@ -142,6 +129,7 @@ async createToken(ctx){
                 From: arrayTransfer,
                 To: arrayReceive,
                 ConfirmFromAdmin: false,
+                Money:amount,
                 docType: "trans"
         };
         let resultString = await this.checkLengthTransfer(ctx);

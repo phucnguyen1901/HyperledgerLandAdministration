@@ -220,7 +220,9 @@ class FabCar extends Contract {
 
         const Tokens = [
             {
-              "TOKEN": "20000"
+              Transfer:"",
+              UserId: "",
+              MoneyDetention: 200,
             }
         ]
          for (let i = 0; i < Tokens.length; i++) {
@@ -374,7 +376,7 @@ class FabCar extends Contract {
 
 
         let newOb = {};
-        newOb[time] = `Người sở hữu cũ :  { ${oldUserId.join('-')} } chuyển cho người sở hữu mới { ${newUserId} }`
+        newOb[time] = `Người sở hữu cũ :  { ${oldUserId} } chuyển cho người sở hữu mới { ${newUserId} }`
         let land = JSON.parse(landAsBytes.toString());
         land.Owner = newOwner;
         land.UserId = newUserId;

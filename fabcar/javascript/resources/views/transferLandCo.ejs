@@ -18,7 +18,10 @@
   <div id="count">
 
   </div>
-
+  <div class="form-group">
+    <label>Số tiền: </label>
+    <input type="text" class="form-control w-64" name="amount" value="0" placeholder="Nhập số tiền">
+  </div>
   <input type="hidden" value="<%= user.userId%>" id="userId">
 
   <!-- <button id="confirm" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Chuyển ngay</button> -->
@@ -69,4 +72,27 @@
 
   });
 
+</script>
+
+<script>
+
+  $("#submitOTP").click(function(){
+        $('#loading').html(
+          `
+          <div class="flex justify-center items-center" style="position:absolute;height:80%;width:100%;background:rgba(0, 0, 0, 0.5);">
+              <div
+              class="
+                  animate-spin
+                  rounded-full
+                  h-16
+                  w-16
+                  border-t-2 border-b-2 border-purple-500
+              "
+              ></div>&emsp;
+              <div>LOADING...</div>
+          </div>
+          `
+          )
+        // $("#submitTransferToken").submit()
+})
 </script>

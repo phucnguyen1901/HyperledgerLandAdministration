@@ -149,6 +149,11 @@ app.get('/walletUser',authMiddleware.requireAuth, userController().walletUser)
 app.get('/modifyUI/:key',authMiddleware.requireAuth, homeController().modifyUI)
 app.post('/handleModifyLand',authMiddleware.requireAuth, homeController().handleModifyLand)
 
+// transfer token
+app.post('/handleTransferToken',authMiddleware.requireAuth, userController().handleTransferToken)
+
+//statistical
+app.get('/statistical',authMiddleware.requireAuth, userController().statistical)
 
 
 
