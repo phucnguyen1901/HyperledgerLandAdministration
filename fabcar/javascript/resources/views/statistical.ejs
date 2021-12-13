@@ -5,13 +5,71 @@
 
 
 
+<div class="container">
+<br>
+    <button id="land" class="btn btn-success">Số đất đã đăng ký</button>
+    &emsp;
+    <button id="user" class="btn btn-success">Số người dùng đã đăng ký</button>
+
+    <div id="show"></div>
+    
+</div>
 
 
 
 
+<script>
 
+$(document).ready(function(){
+    $('#land').click(function(e){
+        $("#land").css('background-color', "orange")
+        $("#user").css('background-color', "green")
+        $('#show').html(
+    `
+                <div class="flex justify-center items-center" style="position:absolute;height:80%;width:100%;background:rgba(0, 0, 0, 0.5);">
+                    <div
+                    class="
+                        animate-spin
+                        rounded-full
+                        h-16
+                        w-16
+                        border-t-2 border-b-2 border-purple-500
+                    "
+                    ></div>&emsp;
+                    <div>LOADING...</div>
+                </div>
+                `
+            )
+        $.ajax({type: "POST",url: "/detailStatistical",data:{type:"land"} ,success: function(result){
+          $("#show").html(result);
+        }});
+      });
+  });
 
+  $(document).ready(function(){
+    $('#user').click(function(e){
+        $("#user").css('background-color', "orange")
+        $("#land").css('background-color', "green")
+        $('#show').html(
+    `
+                <div class="flex justify-center items-center" style="position:absolute;height:80%;width:100%;background:rgba(0, 0, 0, 0.5);">
+                    <div
+                    class="
+                        animate-spin
+                        rounded-full
+                        h-16
+                        w-16
+                        border-t-2 border-b-2 border-purple-500
+                    "
+                    ></div>&emsp;
+                    <div>LOADING...</div>
+                </div>
+                `
+            )
+        $.ajax({type: "POST",url: "/detailStatistical",data:{type:"user"} ,success: function(result){
+          $("#show").html(result);
+        }});
+      });
+  });
 
-
-
-
+</script>

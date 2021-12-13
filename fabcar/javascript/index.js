@@ -154,7 +154,8 @@ app.post('/handleTransferToken',authMiddleware.requireAuth, userController().han
 
 //statistical
 app.get('/statistical',authMiddleware.requireAuth, userController().statistical)
-
+app.post('/detailStatistical',authMiddleware.requireAuth, userController().detailStatistical)
+app.post('/dataDetailStatistical',authMiddleware.requireAuth, userController().dataDetailStatistical)
 
 
 

@@ -6,6 +6,12 @@ const app = require('./config')
 const db = getFirestore(app);
 
 async function saveUser(userId,fullname,numberPhone,idCard,password){
+    let date_ob = new Date();
+    let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
+    let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
+    let getHour = date_ob.getHours() < 9 ? `0${date_ob.getHours()+1}` : `${date_ob.getHours()+1}`;
+    let getMinute = date_ob.getMinutes() < 9 ? `0${date_ob.getMinutes()+1}` : `${date_ob.getMinutes()+1}`;
+    let time = `${getHour}:${getMinute}`;
 
      try {
         const docRef = await addDoc(collection(db, "users"), {
@@ -14,7 +20,10 @@ async function saveUser(userId,fullname,numberPhone,idCard,password){
             numberPhone:numberPhone,
             idCard: idCard,
             password:password,
-            role:"user"
+            role:"user",
+            timestamp:serverTimestamp(),
+            Date:newDate,
+            Time:time
         });
             console.log("Document written with ID: ", docRef.id);
         } catch (e) {
@@ -31,7 +40,8 @@ async function saveUserManager(userId,password,nameOffice,city){
            password: password,
            nameOffice:nameOffice,
            city: city,
-           role:"manager"
+           role:"manager",
+           timestamp:serverTimestamp()
        });
            console.log("Document written with ID: ", docRef.id);
        } catch (e) {
@@ -39,6 +49,23 @@ async function saveUserManager(userId,password,nameOffice,city){
        }
 
 }
+
+async function saveUserAdmin(password){
+
+    try {
+       const docRef = await addDoc(collection(db, "users"), {
+           userId:"admin@gmail.com",
+           password: password,
+           role:"admin",
+           timestamp:serverTimestamp()
+       });
+           console.log("Document written with ID: ", docRef.id);
+       } catch (e) {
+           console.error("Error adding document: ", e);
+       }
+
+}
+
 
 
 async function deleteUserManager(userId) {
@@ -74,6 +101,20 @@ async function getAllUserManager() {
     }
   }
 
+  async function getAllUser() {
+    console.log("Get All user ")
+    const q = query(collection(db, "users"), where("role", "==", "user"));
+    const citySnapshot = await getDocs(q);
+    if(citySnapshot.docs.length > 0){
+      const cityList = citySnapshot.docs.map(doc => doc.data());
+      console.log(cityList);
+      return cityList;
+    }else{
+        console.log("Login Failed")
+        return [];
+    }
+  }
+
 
 
 // Get a list of cities from your database
@@ -95,7 +136,9 @@ async function saveMessage(userId,message) {
     let date_ob = new Date();
     let monthNow = date_ob.getMonth() < 9 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
     let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
-    let time = `${date_ob.getHours()}:${date_ob.getMinutes()}:${date_ob.getSeconds()}`;
+    let getHour = date_ob.getHours() < 9 ? `0${date_ob.getHours()+1}` : `${date_ob.getHours()+1}`;
+    let getMinute = date_ob.getMinutes() < 9 ? `0${date_ob.getMinutes()+1}` : `${date_ob.getMinutes()+1}`;
+    let time = `${getHour}:${getMinute}`;
 
     try {
         const docRef = await addDoc(collection(db, "messages"), {
@@ -184,7 +227,9 @@ async function updateInfo(userId,fullname,numberPhone,idCard){
 
 
 
-module.exports = {saveUser,getUser,saveMessage,updateInfo, getMessage, saveUserManager,deleteUserManager,getAllUserManager}
+module.exports = {saveUser,getUser,saveMessage,
+    updateInfo, getMessage, saveUserManager,saveUserAdmin
+    ,deleteUserManager,getAllUserManager ,getAllUser}
 
 
 

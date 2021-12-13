@@ -2,7 +2,9 @@
 
 // import {firebase} from 'firebase'
 
-const { saveMessage ,getUser, saveUser, updateInfo, getAllUserManager,getMessage, saveUserManager,deleteUserManager} = require('./saveUser');
+const { saveMessage ,getUser, getAllUser,saveUser, saveUserAdmin,
+    updateInfo, getAllUserManager,getMessage,
+    saveUserManager,deleteUserManager} = require('./saveUser');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -51,11 +53,11 @@ function userController(){
         },
 
         async fast(req,res){
-            const nva = "a@gmail.com";
-            const nvb = "b@gmail.com";
-            const nvc = "c@gmail.com";
-            const nvd = "d@gmail.com";
-            const nve = "e@gmail.com";
+            const nva = "ntk@gmail.com";
+            const nvb = "hva@gmail.com";
+            const nvc = "ttt@gmail.com";
+            const nvd = "pnh@gmail.com";
+            const nve = "htb@gmail.com";
             const off = "office1@gmail.com";
             const admin = "admin@gmail.com";
             await register(nva,mspOrg[0],organizationsCA[0],affiliations[0]),
@@ -65,6 +67,25 @@ function userController(){
             await register(nve,mspOrg[0],organizationsCA[0],affiliations[0]),
             await register(admin,mspOrg[0],organizationsCA[0],affiliations[0]),
             await register(off,mspOrg[0],organizationsCA[0],affiliations[0]),
+
+            
+            bcrypt.hash('123', saltRounds,async function(err, hash) {
+                // Store hash in your password DB.
+                if(err){
+                    req.flash('error', 'Có lỗi xảy ra ! Đăng ký không thành công');
+                    return res.redirect('/login');
+                }
+                await saveUserAdmin(hash),
+                await saveUserManager('office1@gmail.com',hash,"Văn phòng Cái Răng","TP.Cần Thơ")
+
+                await saveUser(nva,"Nguyễn Trung Kiên","+84795418148","104949231",hash)
+                await saveUser(nvb,"Hoàng Văn Anh","+84795418148","313456789",hash)
+                await saveUser(nvc,"Trương Thị Tú","+84795418148","890494094",hash)
+                await saveUser(nvd,"Phạm Ngọc Hân","+84795418148","908488212",hash)
+                await saveUser(nve,"Huỳnh Thành Bá","+84795418148","894041234",hash)
+
+                
+            });
 
             res.redirect('/login')
         },
@@ -212,32 +233,105 @@ function userController(){
 
         //statistical
         async statistical(req,res){
-            const {typeSearch, fromTime,toTime} = req.body;
-            let result;
-            if(fromTime != "" && toTime != ""){
-                let dateFromTime = new Date(fromTime);
-                let dateFromTo = new Date(toTime);
-                let list1 = [];
-                let listAllLandString = await queryAllLandsCoUserAndAdmin(req.session.user.userId,res.session.user.role);
-                let listAllLand = JSON.parse(listAllLandString);
+            // const {typeSearch, fromTime,toTime} = req.body;
+            // let result;
+            // if(fromTime != "" && toTime != ""){
+            //     let dateFromTime = new Date(fromTime);
+            //     let dateFromTo = new Date(toTime);
+            //     let list1 = [];
+            //     let listAllLandString = await queryAllLandsCoUserAndAdmin(req.session.user.userId,res.session.user.role);
+            //     let listAllLand = JSON.parse(listAllLandString);
 
-                for(let i = 0; i < listAllLand.length; i++){
+            //     for(let i = 0; i < listAllLand.length; i++){
 
-                    let arrayDate = listAllLand[i].value.ThoiGianDangKy.split('-')
-                    let splitDate= arrayDate[1].split('/');
-                    let convertDateString = splitDate[2]+'-'+splitDate[1]+'-'+splitDate[0];
-                    let dateLand = new Date(convertDateString)
+            //         let arrayDate = listAllLand[i].value.ThoiGianDangKy.split('-')
+            //         let splitDate= arrayDate[1].split('/');
+            //         let convertDateString = splitDate[2]+'-'+splitDate[1]+'-'+splitDate[0];
+            //         let dateLand = new Date(convertDateString)
 
-                    if(dates.inRange(dateLand,fromTime,toTime)){
-                        list1.push(listAllLand[i])
-                    };
+            //         if(dates.inRange(dateLand,fromTime,toTime)){
+            //             list1.push(listAllLand[i])
+            //         };
+            //     }
+            //     console.log(`dateFromTime : ${dateFromTime}`)
+            //     console.log(`dateFromTo : ${dateFromTo}`)
+            //     console.log(`list1 : ${list1}`)
+            //     result = list1;
+            // }
+            return res.render("statistical")
+
+        },
+
+        async detailStatistical(req,res){
+            const {type} = req.body;
+            return res.render("detail_statistical",{layout:false,type:type})
+        },
+
+        async dataDetailStatistical(req,res){
+
+            const userId = req.session.user.userId;
+            const role = req.session.user.role;
+            const {fromTime, toTime , type} = req.body;
+
+            console.log("FROMTIME :"+fromTime)
+            console.log("FROMTIME22222 :"+toTime)
+
+            
+            let listResult = [];
+            
+            if(type == "land"){
+                let listResultString = await queryAllLandsCoUserAndAdmin(userId,role)
+                let listLand = JSON.parse(listResultString);
+                if(fromTime != "" && toTime != ""){
+                    let dateFromTime = new Date(fromTime);
+                    let dateFromTo = new Date(toTime);
+                    for(let i = 0 ; i < listLand.length;i++){
+                        let arrayDate = listLand[i].value.ThoiGianDangKy.split('-')
+                        let splitDate= arrayDate[1].split('/');
+                        let convertDateString = splitDate[2]+'-'+splitDate[1]+'-'+splitDate[0];
+                        let dateLand = new Date(convertDateString)
+    
+                        if(dates.inRange(dateLand,dateFromTime,dateFromTo)){
+                            listResult.push(listLand[i]);
+                        }
+                    }
+                }else{
+                    listResult = listLand;
                 }
-                console.log(`dateFromTime : ${dateFromTime}`)
-                console.log(`dateFromTo : ${dateFromTo}`)
-                console.log(`list1 : ${list1}`)
-                result = list1;
+                
+                
+
+            }else{
+                console.log("VAO DAYYYYYYYYYYYYYYYYYYYYYYYYYY")
+                let listLand = await getAllUser();
+                if(fromTime != "" && toTime != ""){
+                    let dateFromTime = new Date(fromTime);
+                    let dateFromTo = new Date(toTime);
+                    console.log("VAO DAYYYYYYYYYYYYYYYYYYYYYYYYYY222222222222")
+
+                    for(let i = 0 ; i < listLand.length;i++){
+                        let dateHandle = listLand[i].Date.split("/");
+                        let dateFormat = `${dateHandle[2]}-${dateHandle[1]}-${dateHandle[0]}`;
+                        let dateLand = new Date(dateFormat);
+                        console.log("DATE : " + dateFormat)
+                        console.log("DATE2 : " + dateLand)
+
+
+                        if(dates.inRange(dateLand,dateFromTime,dateFromTo)){
+                            listResult.push(listLand[i]);
+                        }
+                        
+                    }
+                }else{
+                    console.log("VAO DAYYYYYYYYYYYYYYYYYYYYYYYYYY333333333333")
+                    listResult = listLand;
+                }
+
             }
 
+
+
+            return res.render("data_detail_statistical",{layout:false,listResult:listResult,type:type})
         },
 
         //Search

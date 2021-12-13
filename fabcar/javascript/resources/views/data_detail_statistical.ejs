@@ -1,0 +1,70 @@
+
+<%if(type == "land"){%>
+
+    <div class="text-green-500">Số đất đã đăng ký: <%= listResult.length%></div>
+
+    <table class="table table-striped mt-6">
+        <thead>
+        <tr>
+            <th>Mã đất</th>
+            <th>UserId</th>
+            <th>Người sở hữu</th>
+            <th>Thời gian đăng ký</th>
+            <th>Trạng thái</th>
+        </tr>
+        </thead>
+        <tbody>
+            <%for(let i = 0 ; i < listResult.length; i++){%>
+                <tr>
+                    <td><%= listResult[i].key %></td>
+                    <td><%= listResult[i].value.UserId %></td>
+                    <td><%= listResult[i].value.Owner %></td>
+                    <td><%= listResult[i].value.ThoiGianDangKy %></td>
+                    <td><%= listResult[i].value.Status %></td>
+            
+                </tr>
+            <%}%>
+        </tbody>
+        
+        </table>
+
+<%}else{%>
+    <div class="text-green-500">Số người dùng đã đăng ký : <%= listResult.length%></div>
+
+    <table class="table table-striped mt-6">
+    <thead>
+      <tr>
+        <th>UserId</th>
+        <th>Họ tên</th>
+        <th>CMND/CCCD</th>
+        <th>Số điện thoại</th>
+        <th>Thời gian đăng ký</th>
+
+      </tr>
+    </thead>
+    <tbody>
+        <%for(let i = 0 ; i < listResult.length; i++){%>
+            <tr>
+                <td><%= listResult[i].userId %></td>
+                <td><%= listResult[i].fullname %></td>
+                <td><%= listResult[i].idCard %></td>
+                <td><%= listResult[i].numberPhone %></td>        
+                <td><%= listResult[i].Time %> - <%= listResult[i].Date %></td>
+            </tr>
+        <%}%>
+    
+    </tbody>
+    
+    </table>
+
+<%}%>
+
+
+
+
+
+
+
+
+
+
