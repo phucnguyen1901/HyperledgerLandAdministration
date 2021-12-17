@@ -28,8 +28,9 @@ class Transfer extends Contract {
         };
         let resultString = await this.checkLengthTransfer(ctx);
         let result = JSON.parse(resultString);
+
         await ctx.stub.putState(`TRANS${result.length+1}`, Buffer.from(JSON.stringify(transfer)));
-        console.info('============= END : Create transfer ===========');
+
     }
 
     async createTransferOneOwnerForCo(ctx,land,userTransfer,arrayUserReceive,time,amount){
@@ -398,6 +399,11 @@ class Transfer extends Contract {
         let result = JSON.parse(transferAsBytes);
 
         if(result.From != userId || result.Land != lane ) throw new Error(`${key} co loi khi xoa`);;
+        await ctx.stub.deleteState(key);
+    }
+
+    // DeleteAsset deletes an given asset from the world state.
+    async DeleteAssetFromAdmin(ctx,key) {
         await ctx.stub.deleteState(key);
     }
 

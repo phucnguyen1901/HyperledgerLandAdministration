@@ -25,8 +25,8 @@ class FabCar extends Contract {
         console.info('============= START : Initialize Ledger ===========');
         const lands = [
             {
-                UserId: "b@gmail.com",
-                Owner:"Nguyen Van A",
+                UserId: "ntk@gmail.com",
+                Owner:"Nguyễn Trung Kiên",
                 ThuaDatSo: 931,
                 ToBanDo5o: 3,
                 CacSoThuaGiapRanh: '919, 905,803',
@@ -46,8 +46,8 @@ class FabCar extends Contract {
 
             },
             {
-                UserId: "b@gmail.com",
-                Owner:"Nguyen Van B",
+                UserId: "ntk@gmail.com",
+                Owner:"Nguyễn Trung Kiên",
                 ThuaDatSo: 931,
                 ToBanDo5o: 3,
                 CacSoThuaGiapRanh: '919, 905,803',
@@ -67,8 +67,8 @@ class FabCar extends Contract {
 
             },
             {
-                UserId: "b@gmail.com",
-                Owner:"Nguyen Van B",
+                UserId: "ntk@gmail.com",
+                Owner:"Nguyễn Trung Kiên",
                 ThuaDatSo: 931,
                 ToBanDo5o: 3,
                 CacSoThuaGiapRanh: '919, 905,803',
@@ -88,8 +88,8 @@ class FabCar extends Contract {
 
             },
             {
-                UserId: "b@gmail.com",
-                Owner:"Nguyen Van B",
+                UserId: "ntk@gmail.com",
+                Owner:"Nguyễn Trung Kiên",
                 ThuaDatSo: 931,
                 ToBanDo5o: 3,
                 CacSoThuaGiapRanh: '919, 905,803',
@@ -110,8 +110,8 @@ class FabCar extends Contract {
             },
             
             {
-                UserId: ["e@gmail.com","b@gmail.com"],
-                Owner:["Nguyen Van E","Nguyen Van B"],
+                UserId: ["ttt@gmail.com","ntk@gmail.com"],
+                Owner:["Trương Thị Tú","Nguyễn Trung Kiên"],
                 ThuaDatSo: 931,
                 ToBanDo5o: 3,
                 CacSoThuaGiapRanh: '919, 905,803',
@@ -131,8 +131,8 @@ class FabCar extends Contract {
 
             },
             {
-                UserId: ["e@gmail.com","b@gmail.com"],
-                Owner:["Nguyen Van E","Nguyen Van B"],
+                UserId: ["ttt@gmail.com","ntk@gmail.com"],
+                Owner:["Trương Thị Tú","Nguyễn Trung Kiên"],
                 ThuaDatSo: 931,
                 ToBanDo5o: 3,
                 CacSoThuaGiapRanh: '919, 905,803',
@@ -152,8 +152,8 @@ class FabCar extends Contract {
 
             },
             {
-                UserId: ["e@gmail.com","b@gmail.com"],
-                Owner:["Nguyen Van E","Nguyen Van B"],
+                UserId: ["ttt@gmail.com","ntk@gmail.com"],
+                Owner:["Trương Thị Tú","Nguyễn Trung Kiên"],
                 ThuaDatSo: 931,
                 ToBanDo5o: 3,
                 CacSoThuaGiapRanh: '919, 905,803',
@@ -173,8 +173,8 @@ class FabCar extends Contract {
 
             },
             {
-                UserId: ["e@gmail.com","b@gmail.com"],
-                Owner:["Nguyen Van E","Nguyen Van B"],
+                UserId: ["ttt@gmail.com","ntk@gmail.com"],
+                Owner:["Trương Thị Tú","Nguyễn Trung Kiên"],
                 ThuaDatSo: 931,
                 ToBanDo5o: 3,
                 CacSoThuaGiapRanh: '919, 905,803',

@@ -5,7 +5,7 @@
 
 
 
-<form id="formTransfer" action="/handleTransferLand" method="post" >
+<form id="formTransfer" action="/handleTransferLand" method="post" onsubmit="return false;">
   <div class="form-group">
     <label>Mã đang được chuyển: </label>
     <input type="text" class="form-control w-64" name="key" id="keyLane" placeholder="Nhập mã" value="<%= key %>" disabled>
@@ -18,9 +18,10 @@
     <input type="text" class="form-control w-64" name="amount" value="0" placeholder="Nhập số tiền">
   </div>
   <div id="error"></div>
-  <button id="confirm" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Chuyển ngay</button>
-
+<button id="confirm" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Chuyển ngay</button>
 </form>
+
+
 
 </div>
 

@@ -224,6 +224,26 @@
 
 <script>
 
+$("#addButton").click(function(){
+          $('#loading').html(
+            `
+            <div class="flex justify-center items-center" style="position:absolute;height:80%;width:100%;background:rgba(0, 0, 0, 0.5);">
+                <div
+                class="
+                    animate-spin
+                    rounded-full
+                    h-16
+                    w-16
+                    border-t-2 border-b-2 border-purple-500
+                "
+                ></div>&emsp;
+                <div>LOADING...</div>
+            </div>
+            `
+            )
+          // $("#submitTransferToken").submit()
+  })
+
   $(document).ready(function(){
     $('#countCoordinates').on('input',function(e){
         $.ajax({type: "POST",url: "/addCoordinatesForm",data:{count:this.value,listCoOwner:""} ,success: function(result){
@@ -253,7 +273,7 @@
 </script>
 
 
-<!-- <script type="module">
+<script type="module">
   import app from '/js/config.js';
   import { getStorage, ref, uploadBytes,uploadBytesResumable,getDownloadURL } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-storage.js";
 
@@ -304,5 +324,5 @@
 
   })
 
-</script> -->
+</script>
 

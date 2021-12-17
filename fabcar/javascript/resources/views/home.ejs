@@ -102,7 +102,7 @@
                      <td><%= element.value.ThoiGianDangKy %></td>
                      <%if(element.value.Status == "Chưa duyệt"){%>
                        <td class="text-red-500"><%= element.value.Status %></td>
-                       <td> <a href="/modifyUI/<%= element.key %>" class="bg-blue-700 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Sửa đổi thông tin</a> </td>
+                       <td> <a href="/detail/<%= element.key %>" class="bg-blue-700 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Xem và sửa thông tin</a> </td>
                      <%}else{%>
                        <td class="text-green-500"><%= element.value.Status %></td>
                        <td class="text-red-500">Không thể sửa đổi thông tin</td>
@@ -113,7 +113,7 @@
                        <%}else if(element.value.Status == "Chưa duyệt"){%>
                          <p class="text-red-500">Đất chưa được duyệt không thể chuyển</p>
                        <%}else{%>
-                           <a href="./detail/<%= element.key %>" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Chuyển quyền sở hữu</a>
+                           <a href="./detail/<%= element.key %>" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Xem và chuyển quyền sở hữu</a>
                        <%} %>
                      </td>
             

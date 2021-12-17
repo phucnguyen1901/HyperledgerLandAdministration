@@ -44,42 +44,42 @@
         let userId = document.getElementById("userTransfer").value;
         console.log(userId)
 
-//         if(checkUser == "true"){
-//             console.log("Da vao day")
-//             document.getElementById("showNumberPhone").innerHTML = 'Nhập OTP đã gửi về số điện thoại : '+numberPhone;
-//             signInWithPhoneNumber(auth, numberPhone, window.recaptchaVerifier)
-//                 .then((confirmationResult) => {
-//                     console.log("Da send code")
-//                     window.confirmationResult = confirmationResult;
-//                     verifyCode = confirmationResult;
+        if(checkUser == "true"){
+            console.log("Da vao day")
+            document.getElementById("showNumberPhone").innerHTML = 'Nhập OTP đã gửi về số điện thoại : '+numberPhone;
+            signInWithPhoneNumber(auth, numberPhone, window.recaptchaVerifier)
+                .then((confirmationResult) => {
+                    console.log("Da send code")
+                    window.confirmationResult = confirmationResult;
+                    verifyCode = confirmationResult;
                     
-//                     // return confirmationResult;
-//                 // console.log(confirmationResult);
-//                 // ...
-//                 }).catch((error) => {
-//                     console.log("Error Send SMS")
-//                     console.log(`ERROR : ${error}`)
-//                     // Error; SMS not sent
-//                     // ...
-//                 });
+                    // return confirmationResult;
+                // console.log(confirmationResult);
+                // ...
+                }).catch((error) => {
+                    console.log("Error Send SMS")
+                    console.log(`ERROR : ${error}`)
+                    // Error; SMS not sent
+                    // ...
+                });
 
-//             document.getElementById("submitOTP").addEventListener("click",function(){
-//                 let code = document.getElementById("code").value;
-//                 verifyCode.confirm(code).then((result) => {
-//                         // User signed in successfully.
-//                             console.log("Register successfully")
-//                             const user = result.user;
-//                             console.log(`User : ${user}`)
-//                             document.getElementById("formTransfer").submit();
-//                         // ...
-//                         }).catch((error) => {
-//                             console.log("Register failed")
-//                         // User couldn't sign in (bad verification code?)
-//                         // ...
-//                     });
-//   })
+            document.getElementById("submitOTP").addEventListener("click",function(){
+                let code = document.getElementById("code").value;
+                verifyCode.confirm(code).then((result) => {
+                        // User signed in successfully.
+                            console.log("Register successfully")
+                            const user = result.user;
+                            console.log(`User : ${user}`)
+                            document.getElementById("formTransfer").submit();
+                        // ...
+                        }).catch((error) => {
+                            alert("OTP không chính xác")
+                        // User couldn't sign in (bad verification code?)
+                        // ...
+                    });
+  })
 
-        // }
+        }
        
     })
 

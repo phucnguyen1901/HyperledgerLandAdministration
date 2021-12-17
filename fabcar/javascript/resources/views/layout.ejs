@@ -42,7 +42,7 @@
           <%}%>
         </div>
         <div>
-          <ul class="flex items-center">
+          <ul id="ulMain" class="flex items-center">
 
             <%if(user.role == 'manager'){%>
               <p class="text-blue-500"> Xin chào, <%= user.nameOffice%></p>
@@ -59,42 +59,42 @@
             </button>
             <% if(user.role == "user"){%>
             <li class="ml-10">
-              <a href="/" class="text-blue-500 hover:text-red-500 focus:outline-none" style="font-size: 20px;">Đất của tôi</a>
+              <a href="/" id="a1" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Đất của tôi</a>
             </li>
             <li class="ml-10">
-              <a href="/addAsset" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Thêm mới</a>
+              <a href="/addAsset" id="a2" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Thêm mới</a>
             </li>
             <li class="ml-10">
-              <a href="/transferLandOwner" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Đất chuyển</a>
+              <a href="/transferLandOwner" id="a3" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Đất chuyển</a>
             </li>
             <li class="ml-10">
-              <a href="/receiveLand" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Đất nhận</a>
+              <a href="/receiveLand" id="a4" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Đất nhận</a>
             </li>
             <li class="ml-10">
-              <a href="/info" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Thông tin cá nhân</a>
+              <a href="/info" id="a5" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Thông tin cá nhân</a>
             </li>
             <li class="ml-10">
-              <a href="/walletUser" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Ví</a>
+              <a href="/walletUser" id="a6" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Ví</a>
             </li>
             <%}else if(user.role == "admin"){%>
               <li class="ml-12">
-                <a href="/adminAddManager" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Thêm quản lý</a>
+                <a  id="b1" href="/adminAddManager"  class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Thêm quản lý</a>
               </li>
               <li class="ml-12">
-                <a href="/adminDeleteManager" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Xóa quản lý</a>
+                <a id="b2" href="/adminDeleteManager" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Xóa quản lý</a>
               </li>
             <%}else{%>
               <li class="ml-12">
-                <a href="/" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Tất cả đất</a>
+                <a id="a1" href="/" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Tất cả đất</a>
               </li>
               <li class="ml-12">
-                <a href="/requestAllTransferLand" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Tất cả yêu cầu chuyển đất</a>
+                <a id="c2" href="/requestAllTransferLand" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Tất cả yêu cầu chuyển đất</a>
               </li>
               <li class="ml-12">
-                <a href="/statistical" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Thống kê</a>
+                <a id="c3" href="/statistical" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Thống kê</a>
               </li>
               <li class="ml-12">
-                <a href="/addToken" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Nạp tiền</a>
+                <a id="c4" href="/addToken" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Nạp tiền</a>
               </li>
             <%}%>
 
@@ -148,6 +148,87 @@
 
 
   <script>
+
+    let currentURL = window.location.pathname;
+
+    $(document).ready(function(){
+      if(currentURL == "/"){
+
+          $("#a1").css("color","#4299e1")
+
+
+      }else if(currentURL == "/addAsset"){
+
+          $("#a2").css("color","#4299e1")
+
+      }else if(currentURL == "/transferLandOwner"){
+
+          $("#a3").css("color","#4299e1")
+
+
+      }else if(currentURL == "/receiveLand"){
+
+          $("#a4").css("color","#4299e1")
+
+
+      }else if(currentURL == "/info"){
+
+          $("#a5").css("color","#4299e1")
+
+
+      }else if(currentURL == "/walletUser"){
+
+          $("#a6").css("color","#4299e1")
+
+
+      }else if(currentURL == "/adminAddManager"){
+
+
+          $("#b1").css("color","#4299e1")
+
+
+      }else if(currentURL == "/adminDeleteManager"){
+
+          $("#b2").css("color","#4299e1")
+
+
+      }else if(currentURL == "/requestAllTransferLand"){
+
+          $("#c2").css("color","#4299e1")
+
+
+      }else if(currentURL == "/statistical"){
+
+          $("#c3").css("color","#4299e1")
+
+
+      }else if(currentURL == "/addToken"){
+
+          $("#c4").css("color","#4299e1")
+
+      }
+    })
+    
+    // $("#a1").click(function(){
+    //   alert(window.location.pathname)
+    // })
+    // let currentURL = window.location.hostname
+    // if();
+
+    // for(let i = 1; i <= 6; i++){
+
+    //   $(`#a${i}`).click(function(){
+    //     console.log("CLICK A"+i); 
+    //     for(let j = 1 ; j <= 6 ; j++){
+    //       if(i == j){
+    //         $(`#a${j}`).css("color","blue");
+    //       }else{
+    //         $(`#a${j}`).css("color,yellow");
+    //       }
+    //     }
+    //   })
+    // }
+
       $("a").click(function(){
     $('#loading').html(
     `

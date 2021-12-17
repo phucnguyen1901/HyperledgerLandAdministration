@@ -286,84 +286,124 @@
 
 
 
-  <button id="addButton" class="btn btn-primary">Sửa</button>
-</form>
-
+    <button id="addButton" class="btn btn-primary">Sửa</button>
+  </form>
+</div>
 <div style="height: 100px;"></div>
 
 
+<script type="module">
+  import app from '/js/config.js';
+  import { getStorage, ref, uploadBytes,uploadBytesResumable,getDownloadURL } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-storage.js";
+
+  const storage = getStorage(app);
 
 
-<script>
+  const form = document.getElementById("formAdd")
 
-      let listCoOwner = "<%= land.UserId %>"
+  document.getElementById('addButton').addEventListener('click',function(){
+    const selectedFile = document.getElementById('image').files[0];
+    const storageRef = ref(storage, selectedFile.name);
+    const uploadTask = uploadBytesResumable(storageRef, selectedFile);
 
-      let checkData = listCoOwner.split(',')
+    // Register three observers:
+    // 1. 'state_changed' observer, called any time the state changes
+    // 2. Error observer, called on failure
+    // 3. Completion observer, called on successful completion
+      uploadTask.on('state_changed', 
+        (snapshot) => {
+          // Observe state change events such as progress, pause, and resume
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          switch (snapshot.state) {
+            case 'paused':
+              console.log('Upload is paused');
+              break;
+            case 'running':
+              console.log('Upload is running');
+              break;
+          }
+        }, 
+        (error) => {
+          // Handle unsuccessful uploads
+        }, 
+        () => {
 
-      if(checkData.length != 1){
-        $(document).ready(function(){
-        $.ajax({type:"POST",url: "/addAssetFormOwner",data:{count:0,listCoOwner:listCoOwner}, success: function(result){
-          $("#count").html(result);
-        }});
-
-      });
-      }
-
-  let listParcels = "<%= land.CacSoThuaGiapRanh %>"
-
-  $(document).ready(function(){
-        $.ajax({type: "POST",url: "/addParcels",data:{count:0,parcels:listParcels} ,success: function(result){
-          $("#showParcels").html(result);
-        }});
-    });
-
-
-    $(document).ready(function(){
-        $('#countOwner').on('input',function(e){
-            $.ajax({type:"POST",url: "/addAssetFormOwner",data:{count:this.value,listCoOwner:""}, success: function(result){
-              $("#count").html(result);
-            }});
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log('File available at', downloadURL);
+            document.getElementById('url').value = downloadURL;
+            form.submit()
           });
 
-      });
+        }
+      );
 
-      $(document).ready(function(){
-      $('#countCoordinates').on('input',function(e){
-          $.ajax({type: "POST",url: "/addCoordinatesForm",data:{count:this.value} ,success: function(result){
-            $("#showCoordinates").html(result);
-          }});
-        });
-    });
+    console.log(document.getElementById('url').value)
 
-    $(document).ready(function(){
-      $('#countLengths').on('input',function(e){
-          $.ajax({type: "POST",url: "/addLength",data:{count:this.value} ,success: function(result){
-            $("#showLengths").html(result);
-          }});
-        });
-    });
-
-    $(document).ready(function(){
-      $('#countParcels').on('input',function(e){
-        console.log("GOOOOOD")
-          $.ajax({type: "POST",url: "/addParcels",data:{count:this.value,parcels:""} ,success: function(result){
-            $("#showParcels").html(result);
-          }});
-        });
-    });
-
+  })
 
 </script>
 
 
+<script>
+
+  let listCoOwner = "<%= land.UserId %>"
+
+  let checkData = listCoOwner.split(',')
+
+  if(checkData.length != 1){
+    $(document).ready(function(){
+    $.ajax({type:"POST",url: "/addAssetFormOwner",data:{count:0,listCoOwner:listCoOwner}, success: function(result){
+      $("#count").html(result);
+    }});
+
+  });
+  }
+
+let listParcels = "<%= land.CacSoThuaGiapRanh %>"
+
+$(document).ready(function(){
+    $.ajax({type: "POST",url: "/addParcels",data:{count:0,parcels:listParcels} ,success: function(result){
+      $("#showParcels").html(result);
+    }});
+});
 
 
+$(document).ready(function(){
+    $('#countOwner').on('input',function(e){
+        $.ajax({type:"POST",url: "/addAssetFormOwner",data:{count:this.value,listCoOwner:""}, success: function(result){
+          $("#count").html(result);
+        }});
+      });
+
+  });
+
+  $(document).ready(function(){
+  $('#countCoordinates').on('input',function(e){
+      $.ajax({type: "POST",url: "/addCoordinatesForm",data:{count:this.value} ,success: function(result){
+        $("#showCoordinates").html(result);
+      }});
+    });
+});
+
+$(document).ready(function(){
+  $('#countLengths').on('input',function(e){
+      $.ajax({type: "POST",url: "/addLength",data:{count:this.value} ,success: function(result){
+        $("#showLengths").html(result);
+      }});
+    });
+});
+
+$(document).ready(function(){
+  $('#countParcels').on('input',function(e){
+    console.log("GOOOOOD")
+      $.ajax({type: "POST",url: "/addParcels",data:{count:this.value,parcels:""} ,success: function(result){
+        $("#showParcels").html(result);
+      }});
+    });
+});
 
 
+</script>
 
-
-
-
-
-
-</div>

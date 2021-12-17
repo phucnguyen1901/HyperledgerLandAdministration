@@ -20,6 +20,8 @@
             <th style="text-align:center;">Người nhận</th>
             <th style="text-align:center;">Người nhận xác nhận</th>
             <th style="text-align:center;">Admin xác nhận</th>
+            <th style="text-align:center;">Hủy</th>
+
         </tr>
 
     </thead>
@@ -50,7 +52,7 @@
                   <%}else{%>
                     <td style="text-align:center"><%= element.value.To%></td>
                   <%}%>
-                    
+
                   <%if(typeof element.value.To == 'object'){%>
                     <% 
                     let array = [];
@@ -76,6 +78,7 @@
                           <%}%>
                     <%}else{%>
                         <td style="text-align:center; color:red;">Người nhận chưa xác nhận <br> {<%= array.join("/")%>} </td>
+                        <td style="text-align:center; color:red;">Không thể duyệt</td>
                     <%}%>
 
                   <%}else{%>
@@ -88,7 +91,7 @@
                                         <input type="hidden" name="userIdOld" value=<%= element.value.From %> >
                                         <input type="hidden" name="userIdNew" value=<%= element.value.To %> >
                                         <input type="hidden" name="land" value=<%= element.value.Land %> >
-                                        <button id="confirm" type="submit" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-1 px-4 rounded">Xác nhận chuyển quyền sở hữu đất</button>
+                                        <button id="confirm" type="submit" class="bg-green-700 hover:bg-yellow-700 text-white font-bold py-1 px-4 rounded">Xác nhận</button>
 
                                     </form>
                                   </td>
@@ -99,11 +102,20 @@
                       
                     <%}else{%>
                         <td style="text-align:center; color:red;">Chưa xác nhận</td>
-
+                        <td style="text-align:center; color:red;">Không thể duyệt</td>
                     <%}%>
 
                   <%}%>
+                  <td style="text-align:center h-full" style="height: 100%;"> 
+                    <form action="/cancelTransferLane" method="POST">
+                        <input type="hidden" name="keyTransfer" value=<%= element.key%> >
+                        <input type="hidden" name="keyLand" value=<%= element.value.Land%> >
+                        <input type="hidden" name="receiver" value=<%= element.value.To%> >
+                        <input type="hidden" name="receiverConfirm" value=<%= element.value.ConfirmFromReceiver%> >
 
+                        <button type="submit" class="bg-red-700 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Hủy chuyển</button>
+                    </form>
+                  </td>
 
 
                 </tr>

@@ -342,16 +342,16 @@ function homeController() {
           if(typeof land.UserId != "object"){
 
             if(land.UserId == userId){
-
-
-
+              console.log("VAO TOI DAY ROI")
+              let thoigiandangky = getNow();
               await createTransfer(key,userId,owner0,thoigiandangky,amount)
-              await updateLand(userId,key,"Đang chuyển")
-              await saveMessage(owner0,`Bạn nhận được đất do người sở hữu ${userId} chuyển cho bạn`)
-              await saveMessage(userId,`Bạn đã gửi yêu cầu chuyển quyền sở hữu đất có mã ${key} cho người sở hữu ${owner0}`)
+
+                await updateLand(userId,key,"Đang chuyển1")
+                await saveMessage(owner0,`Bạn nhận được đất do người sở hữu ${userId} chuyển cho bạn`)
+                await saveMessage(userId,`Bạn đã gửi yêu cầu chuyển quyền sở hữu đất có mã ${key} cho người sở hữu ${owner0}`)
+                req.flash("success",`Đã gửi yêu cầu chuyển quyền sở hữu đất có mã ${key} cho người sở hữu ${owner0}`)
+                return res.redirect('/')
             
-              req.flash("success",`Đã gửi yêu cầu chuyển quyền sở hữu đất có mã ${key} cho người sở hữu ${owner0}`)
-              return res.redirect('/')
             }else{
               req.flash("success", `Người dùng ${userId} không sở hữu mảnh đất ${key}`)
               return res.redirect('/')
@@ -361,7 +361,6 @@ function homeController() {
             if(land.UserId.includes(userId)){
               console.log("DA VAO DAY ROIIIIIIIIIIIIIIIIIIIIIIIIIIIIi : "+land.UserId)
               let thoigiandangky = getNow();
-
               
               await createTransferCoToOne(key,userId,land.UserId,owner0,thoigiandangky,amount)
               await updateLand(userId,key,"Đang chuyển")
@@ -383,6 +382,7 @@ function homeController() {
           }
        
       } catch (error) {
+        console.log("LOIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII : "+error);
         req.flash("owner0",owner0)
         req.flash("error","Lỗi chuyển nhượng")
         res.redirect(`/transferLand/${key}`)
@@ -499,7 +499,7 @@ function homeController() {
             await MoneyDetention(userId,key,amount);
           }else{
             console.log("Thieu TIEN ")
-            req.flash("error","Bạn không đủ tiền ! Ví của bạn chỉ còn "+allMoney+" triệu")
+            req.flash("error","Bạn không đủ tiền ! Ví của bạn chỉ còn "+allMoney+" đồng")
             return res.redirect('/receiveLand');
   
           }
@@ -682,8 +682,12 @@ function homeController() {
 
     async cancelTransferLane(req,res){
       try {
-        const {keyLand, keyTransfer, receiver} = req.body;
-        await cancleTransferFromUser(keyTransfer,req.session.user.userId,keyLand);
+        const {keyLand, keyTransfer, receiver , receiverConfirm} = req.body;
+        await cancleTransferFromUser(keyTransfer,req.session.user.userId,keyLand,req.session.user.role);
+        console.log("receiverConfirm: "+receiverConfirm)
+        if(receiverConfirm == "true"){
+          await deleteMoneyDetention(req.session.user.userId,receiver,keyTransfer);
+        }
         await updateLand(req.session.user.userId,keyLand,"Đã duyệt")
         await saveMessage(req.session.user.userId,`Bạn đã hủy chuyển nhượng mã đất ${keyLand} thành công`)
         await saveMessage(receiver,`Người chuyển mã đất ${keyLand} đã hủy giao dịch`)

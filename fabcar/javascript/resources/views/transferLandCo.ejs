@@ -5,7 +5,7 @@
 
 
 
-<form id="formTransfer" action="/handleTransferLandCo" method="post" >
+<form id="formTransfer" action="/handleTransferLandCo" method="post" onsubmit="return false;">
   <div class="form-group">
     <label>Mã đang được chuyển: </label>
     <input type="text" class="form-control w-64" name="key" id="keyLane" placeholder="Nhập mã" value="<%= key %>" disabled>
@@ -24,10 +24,11 @@
   </div>
   <input type="hidden" value="<%= user.userId%>" id="userId">
 
-  <!-- <button id="confirm" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Chuyển ngay</button> -->
-  <button id="confirm" type="submit" class="btn btn-primary">Chuyển ngay</button>
+  <!-- <button id="confirm" type="submit" class="btn btn-primary">Chuyển ngay</button> -->
+  <button id="confirm" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Chuyển ngay</button>
 
 </form>
+
 
 </div>
 
@@ -36,7 +37,7 @@
 <div style="height: 100px;"></div>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 <div class="modal-dialog" role="document">
   <div class="modal-content">
     <div class="modal-header">
@@ -57,7 +58,7 @@
     </div>
   </div>
 </div>
-</div>
+</div> -->
 
 <script type="module" src="/js/transferLandClient.js"></script>
 
