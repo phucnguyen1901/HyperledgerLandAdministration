@@ -1,6 +1,6 @@
 
 
-<form  id="formAdd" action="./handleAddAsset" method="post" enctype="multipart/form-data">
+<form  id="formAdd" action="./handleAddAsset" method="post" enctype="multipart/form-data" onsubmit="return false;">
     <div class="form-group">
       <label>Người sở hữu</label>
       <input type="text" class="form-control" name="owner" placeholder="Người sở hữu" value="<%= user.fullname%>" disabled>

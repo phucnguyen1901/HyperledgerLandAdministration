@@ -20,24 +20,6 @@ const totalSupplyKey = '200000';
 
 class Token extends Contract {
 
-
-    // async createToken(ctx){
-    //     console.info('============= START : Create transfer ===========');
-    //     console.log("tao token moi ")
-    //     const transfer = {
-    //             Land:"land",
-    //             TimeStart: "time",
-    //             TimeEnd: "-/-/-",
-    //             From: "userTransfer1",
-    //             To: "userReceive1",
-    //             ConfirmFromReceiver: false,
-    //             ConfirmFromAdmin: false,
-    //             docType: "token"
-    //     };
-    //     await ctx.stub.putState(`TOKENS5`, Buffer.from(JSON.stringify(transfer)));
-    //     console.info('============= END : Create transfer ===========');
-    // }
-
     async createMoneyDetention(ctx,userId,transfer,amount){
         console.info('============= START : Create transfer ===========');
         console.log("tao token moi ")

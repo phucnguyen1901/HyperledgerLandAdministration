@@ -346,7 +346,7 @@ function homeController() {
               let thoigiandangky = getNow();
               await createTransfer(key,userId,owner0,thoigiandangky,amount)
 
-                await updateLand(userId,key,"Đang chuyển1")
+                await updateLand(userId,key,"Đang chuyển")
                 await saveMessage(owner0,`Bạn nhận được đất do người sở hữu ${userId} chuyển cho bạn`)
                 await saveMessage(userId,`Bạn đã gửi yêu cầu chuyển quyền sở hữu đất có mã ${key} cho người sở hữu ${owner0}`)
                 req.flash("success",`Đã gửi yêu cầu chuyển quyền sở hữu đất có mã ${key} cho người sở hữu ${owner0}`)
@@ -534,7 +534,7 @@ function homeController() {
         let transfer = JSON.parse(transferString);
         await saveMessage(userId,`Bạn đã xác nhận chuyển đất { ${transfer.Land} } thành công`)
         for(let i = 0; i < Object.keys(transfer.From).length; i++){
-          await saveMessage(Object.keys(a)[i],`Người dùng ${userId} đã xác nhận chuyển mã đất ${transfer.Land}`)
+          await saveMessage(Object.keys(transfer.From)[i],`Người dùng ${userId} đã xác nhận chuyển mã đất ${transfer.Land}`)
         }
         req.flash("success","Bạn đã xác nhận nhận đất thành công")
         res.redirect('/transferLandOwner');
@@ -618,16 +618,28 @@ function homeController() {
 
             listNameOwner.push(listNewUser[0].fullname);
           }
-          
-          await changeLandOwner(land,userId,oldUserId,listNewUserHandle,listNameOwner,thoigiandangky)
+          let oldUserIdHandle;
+          if(typeof oldUserId == 'object'){
+            let listOldUserHandle = []
+            for(let el of oldUserId){
+              listOldUserHandle.push(Object.keys(el)[0])
+            }
+            oldUserIdHandle = listOldUserHandle
+          }else{
+            oldUserIdHandle = oldUserId;
+          }
+
+
+          await changeLandOwner(land,userId,oldUserIdHandle,listNewUserHandle,listNameOwner,thoigiandangky)
           await updateLand(req.session.user.userId,land,"Đã duyệt")
           await updateTransfer(req.session.user.userId,key,req.session.user.role,thoigiandangky)
 
 
-          saveMessageTransferLandSuccessLoop(oldUserId,listNewUserHandle,land)
+          await saveMessageTransferLandSuccessLoop(oldUserIdHandle,listNewUserHandle,land)
 
           req.flash("success","Xác nhận chuyển đất "+key+" thành công")
           res.redirect('/requestAllTransferLand')
+
         }else{
           
           
@@ -636,21 +648,30 @@ function homeController() {
           let owner = listNewUser[0].fullname;
 
           let thoigiandangky = getNow();
+          let oldUserIdHandle;
+          if(typeof oldUserId == 'object'){
+            let listOldUserHandle = []
+            for(let el of oldUserId){
+              listOldUserHandle.push(Object.keys(el)[0])
+            }
+            oldUserIdHandle = listOldUserHandle
+          }else{
+            oldUserIdHandle = oldUserId;
+          }
+         
 
-
-          let listOldUserHandle = []
-          for(let el of oldUserId){
-            listOldUserHandle.push(Object.keys(el)[0])
+          if(transfer.Money != 0){
+            if(typeof transfer.From != 'object'){
+              let getAccountIdFrom = await getAccountId(transfer.From);
+              let getAccountIdTo = await getAccountId(transfer.To);
+              await deleteMoneyDetention(userId,transfer.To,key)
+              await transferToken(userId,getAccountIdTo,getAccountIdFrom,transfer.Money)
+            }
           }
 
-          if(typeof transfer.From != 'object'){
-            let getAccountIdFrom = await getAccountId(transfer.From);
-            let getAccountIdTo = await getAccountId(transfer.To);
-            await deleteMoneyDetention(userId,transfer.To,key)
-            await transferToken(userId,getAccountIdTo,getAccountIdFrom,transfer.Money)
-          }
+          console.log("OLDDDDDDDDDDDDDDDDD: "+oldUserIdHandle)
 
-          await changeLandOwner(land,userId,listOldUserHandle,newUserId,owner,thoigiandangky)
+          await changeLandOwner(land,userId,oldUserIdHandle,newUserId,owner,thoigiandangky)
           await updateLand(userId,land,"Đã duyệt")
           await updateTransfer(req.session.user.userId,key,req.session.user.role,thoigiandangky)
 

@@ -58,7 +58,7 @@ function userController(){
             const nvc = "ttt@gmail.com";
             const nvd = "pnh@gmail.com";
             const nve = "htb@gmail.com";
-            const off = "office1@gmail.com";
+            const off = "dts@gmail.com";
             const admin = "admin@gmail.com";
             await register(nva,mspOrg[0],organizationsCA[0],affiliations[0]),
             await register(nvb,mspOrg[0],organizationsCA[0],affiliations[0]),
@@ -76,7 +76,7 @@ function userController(){
                     return res.redirect('/login');
                 }
                 await saveUserAdmin(hash),
-                await saveUserManager('office1@gmail.com',hash,"Văn phòng Cái Răng","TP.Cần Thơ")
+                await saveUserManager('dts@gmail.com',hash,"Đoàn Thanh Sơn","TP.Cần Thơ")
 
                 await saveUser(nva,"Nguyễn Trung Kiên","+84795418148","104949231",hash)
                 await saveUser(nvb,"Hoàng Văn Anh","+84795418148","313456789",hash)

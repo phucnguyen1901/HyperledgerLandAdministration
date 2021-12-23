@@ -46,9 +46,12 @@
 
             <%if(user.role == 'manager'){%>
               <p class="text-blue-500"> Xin chào, <%= user.nameOffice%></p>
+            <%}else if(user.role == 'admin'){%>
+              <p class="text-blue-500"> Xin chào, Admin</p>
             <%}else{%>
               <p class="text-blue-500"> Xin chào, <%= user.fullname%></p>
             <%}%>
+            
 
             &emsp;
             <button  id="notification">
@@ -78,10 +81,7 @@
             </li>
             <%}else if(user.role == "admin"){%>
               <li class="ml-12">
-                <a  id="b1" href="/adminAddManager"  class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Thêm quản lý</a>
-              </li>
-              <li class="ml-12">
-                <a id="b2" href="/adminDeleteManager" class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Xóa quản lý</a>
+                <a  id="b1" href="/adminAddManager"  class="hover:text-red-500 focus:outline-none" style="font-size: 20px;">Thêm nhân viên</a>
               </li>
             <%}else{%>
               <li class="ml-12">
@@ -111,7 +111,7 @@
     <div id="message" class="overflow-auto w-72 h-64 bg-gray-800 rounded-b-lg	" style="display: none; position: fixed; top:bottom; left: 60%; z-index: 10;">
       <ul>
               <% for(var element of noty.listMessages){%>
-            <a>
+            <!-- <a> -->
             <li class="px-2 py-2 border-b-2 hover:bg-blue-800 text-white " > 
                 <span class="px-2"><%= element.Message%></span>  
                 <% if(!element.Seen){ %>
@@ -119,7 +119,7 @@
                 <%}%>
                <div class="px-2"><%= element.Time %> - <span><%= element.Date %></span></div>
              </li>
-            </a>
+            <!-- </a> -->
  
           <%} %>
 

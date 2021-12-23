@@ -25,29 +25,8 @@ class FabCar extends Contract {
         console.info('============= START : Initialize Ledger ===========');
         const lands = [
             {
-                UserId: "ntk@gmail.com",
-                Owner:"Nguyễn Trung Kiên",
-                ThuaDatSo: 931,
-                ToBanDo5o: 3,
-                CacSoThuaGiapRanh: '919, 905,803',
-                DienTich: 393.1,
-                ToaDoCacDinh: { "D1": [406836.70,1183891.04],"D2": [406836.75,1183891.44],
-                "D3": [406836.80,1183891.37],"D4": [406836.79,1183891.40]},
-                ChieuDaiCacCanh: {"C12": 20.5, "C23": 1.12, "C34" :7.53, "C41" :15.5},
-                HinhThucSuDung:"Sử dụng riêng",
-                MucDichSuDung: "Đất đai nông thôn",
-                ThoiHanSuDung: "Lâu dài",
-                NguocGocSuDung:"Nhà nưóc giao đất có thu tiền sử dụng",
-                ThoiGianDangKy: "09:12-11/10/2021",
-                Status: "Đã duyệt",
-                UrlImage: "",
-                Transactions: [],
-                LaneOfCity: "TP.HCM"
-
-            },
-            {
-                UserId: "ntk@gmail.com",
-                Owner:"Nguyễn Trung Kiên",
+                UserId: "htb@gmail.com",
+                Owner:"Huỳnh Thành Bá",
                 ThuaDatSo: 931,
                 ToBanDo5o: 3,
                 CacSoThuaGiapRanh: '919, 905,803',
@@ -67,8 +46,8 @@ class FabCar extends Contract {
 
             },
             {
-                UserId: "ntk@gmail.com",
-                Owner:"Nguyễn Trung Kiên",
+                UserId: "htb@gmail.com",
+                Owner:"Huỳnh Thành Bá",
                 ThuaDatSo: 931,
                 ToBanDo5o: 3,
                 CacSoThuaGiapRanh: '919, 905,803',
@@ -88,8 +67,8 @@ class FabCar extends Contract {
 
             },
             {
-                UserId: "ntk@gmail.com",
-                Owner:"Nguyễn Trung Kiên",
+                UserId: "htb@gmail.com",
+                Owner:"Huỳnh Thành Bá",
                 ThuaDatSo: 931,
                 ToBanDo5o: 3,
                 CacSoThuaGiapRanh: '919, 905,803',
@@ -110,8 +89,8 @@ class FabCar extends Contract {
             },
             
             {
-                UserId: ["ttt@gmail.com","ntk@gmail.com"],
-                Owner:["Trương Thị Tú","Nguyễn Trung Kiên"],
+                UserId: ["pnh@gmail.com","htb@gmail.com"],
+                Owner:["Phạm Ngọc Hân","Huỳnh Thành Bá"],
                 ThuaDatSo: 931,
                 ToBanDo5o: 3,
                 CacSoThuaGiapRanh: '919, 905,803',
@@ -131,8 +110,8 @@ class FabCar extends Contract {
 
             },
             {
-                UserId: ["ttt@gmail.com","ntk@gmail.com"],
-                Owner:["Trương Thị Tú","Nguyễn Trung Kiên"],
+                UserId: ["pnh@gmail.com","htb@gmail.com"],
+                Owner:["Phạm Ngọc Hân","Huỳnh Thành Bá"],
                 ThuaDatSo: 931,
                 ToBanDo5o: 3,
                 CacSoThuaGiapRanh: '919, 905,803',
@@ -152,8 +131,8 @@ class FabCar extends Contract {
 
             },
             {
-                UserId: ["ttt@gmail.com","ntk@gmail.com"],
-                Owner:["Trương Thị Tú","Nguyễn Trung Kiên"],
+                UserId: ["pnh@gmail.com","htb@gmail.com"],
+                Owner:["Phạm Ngọc Hân","Huỳnh Thành Bá"],
                 ThuaDatSo: 931,
                 ToBanDo5o: 3,
                 CacSoThuaGiapRanh: '919, 905,803',
@@ -173,8 +152,8 @@ class FabCar extends Contract {
 
             },
             {
-                UserId: ["ttt@gmail.com","ntk@gmail.com"],
-                Owner:["Trương Thị Tú","Nguyễn Trung Kiên"],
+                UserId: ["pnh@gmail.com","htb@gmail.com"],
+                Owner:["Phạm Ngọc Hân","Huỳnh Thành Bá"],
                 ThuaDatSo: 931,
                 ToBanDo5o: 3,
                 CacSoThuaGiapRanh: '919, 905,803',
@@ -387,57 +366,6 @@ class FabCar extends Contract {
         await ctx.stub.putState(key, Buffer.from(JSON.stringify(land)));
         console.info('============= END : Update Land ===========');
     }
-
-    // async changeLandOwnerCo(ctx,key,arrayNewOwner,type) {
-    //     console.info('============= START : Update Land ===========');
-
-    //     const landAsBytes = await ctx.stub.getState(key); // get the land from chaincode state
-    //     if (!landAsBytes || landAsBytes.length === 0) {
-    //         throw new Error(`${key} does not exist`);
-    //     }
-
-    //     let arrayNew = arrayNewOwner.split(',')
-
-    //     let date_ob = new Date();
-    //     let monthNow = date_ob.getMonth() < 10 ? `0${date_ob.getMonth()+1}` : `${date_ob.getMonth()+1}`;
-    //     let newDate = `${date_ob.getDate()}/${monthNow}/${date_ob.getFullYear()}`;
-
-    //     let newOb = {};
-    //     newOb[newDate] = `Người sở hữu cũ :  "${userId}" chuyển cho người sở hữu mới "${newUserId}"`
-    //     let land = JSON.parse(landAsBytes.toString());
-    //     land.UserId = arrayNew;
-    //     land.StatusOwner = StatusOwner.CoOwner
-    //     let newTransactions = land.Transactions;
-    //     newTransactions.push(newOb)
-    //     land.Transactions = newTransactions;
-        
-    //     if(type == "one"){
-    //         let newOb = {};
-    //         newOb[newDate] = `Người sở hữu cũ :  "${userId}" chuyển cho người sở hữu mới "${newUserId}"`
-    //         let land = JSON.parse(landAsBytes.toString());
-    //         land.UserId = arrayNew;
-    //         land.StatusOwner = StatusOwner.CoOwner
-    //         let newTransactions = land.Transactions;
-    //         newTransactions.push(newOb)
-    //         land.Transactions = newTransactions;
-
-    //     }else{
-    //         let newOb = {};
-    //         newOb[newDate] = `Người sở hữu cũ :  "${userId}" chuyển cho người sở hữu mới "${newUserId}"`
-    //         let land = JSON.parse(landAsBytes.toString());
-    //         land.CoOwner = arrayNew;
-    //         let newTransactions = land.Transactions;
-    //         newTransactions.push(newOb)
-    //         land.Transactions = newTransactions;
-
-    //     }
-
-
-
-    //     await ctx.stub.putState(key, Buffer.from(JSON.stringify(land)));
-    //     console.info('============= END : Update Land ===========');
-    // }
-
 
     async updateStatusLand(ctx,key,status) {
         console.info('============= START : Update Land ===========');
