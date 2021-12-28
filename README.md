@@ -36,8 +36,7 @@ STEP 4: Install javascript library</br>
 STEP 5: Run blockchain network</br>
     + cd fabcar</br>
     + ./startFabric.sh (run blockchain network), ./networkDown.sh (remove any containers or artifacts from any previous runs)</br>
-    + ./networkMonitor.sh (Tùy chọn) để xem debug code chạy trong chaincode
-
+    + ./networkMonitor.sh (Option) to show debugging in blockchain network.
 Bước 6: Run client </br>
     + cd fabcar/javascript</br>
     + npm start </br>
